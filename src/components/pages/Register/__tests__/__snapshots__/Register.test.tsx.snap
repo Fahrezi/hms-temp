@@ -1,0 +1,74 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`Register page > matches the Register component snapshot 1`] = `
+<div>
+  <div
+    class="_register_5257f9"
+  >
+    <div
+      class="_register__card_5257f9"
+    >
+      <header>
+        <h1
+          class="_register__card--title_5257f9"
+        >
+          Register
+        </h1>
+      </header>
+      <form
+        role="form"
+      >
+        <div
+          class="_register__field_5257f9"
+        >
+          <label
+            class="_register__field--label_5257f9"
+            for="email"
+          >
+            Email
+          </label>
+          <input
+            class="_register__field--input_5257f9"
+            id="email"
+            name="email"
+            type="email"
+          />
+        </div>
+        <div
+          class="_register__field_5257f9"
+        >
+          <label
+            class="_register__field--label_5257f9"
+            for="password"
+          >
+            Password
+          </label>
+          <input
+            class="_register__field--input_5257f9"
+            id="password"
+            name="password"
+            type="password"
+          />
+        </div>
+        <button
+          aria-label="Register"
+          class="_register__button_5257f9"
+          type="submit"
+        >
+          Register
+        </button>
+      </form>
+      <p
+        class="_register__login_5257f9"
+      >
+        Already have an account? 
+        <a
+          href="/login"
+        >
+          Login here
+        </a>
+      </p>
+    </div>
+  </div>
+</div>
+`;

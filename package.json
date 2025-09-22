@@ -1,0 +1,81 @@
+{
+  "name": "codebase-react-vite-ts",
+  "private": true,
+  "version": "0.0.16",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc -b && vite build",
+    "lint": "eslint .",
+    "preview": "vite preview",
+    "type-check": "tsc -b",
+    "prepare": "husky",
+    "test": "vitest --run",
+    "test:watch": "vitest",
+    "test:update": "vitest -u",
+    "test:ui": "vitest --ui --coverage",
+    "test:coverage": "vitest --run --coverage",
+    "generate-pwa-assets": "pwa-assets-generator --preset minimal public/images/logo.svg"
+  },
+  "dependencies": {
+    "@hookform/resolvers": "4.1.2",
+    "@react-pdf/renderer": "^4.3.0",
+    "@tailwindcss/vite": "^4.1.13",
+    "@tanstack/react-query": "5.66.9",
+    "axios": "^1.12.2",
+    "lucide-react": "^0.544.0",
+    "react": "18.3.1",
+    "react-dom": "18.3.1",
+    "react-hook-form": "7.54.2",
+    "react-router-dom": "^7.9.1",
+    "sonner": "^2.0.7",
+    "tailwindcss": "^4.1.13",
+    "zod": "3.24.2"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.19.0",
+    "@tanstack/eslint-plugin-query": "^5.66.1",
+    "@testing-library/jest-dom": "^6.6.3",
+    "@testing-library/react": "^16.2.0",
+    "@testing-library/user-event": "^14.6.1",
+    "@types/jest": "^29.5.14",
+    "@types/node": "^22.13.5",
+    "@types/react": "^19.0.8",
+    "@types/react-dom": "^19.0.3",
+    "@vite-pwa/assets-generator": "^0.2.6",
+    "@vitejs/plugin-react": "^4.3.4",
+    "@vitest/coverage-v8": "^3.0.7",
+    "@vitest/ui": "^3.0.7",
+    "eslint": "^9.19.0",
+    "eslint-config-prettier": "^10.0.1",
+    "eslint-import-resolver-alias": "^1.1.2",
+    "eslint-import-resolver-typescript": "^3.8.3",
+    "eslint-plugin-import": "^2.31.0",
+    "eslint-plugin-prettier": "^5.2.3",
+    "eslint-plugin-react": "^7.37.4",
+    "eslint-plugin-react-hooks": "^5.0.0",
+    "eslint-plugin-react-refresh": "^0.4.18",
+    "eslint-plugin-simple-import-sort": "^12.1.1",
+    "eslint-plugin-sonarjs": "^3.0.2",
+    "globals": "^15.14.0",
+    "husky": "^9.1.7",
+    "jsdom": "^26.0.0",
+    "prettier": "^3.5.2",
+    "sass-embedded": "^1.85.0",
+    "typescript": "~5.7.2",
+    "typescript-eslint": "^8.22.0",
+    "vite": "^6.1.0",
+    "vite-plugin-checker": "^0.9.0",
+    "vite-plugin-pwa": "^0.21.1",
+    "vitest": "^3.0.7"
+  },
+  "lint-staged": {
+    "**/*.{js,jsx,ts,tsx}": [
+      "eslint",
+      "prettier"
+    ],
+    "**/*.{json,css,scss,md,webmanifest}": [
+      "prettier"
+    ]
+  }
+}

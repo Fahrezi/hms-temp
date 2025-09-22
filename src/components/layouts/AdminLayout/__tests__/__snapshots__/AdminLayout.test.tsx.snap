@@ -1,0 +1,25 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`AdminLayout Component > renders the layout correctly 1`] = `
+<div>
+  <div
+    class="_layout_ef7806"
+  >
+    <header
+      class="_layout__header_ef7806"
+    >
+      <button
+        class="_layout__header__button_ef7806"
+      >
+        Log Out
+      </button>
+    </header>
+    <main
+      class="_layout__main_ef7806"
+    />
+    <footer
+      class="_layout__footer_ef7806"
+    />
+  </div>
+</div>
+`;

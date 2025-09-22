@@ -1,0 +1,64 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`Profile Component > matches the Profile component snapshot 1`] = `
+<div>
+  <div
+    class="_profile_f059cd"
+  >
+    <h1
+      class="_profile__title_f059cd"
+    >
+      Profile
+    </h1>
+    <div
+      class="_profile__content_f059cd"
+    >
+      <div
+        class="_profile__card_f059cd"
+      >
+        <div
+          class="_profile__info_f059cd"
+        >
+          <h2
+            class="_profile__info--heading_f059cd"
+          >
+            Personal Information
+          </h2>
+          <div
+            class="_profile__field_f059cd"
+          >
+            <label
+              class="_profile__field--label_f059cd"
+              for="name"
+            >
+              Name
+            </label>
+            <input
+              class="_profile__field--input_f059cd"
+              id="name"
+              placeholder="John Doe"
+              type="text"
+            />
+          </div>
+          <div
+            class="_profile__field_f059cd"
+          >
+            <label
+              class="_profile__field--label_f059cd"
+              for="email"
+            >
+              Email
+            </label>
+            <input
+              class="_profile__field--input_f059cd"
+              id="email"
+              placeholder="john@example.com"
+              type="email"
+            />
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+`;

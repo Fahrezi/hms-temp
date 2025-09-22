@@ -1,0 +1,79 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`NotFound Component > renders the snapshot NotFound component 1`] = `
+<div>
+  <div
+    class="_not_found_b19e84"
+  >
+    <div
+      class="_not_found__container_b19e84"
+    >
+      <h1
+        class="_not_found__title_b19e84"
+      >
+        <span
+          class="_not_found__title-digit_b19e84"
+        >
+          4
+        </span>
+        <span
+          class="_not_found__title-digit_b19e84"
+        >
+          0
+        </span>
+        <span
+          class="_not_found__title-digit_b19e84"
+        >
+          4
+        </span>
+      </h1>
+      <div
+        class="_not_found__astronaut_b19e84"
+      >
+        <div
+          class="_not_found__astronaut-body_b19e84"
+        />
+        <div
+          class="_not_found__astronaut-head_b19e84"
+        />
+        <div
+          class="_not_found__astronaut-arm-left_b19e84"
+        />
+        <div
+          class="_not_found__astronaut-arm-right_b19e84"
+        />
+        <div
+          class="_not_found__astronaut-leg-left_b19e84"
+        />
+        <div
+          class="_not_found__astronaut-leg-right_b19e84"
+        />
+      </div>
+      <div
+        class="_not_found__stars_b19e84"
+      />
+      <div
+        class="_not_found__message_b19e84"
+      >
+        <h2
+          class="_not_found__message-title_b19e84"
+        >
+          Page Not Found
+        </h2>
+        <p
+          class="_not_found__message-text_b19e84"
+        >
+          The page you are looking for might have been removed, had its name changed, or is temporarily unavailable.
+        </p>
+        <a
+          class="_not_found__message-button_b19e84"
+          data-discover="true"
+          href="/"
+        >
+          Return to Dashobard
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
+`;

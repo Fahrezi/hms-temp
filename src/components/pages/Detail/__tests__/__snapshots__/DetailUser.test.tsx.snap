@@ -1,0 +1,51 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`DetailUser Component > renders the snapshot DetailUser component 1`] = `
+<div>
+  <div
+    class="_userDetail_75ff1b"
+  >
+    <h1>
+      &lt;
+       back
+    </h1>
+    <h1
+      class="_title_75ff1b"
+    >
+      User Details
+    </h1>
+    <div
+      class="_card_75ff1b"
+    >
+      <div
+        class="_field_75ff1b"
+      >
+        <span
+          class="_label_75ff1b"
+        >
+          ID:
+        </span>
+        <span
+          class="_value_75ff1b"
+        >
+          1
+        </span>
+      </div>
+      <div
+        class="_field_75ff1b"
+      >
+        <span
+          class="_label_75ff1b"
+        >
+          Email:
+        </span>
+        <span
+          class="_value_75ff1b"
+        >
+          user@example.com
+        </span>
+      </div>
+    </div>
+  </div>
+</div>
+`;

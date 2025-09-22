@@ -1,0 +1,14 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`LazyImage component > renders the image with correct alt text 1`] = `
+<div>
+  <div
+    class="_imageContainer_d76e9f "
+    style="width: 100%; aspect-ratio: 16/9;"
+  >
+    <div
+      class="_placeholder_d76e9f"
+    />
+  </div>
+</div>
+`;

@@ -1,0 +1,69 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`Login Component > renders the login component 1`] = `
+<div>
+  <div
+    class="_login_499337"
+  >
+    <div
+      class="_login__card_499337"
+    >
+      <h1
+        class="_login__card--title_499337"
+      >
+        Login
+      </h1>
+      <form>
+        <div
+          class="_login__field_499337"
+        >
+          <label
+            class="_login__field--label_499337"
+            for="email"
+          >
+            Email
+          </label>
+          <input
+            class="_login__field--input_499337"
+            id="email"
+            name="email"
+            type="email"
+          />
+        </div>
+        <div
+          class="_login__field_499337"
+        >
+          <label
+            class="_login__field--label_499337"
+            for="password"
+          >
+            Password
+          </label>
+          <input
+            class="_login__field--input_499337"
+            id="password"
+            name="password"
+            type="password"
+          />
+        </div>
+        <button
+          class="_login__button_499337"
+          type="submit"
+        >
+          Login
+        </button>
+      </form>
+      <p
+        class="_login__register_499337"
+      >
+        Don't have an account? 
+        <a
+          href="/register"
+        >
+          Register now!
+        </a>
+      </p>
+    </div>
+  </div>
+</div>
+`;

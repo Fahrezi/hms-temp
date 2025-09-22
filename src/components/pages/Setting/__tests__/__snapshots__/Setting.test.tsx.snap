@@ -1,0 +1,62 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`Setting Component > renders the Setting component correctly 1`] = `
+<div>
+  <div
+    class="_settings_7e34ff"
+  >
+    <h1
+      class="_settings__title_7e34ff"
+    >
+      Settings
+    </h1>
+    <div
+      class="_settings__content_7e34ff"
+    >
+      <div
+        class="_settings__section_7e34ff"
+      >
+        <h2
+          class="_settings__section--heading_7e34ff"
+        >
+          Preferences
+        </h2>
+        <div
+          class="_settings__option_7e34ff"
+        >
+          <label
+            class="_settings__option--label_7e34ff"
+          >
+            <input
+              class="_settings__option--label--checkbox_7e34ff"
+              type="checkbox"
+            />
+            <span
+              class="_settings__option--label--text_7e34ff"
+            >
+              Enable notifications
+            </span>
+          </label>
+        </div>
+        <div
+          class="_settings__option_7e34ff"
+        >
+          <label
+            class="_settings__option--label_7e34ff"
+          >
+            <input
+              class="_settings__option--label--checkbox_7e34ff"
+              type="checkbox"
+            />
+            <span
+              class="_settings__option--label--text_7e34ff"
+            >
+              Dark mode
+            </span>
+          </label>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+`;

@@ -1,0 +1,7 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`Pagination > should render with no buttons when on page 1 of 1 1`] = `
+<div>
+  <div />
+</div>
+`;

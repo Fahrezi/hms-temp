@@ -1,0 +1,31 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`Unauthorized page Component > renders the Unauthorized component 1`] = `
+<div>
+  <div
+    class="_unauthorized_71b26e"
+  >
+    <div
+      class="_unauthorized__container_71b26e"
+    >
+      <h1
+        class="_unauthorized__title_71b26e"
+      >
+        403 - Unauthorized
+      </h1>
+      <p
+        class="_unauthorized__message_71b26e"
+      >
+        You do not have permission to access this page.
+      </p>
+      <a
+        class="_unauthorized__link_71b26e"
+        data-discover="true"
+        href="/"
+      >
+        Go to Dashboard
+      </a>
+    </div>
+  </div>
+</div>
+`;

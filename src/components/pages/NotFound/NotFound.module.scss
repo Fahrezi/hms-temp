@@ -1,0 +1,272 @@
+.not_found {
+  & {
+    width: 100%;
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(45deg, #1f1f38, #2c2c6c);
+    overflow: hidden;
+    position: relative;
+  }
+
+  &__container {
+    position: relative;
+    max-width: 1200px;
+    width: 100%;
+    padding: 0 2rem;
+    z-index: 1;
+  }
+
+  &__title {
+    font-size: 15rem;
+    font-weight: 900;
+    margin: 0;
+    text-align: center;
+    line-height: 1;
+    color: rgba(255, 255, 255, 0.1);
+    position: relative;
+
+    @media (max-width: 768px) {
+      font-size: 10rem;
+    }
+
+    @media (max-width: 480px) {
+      font-size: 7rem;
+    }
+
+    &-digit {
+      display: inline-block;
+      animation: float 6s ease-in-out infinite;
+
+      &:nth-child(1) {
+        animation-delay: 0.2s;
+      }
+
+      &:nth-child(2) {
+        animation-delay: 0.4s;
+      }
+
+      &:nth-child(3) {
+        animation-delay: 0.6s;
+      }
+    }
+  }
+
+  &__message {
+    text-align: center;
+    color: #fff;
+    margin-top: 2rem;
+
+    &-title {
+      font-size: 2.5rem;
+      margin-bottom: 1rem;
+
+      @media (max-width: 768px) {
+        font-size: 2rem;
+      }
+    }
+
+    &-text {
+      font-size: 1.2rem;
+      max-width: 600px;
+      margin: 0 auto 2rem;
+      line-height: 1.6;
+      color: rgba(255, 255, 255, 0.7);
+    }
+
+    &-button {
+      display: inline-block;
+      padding: 0.8rem 2rem;
+      background: #4db5ff;
+      color: #1f1f38;
+      border-radius: 0.5rem;
+      font-weight: 600;
+      transition: all 0.3s ease;
+      text-decoration: none;
+
+      &:hover {
+        background: #fff;
+        box-shadow: 0 0 20px rgba(77, 181, 255, 0.4);
+        transform: translateY(-3px);
+      }
+    }
+  }
+
+  &__stars {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+
+    &::before,
+    &::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-image:
+        radial-gradient(2px 2px at 20px 30px, #fff, rgba(0, 0, 0, 0)),
+        radial-gradient(2px 2px at 40px 70px, #fff, rgba(0, 0, 0, 0)),
+        radial-gradient(2px 2px at 50px 160px, #fff, rgba(0, 0, 0, 0)),
+        radial-gradient(2px 2px at 90px 40px, #fff, rgba(0, 0, 0, 0)),
+        radial-gradient(2px 2px at 130px 80px, #fff, rgba(0, 0, 0, 0)),
+        radial-gradient(2px 2px at 160px 120px, #fff, rgba(0, 0, 0, 0));
+      background-repeat: repeat;
+      background-size: 200px 200px;
+      opacity: 0.5;
+    }
+
+    &::after {
+      background-size: 300px 300px;
+      background-position: 50px 50px;
+      animation: stars 30s linear infinite;
+    }
+  }
+
+  &__astronaut {
+    position: absolute;
+    top: 50%;
+    right: 20%;
+    width: 100px;
+    height: 160px;
+    animation: astronaut 15s ease-in-out infinite;
+    transform: translate(-50%, -50%);
+
+    @media (max-width: 768px) {
+      display: none;
+    }
+
+    &-body {
+      position: absolute;
+      top: 40px;
+      left: 25px;
+      width: 50px;
+      height: 80px;
+      background: #f5f5f5;
+      border-radius: 40px 40px 0 0;
+    }
+
+    &-head {
+      position: absolute;
+      top: 10px;
+      left: 35px;
+      width: 30px;
+      height: 30px;
+      background: #f5f5f5;
+      border-radius: 50%;
+
+      &::before {
+        content: '';
+        position: absolute;
+        top: 5px;
+        left: 5px;
+        width: 20px;
+        height: 15px;
+        background: rgba(0, 0, 0, 0.1);
+        border-radius: 10px;
+      }
+    }
+
+    &-arm-left,
+    &-arm-right {
+      position: absolute;
+      top: 50px;
+      width: 15px;
+      height: 40px;
+      background: #f5f5f5;
+      border-radius: 10px;
+    }
+
+    &-arm-left {
+      left: 15px;
+      transform: rotate(15deg);
+      transform-origin: top center;
+      animation: arm-left 4s ease-in-out infinite;
+    }
+
+    &-arm-right {
+      right: 15px;
+      transform: rotate(-15deg);
+      transform-origin: top center;
+      animation: arm-right 4s ease-in-out infinite;
+    }
+
+    &-leg-left,
+    &-leg-right {
+      position: absolute;
+      top: 120px;
+      width: 15px;
+      height: 40px;
+      background: #f5f5f5;
+      border-radius: 0 0 10px 10px;
+    }
+
+    &-leg-left {
+      left: 30px;
+    }
+
+    &-leg-right {
+      right: 30px;
+    }
+  }
+}
+
+@keyframes float {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-20px);
+  }
+}
+
+@keyframes stars {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes astronaut {
+  0%,
+  100% {
+    transform: translate(-50%, -50%) rotate(0deg) translateY(0);
+  }
+  25% {
+    transform: translate(-50%, -50%) rotate(5deg) translateY(-10px);
+  }
+  50% {
+    transform: translate(-50%, -50%) rotate(0deg) translateY(0);
+  }
+  75% {
+    transform: translate(-50%, -50%) rotate(-5deg) translateY(10px);
+  }
+}
+
+@keyframes arm-left {
+  0%,
+  100% {
+    transform: rotate(15deg);
+  }
+  50% {
+    transform: rotate(25deg);
+  }
+}
+
+@keyframes arm-right {
+  0%,
+  100% {
+    transform: rotate(-15deg);
+  }
+  50% {
+    transform: rotate(-25deg);
+  }
+}
