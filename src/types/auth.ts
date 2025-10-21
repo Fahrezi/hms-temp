@@ -7,11 +7,19 @@ export type User = {
   roles: string[];
 };
 
+export type Topic = {
+  id: string;
+  title: string;
+  description: string;
+}
+
 export type AuthState = {
   user: User | null;
   isAuthenticated: boolean;
   isLoading: boolean;
   token: string | null;
+  notification: Topic[];
+  messages: Topic[];
 };
 
 export type AuthAction = {

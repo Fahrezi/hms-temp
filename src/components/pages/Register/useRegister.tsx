@@ -5,10 +5,13 @@ import { z } from 'zod';
 
 import { registerRequest } from '@/services/auth.service';
 
-const registerSchema = z.object({
-  email: z.string().email('Invalid email address'),
-  password: z.string().min(6, 'Password must be at least 6 characters'),
+export const registerSchema = z.object({
+  email: z.string().trim().email({ message: "Email is invalid" }),
+  password: z.string().min(8, { message: "Password must be at least 8 characters" }),
 });
+
+type In  = z.input<typeof registerSchema>; 
+type Out = z.output<typeof registerSchema>;
 
 type RegisterFormInputs = z.infer<typeof registerSchema>;
 

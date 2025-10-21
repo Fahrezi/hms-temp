@@ -1,3 +1,4 @@
+import tailwindcss from '@tailwindcss/vite';
 import react from '@vitejs/plugin-react';
 import path from 'path';
 import { defineConfig } from 'vite';
@@ -8,6 +9,7 @@ import { VitePWA } from 'vite-plugin-pwa';
 // https://vite.dev/config/
 export default defineConfig({
   plugins: [
+    tailwindcss(),
     react(),
     checker({
       typescript: {
@@ -18,9 +20,9 @@ export default defineConfig({
       registerType: 'autoUpdate',
       includeAssets: ['favicon.ico', 'apple-touch-icon.png', 'mask-icon.svg'],
       manifest: {
-        name: 'Codebase EADDS',
-        short_name: 'Codebase EADDS',
-        description: 'Codebase for all EADDS FE Project',
+        name: 'Hotel Management System',
+        short_name: 'HMS',
+        description: 'Hotel Management System - New System',
         theme_color: '#ffffff',
         icons: [
           {

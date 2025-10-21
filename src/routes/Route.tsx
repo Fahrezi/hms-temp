@@ -45,6 +45,46 @@ const routes: RouteObject[] = [
           </RouteGuard>
         ),
       },
+      {
+        path: 'reservation/list-reservation',
+        element: (
+          <RouteGuard>
+            <Pages.ListReservation />
+          </RouteGuard>
+        ),
+      },
+      {
+        path: 'reservation/register',
+        element: (
+          <RouteGuard>
+            <Pages.RegisterReservationForm />
+          </RouteGuard>
+        ),
+      },
+      {
+        path: 'reservation/list-reservation/new-reservation',
+        element: (
+          <RouteGuard>
+            <Pages.NewReservationForm />
+          </RouteGuard>
+        ),
+      },
+      {
+        path: 'cashier/deposit',
+        element: (
+          <RouteGuard>
+            <Pages.Deposit />
+          </RouteGuard>
+        ),
+      },
+      {
+        path: 'report/invoice-report',
+        element: (
+          <RouteGuard>
+            <Pages.ReportInvoice />
+          </RouteGuard>
+        ),
+      }
     ],
   },
   {

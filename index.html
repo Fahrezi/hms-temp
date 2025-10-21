@@ -16,5 +16,16 @@
   <body>
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
+    <script>
+      // Skip modified-clicks, new tabs, anchors, etc.
+      addEventListener('click', (e) => {
+        const a = e.target.closest('a[href]');
+        if (!a || a.target || e.metaKey || e.ctrlKey || a.href.startsWith('#')) return;
+
+        e.preventDefault();
+        document.body.classList.add('fade-out');
+        setTimeout(() => { location.href = a.href; }, 150); // match CSS duration
+      });
+    </script>
   </body>
 </html>

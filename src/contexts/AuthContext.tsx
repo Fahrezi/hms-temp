@@ -9,6 +9,8 @@ const initialState: AuthState = {
   token: null,
   isAuthenticated: false,
   isLoading: true,
+  notification: [],
+  messages: [],
 };
 
 const authReducer = (state: AuthState, action: AuthAction): AuthState => {
