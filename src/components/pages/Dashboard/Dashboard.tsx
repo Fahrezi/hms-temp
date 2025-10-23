@@ -94,10 +94,10 @@ const Dashboard = () => {
   return (
     <div className='flex gap-8'>
       <div className="grow">
-        <div className="flex justify-end gap-4 mb-4">
+        <div className="flex justify-end gap-4 mb-8">
           <Popover>
             <PopoverTrigger>
-              <Button className="font-semibold bg-[#8FB996] rounded-lg py-2 px-12 cursor-pointer shadow hover:scale-[1.009] active:scale-98">
+              <Button className="font-semibold bg-hotel-green hover:bg-hotel-green-hover text-hotel-mint-mist rounded-lg py-2 px-12 cursor-pointer shadow hover:scale-[1.009] active:scale-98">
                 New Reservation
               </Button>
             </PopoverTrigger>
@@ -146,47 +146,34 @@ const Dashboard = () => {
             Walk In Register
           </Button>
         </div>
-        <div className="grid grid-cols-[30%_1fr] gap-4 mb-4">
+        <div className="grid grid-cols-4 gap-4 mb-4">
           <Card>
-            <h2 className="font-semibold text-2xl">Booking</h2>
+            <h2 className="font-semibold text-2xl">Occupied</h2>
             <LineChart
-            title="Monthly Revenue"
-            labels={["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul"]}
-            series={[
-            { label: "2025", data: [12, 19, 17, 23, 28, 30, 36], color: "#2563eb", fill: true },
-            { label: "2024", data: [10, 15, 14, 18, 20, 22, 26], color: "#16a34a" },
-            ]}
-            tension={0.35}
-            yMin={0}
-            yStepSize={5}
-            formatTooltip={(v) => `Rp ${v.toLocaleString("id-ID")}`}
-            />
+              title="Monthly Revenue"
+              labels={["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul"]}
+              series={[
+              { label: "2025", data: [12, 19, 17, 23, 28, 30, 36], color: "#2563eb", fill: true },
+              { label: "2024", data: [10, 15, 14, 18, 20, 22, 26], color: "#16a34a" },
+              ]}
+              tension={0.35}
+              yMin={0}
+              yStepSize={5}
+              formatTooltip={(v) => `Rp ${v.toLocaleString("id-ID")}`}
+              />
           </Card>
           <Card>
-            <h2 className="font-semibold text-2xl">Occupancy</h2>
-            <div className="flex items-center justify-between h-full">
-              <div className="flex flex-col gap-2 items-center">
-                <h3 className="font-semibold text-2xl">26%</h3>
-                <span className="text-sm">Estimated</span>
-              </div>
-              <div className="flex flex-col gap-2 items-center">
-                <h3 className="font-semibold text-2xl">49</h3>
-                <span className="text-sm">Vacant</span>
-              </div>
-              <div className="flex flex-col gap-2 items-center">
-                <h3 className="font-semibold text-2xl">34</h3>
-                <span className="text-sm">Occupied</span>
-              </div>
-              <div className="flex flex-col gap-2 items-center">
-                <h3 className="font-semibold text-2xl">8</h3>
-                <span className="text-sm">Not Ready</span>
-              </div>
-              <div className="flex flex-col gap-2 items-center">
-                <h3 className="font-semibold text-2xl">26%</h3>
-                <span className="text-sm">Estimated</span>
-              </div>
-            </div>
-          </Card> 
+            <h2 className="font-semibold text-2xl">Booking</h2>
+
+          </Card>
+          <Card>
+            <h2 className="font-semibold text-2xl">Pax</h2>
+
+          </Card>
+          <Card>
+            <h2 className="font-semibold text-2xl">Revenue</h2>
+
+          </Card>
         </div>  
         <div className="flex items-center gap-4 mb-4">
           {
@@ -255,21 +242,6 @@ const Dashboard = () => {
             </TableFooter>
           </Table>
         </Card>
-      </div>
-      <div className="max-w-[60px] rounded-xl shadow p-4 border border-[#8FB996]">
-        <Popover>
-          <PopoverTrigger asChild>
-            <Search size={24} className="cursor-pointer" />
-          </PopoverTrigger>
-          <PopoverContent className="w-[150px] bg-white shadow p-2 rounded-2xl" side="left">
-            <ul>
-              <li className="font-semibold flex items-center justify-between rounded-xl p-2 hover:bg-[#8FB996] cursor-pointer">
-                <span>VIP</span>
-                <span className="inline-block p-2 rounded-full bg-black text-white">2</span>
-              </li>
-            </ul>
-          </PopoverContent>
-        </Popover>
       </div>
     </div>
   );

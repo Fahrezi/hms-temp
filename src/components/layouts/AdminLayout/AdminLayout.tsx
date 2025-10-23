@@ -112,7 +112,7 @@ const AdminLayout = () => {
           {
             NAVBAR_ITEMS.map((item, index) => (
               item.submenu === null ? (
-                <li key={index} className={cn("mb-4 rounded-xl", isActiveMenu(item.path) && 'bg-green-100  py-2 px-4 text-green-900 font-medium')}><a href={item.path}>{item.name}</a></li>
+                <li key={index} className={cn("mb-4 rounded-xl", isActiveMenu(item.path) && 'bg-hotel-sage-whisper py-2 px-4 text-green-900 font-medium')}><a href={item.path}>{item.name}</a></li>
               ) : (
                 <li key={index}>
                   <div className="flex items-center justify-between cursor-pointer mb-4">
@@ -121,7 +121,7 @@ const AdminLayout = () => {
                     <ul className="pl-4 flex flex-col gap-4 mb-4">
                       {
                         item.submenu.map((subitem, subindex) => (
-                          <li className={cn("rounded-xl", isActiveMenu(subitem.path) && 'bg-green-100  py-2 px-4 text-green-900 font-medium')} key={subindex}>
+                          <li className={cn("rounded-xl", isActiveMenu(subitem.path) && 'bg-hotel-sage-whisper  py-2 px-4 text-green-900 font-medium')} key={subindex}>
                             <a href={subitem.path}>{subitem.name}</a>
                           </li>
                         ))

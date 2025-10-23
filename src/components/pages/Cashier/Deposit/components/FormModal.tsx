@@ -50,7 +50,7 @@ const FormModal = (props: FormModalProps) => {
         <DialogTrigger asChild>
           <Button
             variant="ghost"
-            className="font-semibold bg-white border border-gray-100 rounded-lg py-2 px-12 text-black cursor-pointer shadow hover:scale-[1.009] active:scale-98"
+            className="font-semibold bg-hotel-green hover:bg-hotel-green-hover text-hotel-mint-mist rounded-lg py-2 px-12 cursor-pointer shadow hover:scale-[1.009] active:scale-98"
             onClick={() => setOpenModal(true)}
           >
             Add New Deposit
@@ -144,10 +144,10 @@ const FormModal = (props: FormModalProps) => {
             />
           </div>
           <DialogFooter className="mt-2">
-            <Button type="button" variant="secondary" onClick={() => setOpenModal(false)}>
+            <Button type="button" variant="secondary" className="border-hotel-green text-hotel-green" onClick={() => setOpenModal(false)}>
               Cancel
             </Button>
-            <Button type="submit" variant="default" className="bg-black text-white font-medium">Submit</Button>
+            <Button type="submit" variant="default" className="bg-hotel-green font-bold text-white">Submit</Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>

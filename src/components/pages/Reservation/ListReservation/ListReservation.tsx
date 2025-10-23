@@ -103,7 +103,7 @@ const ListReservation = () => {
                 key={index}
                 className={
                   cn("font-medium text-sm cursor-pointer p-2 rounded-lg",
-                    filterTab === label && 'bg-[#091E24] text-[#8FB996]')
+                    filterTab === label && 'bg-hotel-mint-mist text-hotel-green')
                 }
                 onClick={() => setFilterTab(label)}
                 >
@@ -115,14 +115,14 @@ const ListReservation = () => {
         <div className="flex gap-4">
           <Popover>
             <PopoverTrigger>
-              <Button className="font-semibold bg-[#8FB996] rounded-lg py-2 px-12 cursor-pointer shadow hover:scale-[1.009] active:scale-98">
+              <Button className="font-semibold bg-hotel-green hover:bg-hotel-green-hover text-hotel-mint-mist rounded-lg py-2 px-12 cursor-pointer shadow hover:scale-[1.009] active:scale-98">
                 New Reservation
               </Button>
             </PopoverTrigger>
             <PopoverContent className="w-64 bg-white border-gray-100 rounded-xl shadow py-4 px-2">
               <div className="space-y-2 flex flex-col">
                 <Button asChild variant="ghost">
-                  <Link className="p-2 rounded-xl hover:shadow hover:ring hover:ring-green-700 bg-white h-auto justify-start items-start gap-2" to="/reservation/list-reservation/new-reservation?type=individual">
+                  <Link className="p-2 rounded-xl hover:shadow hover:ring hover:ring-hotel-soft-fern bg-white h-auto justify-start items-start gap-4" to="/reservation/list-reservation/new-reservation?type=individual">
                     <User className="mt-1" size={24} />
                     <div className="flex flex-col gap-0 items-start">
                       <span>Individual</span>
@@ -131,7 +131,7 @@ const ListReservation = () => {
                   </Link>
                 </Button>
                 <Button asChild variant="ghost">
-                  <Link className="p-2 rounded-xl hover:shadow hover:ring hover:ring-green-700 bg-white h-auto justify-start items-start gap-2" to="/reservation/list-reservation/new-reservation?type=individual">
+                  <Link className="p-2 rounded-xl hover:shadow hover:ring hover:ring-hotel-soft-fern bg-white h-auto justify-start items-start gap-4" to="/reservation/list-reservation/new-reservation?type=individual">
                     <Users className="mt-1" size={24} />
                     <div className="flex flex-col gap-0 items-start">
                       <span>Group</span>
@@ -140,7 +140,7 @@ const ListReservation = () => {
                   </Link>
                 </Button>
                 <Button asChild variant="ghost">
-                  <Link className="p-2 rounded-xl hover:shadow hover:ring hover:ring-green-700 bg-white h-auto justify-start items-start gap-2" to="/reservation/list-reservation/new-reservation?type=individual">
+                  <Link className="p-2 rounded-xl hover:shadow hover:ring hover:ring-hotel-soft-fern bg-white h-auto justify-start items-start gap-4" to="/reservation/list-reservation/new-reservation?type=individual">
                     <Repeat className="mt-1" size={24} />
                     <div className="flex flex-col gap-0 items-start">
                       <span>Series</span>
@@ -149,7 +149,7 @@ const ListReservation = () => {
                   </Link>
                 </Button>
                 <Button asChild variant="ghost">
-                  <Link className="p-2 rounded-xl hover:shadow hover:ring hover:ring-green-700 bg-white h-auto justify-start items-start gap-2" to="/reservation/list-reservation/new-reservation?type=individual">
+                  <Link className="p-2 rounded-xl hover:shadow hover:ring hover:ring-hotel-soft-fern bg-white h-auto justify-start items-start gap-4" to="/reservation/list-reservation/new-reservation?type=individual">
                     <Blocks className="mt-1" size={24} />
                     <div className="flex flex-col gap-0 items-start">
                       <span>Block</span>
@@ -240,7 +240,7 @@ const ListReservation = () => {
                   <TableCell className="text-right">
                     <Popover>
                       <PopoverTrigger>
-                        <Button className="shadow rounded-xl p-4 cursor-pointer">
+                        <Button className="border border-hotel-green rounded-xl p-4 cursor-pointer">
                           <Ellipsis size={16} />
                         </Button>
                       </PopoverTrigger>

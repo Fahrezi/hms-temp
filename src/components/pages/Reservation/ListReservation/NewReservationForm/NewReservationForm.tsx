@@ -167,7 +167,7 @@ const RegistrationForm = () => {
           <TabsGroup tabsList={tabsList} methods={methods} errors={formState.errors} setValue={setValue} />
         </div>
         <div className="flex justify-end mt-6">
-          <Button type="submit" className="py-6 rounded-lg font-semibold bg-black text-white cursor-pointer hover:scale-98 disabled:bg-black/50 w-[150px] text-center">
+          <Button type="submit" className="py-6 rounded-lg !font-bold bg-hotel-green text-white cursor-pointer hover:scale-98 disabled:bg-black/50 w-[150px] text-center">
             Submit
           </Button>
         </div>

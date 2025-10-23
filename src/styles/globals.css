@@ -48,6 +48,36 @@
   }
 }
 
+@theme {
+  /* Brand */
+  --color-hotel-green: #40614c;
+  --color-hotel-green-hover: #4e715b;
+
+  --color-hotel-gold: #b8a76c;
+  --color-hotel-gold-dark: #9e905c;
+  --color-hotel-gold-light: #d2c389;
+
+  /* Neutrals */
+  --color-hotel-white: #ffffff;
+  --color-hotel-surface: #f6f7f6;
+  --color-hotel-divider: #d1d3d1;
+  --color-hotel-text: #2c2c2c;
+  --color-hotel-text-muted: #5b5b5b;
+
+  /* Soft greens (highlights) */
+  --color-hotel-mint-mist: #e3eae6;
+  --color-hotel-sage-whisper: #c8d5cc; /* recommended active bg */
+  --color-hotel-pale-moss: #afc2b5;
+  --color-hotel-soft-fern: #8faf9c;
+  --color-hotel-muted-olive: #738e7b;
+
+  /* Status */
+  --color-hotel-success: #4caf50;
+  --color-hotel-danger: #c95b4a;
+  --color-hotel-warning: #e5b75b;
+  --color-hotel-info: #6c91b8;
+}
+
 body {
   -webkit-font-smoothing: antialiased;
   font-family: "Poppins", sans-serif;
