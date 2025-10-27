@@ -8,6 +8,7 @@ import useSmallContainer from './hooks/useSmallContainer';
 import { queryClient } from './libs/queryClients';
 import { router } from './libs/router';
 import { HeaderNavProvider } from './contexts/HeaderNavContext';
+import { OverlayProvider } from './contexts/OverlayContext';
 
 const App = () => {
   useSmallContainer();
@@ -15,11 +16,13 @@ const App = () => {
   return (
     <QueryClientProvider client={queryClient}>
       <AuthProvider>
-        <HeaderNavProvider>
-          <Suspense fallback={<Loading />}>
-            <RouterProvider router={router} />
-          </Suspense>
-        </HeaderNavProvider>
+        <OverlayProvider>
+          <HeaderNavProvider>
+            <Suspense fallback={<Loading />}>
+              <RouterProvider router={router} />
+            </Suspense>
+          </HeaderNavProvider>
+        </OverlayProvider>
       </AuthProvider>
     </QueryClientProvider>
   );

@@ -1,4 +1,4 @@
-import { Outlet, useLocation, useNavigate } from 'react-router-dom';
+import { Link, Outlet, useLocation, useNavigate } from 'react-router-dom';
 
 import { useAuth } from '@/hooks/useAuth';
 import { useHeaderNav } from '@/hooks/useHeaderNav';
@@ -103,7 +103,7 @@ const AdminLayout = () => {
   }, [pathname]);
 
   return (
-    <div className="grid grid-cols-[248px_1fr]">
+    <div className="grid grid-cols-[248px_1fr] relative">
       <nav className="p-4 h-screen bg-[#FCFBFB] w-[248px] fixed z-20">
         <div aria-label="logo" className="mb-8">
           <img src="/images/logo.png" alt="logo" className="w-[60%] h-auto" />
@@ -112,7 +112,7 @@ const AdminLayout = () => {
           {
             NAVBAR_ITEMS.map((item, index) => (
               item.submenu === null ? (
-                <li key={index} className={cn("mb-4 rounded-xl", isActiveMenu(item.path) && 'bg-hotel-sage-whisper py-2 px-4 text-green-900 font-medium')}><a href={item.path}>{item.name}</a></li>
+                <li key={index} className={cn("mb-4 rounded-xl", isActiveMenu(item.path) && 'bg-hotel-sage-whisper py-2 px-4 text-green-900 font-medium')}><Link to={item.path}>{item.name}</Link></li>
               ) : (
                 <li key={index}>
                   <div className="flex items-center justify-between cursor-pointer mb-4">
@@ -122,7 +122,7 @@ const AdminLayout = () => {
                       {
                         item.submenu.map((subitem, subindex) => (
                           <li className={cn("rounded-xl", isActiveMenu(subitem.path) && 'bg-hotel-sage-whisper  py-2 px-4 text-green-900 font-medium')} key={subindex}>
-                            <a href={subitem.path}>{subitem.name}</a>
+                            <Link to={subitem.path}>{subitem.name}</Link>
                           </li>
                         ))
                       }
@@ -134,7 +134,7 @@ const AdminLayout = () => {
         </ul>
       </nav>
       <div className="opacity-0 w-[248px]"></div>
-      <main className="bg-white min-h-screen border border-gray-100 rounded-l-2xl w-full">
+      <main className="bg-white min-h-screen border border-gray-100 rounded-l-2xl w-full" id="main-content">
         <header className="flex justify-between items-center p-8 pr-6">
           <div className="space-y-4">
             <div className="flex items-center gap-2">
@@ -191,7 +191,6 @@ const AdminLayout = () => {
           <Outlet />
         </section>
       </main>
-      <footer>{/* Add your footer content */}</footer>
     </div>
   );
 };

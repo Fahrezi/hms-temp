@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/Button';
-import { useEffect, useState } from 'react';
+import { act, useEffect, useState } from 'react';
 import { cn } from '@/libs/utils';
 import Card from '@/components/ui/Card/Card';
 import { Table, TableBody, TableCaption, TableCell, TableFooter, TableHead, TableHeader, TableRow } from '@/components/ui/Table';
@@ -8,6 +8,9 @@ import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/Popover
 import { Blocks, ChevronDown, Ellipsis, Repeat, Search, User, Users } from 'lucide-react';
 import { Input } from '@/components/ui/Input';
 import { useHeaderNav } from '@/hooks/useHeaderNav';
+import { useOverlay } from '@/hooks/useOverlay';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/Select';
+import { optionsAvailability } from '../../Dashboard/data.contants';
 
 type FilterTab = 'current-reservation' | 'no-show-reservation' | 'no-show-room';
 const FILTER_TABS: { label: FilterTab; body: string }[] = [
@@ -87,6 +90,7 @@ const ACTION_TABLE = [
 const ListReservation = () => {
   const [filterTab, setFilterTab] = useState<FilterTab>('current-reservation');
   const { changeTitle } = useHeaderNav();
+  const { activateOverlay, isActive: isActiveOverlay } = useOverlay()
 
   useEffect(() => {
     changeTitle('List Reservation');
@@ -115,11 +119,14 @@ const ListReservation = () => {
         <div className="flex gap-4">
           <Popover>
             <PopoverTrigger>
-              <Button className="font-semibold bg-hotel-green hover:bg-hotel-green-hover text-hotel-mint-mist rounded-lg py-2 px-12 cursor-pointer shadow hover:scale-[1.009] active:scale-98">
+              <Button
+                className={`font-semibold bg-hotel-green hover:bg-hotel-green-hover text-hotel-gold-light rounded-lg py-2 px-12 cursor-pointer shadow hover:scale-[1.009] active:scale-98 ${isActiveOverlay && 'z-50'}`}
+                onClick={() => activateOverlay(!isActiveOverlay)}
+              >
                 New Reservation
               </Button>
             </PopoverTrigger>
-            <PopoverContent className="w-64 bg-white border-gray-100 rounded-xl shadow py-4 px-2">
+            <PopoverContent className="w-64 bg-white border-gray-100 rounded-xl shadow py-4 px-2" onCloseAutoFocus={() => activateOverlay(false)}>
               <div className="space-y-2 flex flex-col">
                 <Button asChild variant="ghost">
                   <Link className="p-2 rounded-xl hover:shadow hover:ring hover:ring-hotel-soft-fern bg-white h-auto justify-start items-start gap-4" to="/reservation/list-reservation/new-reservation?type=individual">
@@ -219,7 +226,18 @@ const ListReservation = () => {
         <Card>
           <header className="flex items-center justify-between mb-4">
             <h2 className="font-semibold text-2xl capitalize">{filterTab.split('-').join(' ')}</h2>
-            <p className="p-2 border border-black rounded-xl">Confirmed</p>
+            <Select>
+              <SelectTrigger className="overflow-hidden w-full border border-[#dadada] bg-white max-w-max">
+                <SelectValue placeholder="Select a room type" />
+              </SelectTrigger>
+              <SelectContent className="bg-white border border-[#DADADA] rounded-xl mt-0.5">
+                {optionsAvailability.map((opt, index) => (
+                  <SelectItem className="hover:bg-[#f5f5f5]" key={index} value={opt.value}>
+                    {opt.label}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
           </header>
           <Table>
             <TableCaption>A list of your recent invoices.</TableCaption>
