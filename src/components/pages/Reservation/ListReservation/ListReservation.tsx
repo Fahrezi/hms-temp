@@ -269,7 +269,7 @@ const ListReservation = () => {
                             <Ellipsis size={16} />
                           </Button>
                         </PopoverTrigger>
-                        <PopoverContent className="flex flex-col gap-2 p-2 rounded-lg w-[150px] shadow bg-white border-none">
+                        <PopoverContent className="flex flex-col gap-2 p-2 rounded-lg w-[150px] shadow bg-white border-none" align="start">
                           {ACTION_TABLE.map((item, index) => (
                             <span className="p-2 rounded hover:shadow-xs hover:bg-hotel-green-hover/70 cursor-pointer text-xs" key={index} onClick={item.action}>
                               {item.name}

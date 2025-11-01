@@ -237,3 +237,9 @@ export const sellingTypeList = [
   { "label": "House Use", "value": "house_use" },
   { "label": "Compliment", "value": "compliment" },
 ]
+
+export const country = [
+  { "id": 1, "name": "Indonesia" },
+  { "id": 2, "name": "USA" },
+  { "id": 3, "name": "Singapore" }
+];

@@ -9,31 +9,33 @@ import { Button } from '@/components/ui/Button';
 import { COLORS, COMP_FOC, EST_OCC_PERCENT, flowData, FOC_OCHU, HU_PERM, HU_PRMO, HU_TEMP, OC, occupancyBreakdown, OCCUPIED_NOW, OD, OOO_PERM, OOO_TEMP, optionsAvailability, roomAvailability, Rooms, roomsPaxTable, statusOptionList, TOTAL_ROOMS, VC, VCI, VD } from './data.contants';
 import { Bar, BarChart, CartesianGrid, Cell, Legend, Pie, PieChart, ResponsiveContainer, XAxis, YAxis, Tooltip as RechartsTooltip } from "recharts"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/Select';
-import { useEffect, useMemo, useState } from 'react';
+import { ButtonHTMLAttributes, useEffect, useMemo, useState } from 'react';
 import { useOverlay } from '@/hooks/useOverlay';
-import toast from 'react-hot-toast';
-
 
 const LIST_RESERVATION = [
   {
+    id: 'individual',
     text: 'Individual',
     subtitle: 'Single guest booking',
     icon: <User className="mt-1" size={24} />,
     type: 'individual',
   },
   {
+    id: 'group',
     text: 'Group',
     subtitle: 'Multiple guests under one booking',
     icon: <Users className="mt-1" size={24} />,
     type: 'group',
   },
   {
+    id: 'series',
     text: 'Series',
     subtitle: 'Repeated group bookings over time',
     icon: <Repeat className="mt-1" size={24} />,
     type: 'series',
   },
   {
+    id: 'block',
     text: 'Block',
     subtitle: 'Reserved rooms held without names yet',
     icon: <Blocks className="mt-1" size={24} />,
@@ -67,11 +69,20 @@ const KPI = ({ title, value, subtitle, tone="neutral" }: { title: string; value:
 }
 
 const Dashboard = () => {
-  const { activateOverlay, isActive: isActiveOverlay, activateNotif } = useOverlay();
+  const { activateOverlay, isActive: isActiveOverlay } = useOverlay();
   const [statusOpen, setStatusOpen] = useState(false);
   const styleStatusContainer = useMemo(() => `
-    ${statusOpen ? 'h-[500px]' : 'h-[75px]'}  
+    ${statusOpen ? 'h-[500px]' : 'h-[50px]'}  
   `, [statusOpen]);
+
+  useEffect(() => {
+    const buttonIndividual = document.querySelector<HTMLAnchorElement>('#individual');;
+    if (statusOpen) {
+      return buttonIndividual?.focus();
+    }
+
+    return buttonIndividual?.blur();
+  }, [statusOpen]);
 
   return (
     <div className='relative flex gap-8'>
@@ -91,7 +102,11 @@ const Dashboard = () => {
                 {
                   LIST_RESERVATION.map((value, index) => (
                     <Button asChild variant="ghost" key={index}>
-                      <Link className="p-2 rounded-xl hover:shadow hover:ring hover:ring-hotel-soft-fern bg-white h-auto justify-start items-start gap-4" to={`/reservation/list-reservation/new-reservation?type=${value.type}`}>
+                      <Link
+                        className="p-2 rounded-xl hover:shadow hover:ring hover:ring-hotel-soft-fern focus-within:ring focus-within:ring-hotel-soft-fern bg-white h-auto justify-start items-start gap-4"
+                        to={`/reservation/list-reservation/new-reservation?type=${value.type}`}
+                        id={value.id}
+                      >
                         {value.icon}
                         <div className="flex flex-col gap-0 items-start">
                           <span>{value.text}</span>
@@ -301,8 +316,8 @@ const Dashboard = () => {
       </div>
       <div className={`fixed bottom-5 right-5 bg-white shadow-sm rounded-xl w-[350px] border border-gray-200 transition-all duration-200 overflow-auto ${styleStatusContainer}`}>
         <div className="relative">
-          <header className="flex justify-between h-[75px] items-center sticky top-0 bg-white p-4 shadow-sm">
-            <h4 className="font-semibold text-2xl">Status</h4>
+          <header className="flex justify-between h-[50px] items-center sticky top-0 bg-white p-4 shadow-sm">
+            <h4 className="font-medium text-lg">Status</h4>
             <ChevronsUp size={20} className={`cursor-pointer ${statusOpen ? 'rotate-180' : ''}`}  onClick={() => setStatusOpen(!statusOpen)}/>
           </header>
           <div className={`p-4 inset-shadow-xs ${!statusOpen && 'h-0 overflow-hidden !p-0'}`}>

@@ -10,6 +10,7 @@ import { BreadcrumbType } from '@/types/headerNav';
 import { cn } from '@/libs/utils';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/Popover';
 import { Button } from '@/components/ui/Button';
+import Avatar from '@/components/ui/Avatar';
 
 const NAVBAR_ITEMS = [
   {
@@ -133,8 +134,8 @@ const AdminLayout = () => {
         <div className="opacity-0 w-[248px]">
           halo
         </div>
-        <main className="bg-white min-w-0 overflow-auto min-h-screen border border-gray-100 rounded-l-2xl" id="main-content">
-          <header className="flex justify-between items-center p-8 pr-6">
+        <main className="bg-white min-w-0 overflow-auto min-h-screen border border-gray-200 rounded-l-2xl" id="main-content">
+          <header className="flex justify-between items-start p-8 pr-6">
             <div className="space-y-4">
               <div className="flex items-center gap-2">
                 {/* {breadcrumb.length > 1 && (
@@ -167,9 +168,7 @@ const AdminLayout = () => {
             </div>
             <Popover>
               <PopoverTrigger>
-                <button className="cursor-pointer p-2">
-                  <CircleUser className="text-black" size={32}/>
-                </button>
+                <Avatar initial="A" className="cursor-pointer" />
               </PopoverTrigger>
               <PopoverContent className="w-64 rounded-xl shadow bg-white p-4 border-gray-100 left-4" align="end">
                 <div>

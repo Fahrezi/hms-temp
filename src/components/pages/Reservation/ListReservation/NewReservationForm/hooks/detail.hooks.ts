@@ -10,7 +10,7 @@ type ListResponse = {
   id: string
 };
 
-const BASE_URL = "http://localhost:5174";
+const BASE_URL = "http://localhost:5175";
 
 export const useDetail = () => {
   const [countryList, setCountryList] = useState<List[]>([]);

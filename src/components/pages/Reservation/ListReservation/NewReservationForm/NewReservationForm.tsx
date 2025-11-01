@@ -342,7 +342,7 @@ const RegistrationForm = () => {
     }
 
     try {
-      const response = await fetch('http://localhost:5174/reservations', {
+      const response = await fetch('http://localhost:5175/reservations', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
