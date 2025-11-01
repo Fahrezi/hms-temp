@@ -5,7 +5,7 @@ import { FieldValues, useForm, UseFormProps } from "react-hook-form";
 import { ZodTypeAny } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "../Table";
-import { Eye, Pencil, Trash } from "lucide-react";
+import { Eye, Pencil, PlusCircle, Trash } from "lucide-react";
 
 type MultiFieldInputProps<TValues extends FieldValues> = {
   buttonText: string;
@@ -22,7 +22,7 @@ type MultiFieldInputProps<TValues extends FieldValues> = {
   values: any[];
   headerTable: { label: string; value: string }[];
   indexBody: string[];
-}
+};
 
 const MultiFieldInput = <TValues extends FieldValues>(props: MultiFieldInputProps<TValues>) => {
   const {
@@ -37,7 +37,7 @@ const MultiFieldInput = <TValues extends FieldValues>(props: MultiFieldInputProp
     cancelText,
     values,
     headerTable,
-    indexBody
+    indexBody,
   } = props;
 
   const [index, setIndex] = useState<number | null>(null);
@@ -58,6 +58,10 @@ const MultiFieldInput = <TValues extends FieldValues>(props: MultiFieldInputProp
     }
     if (!openModalForm) methods.reset({} as any);
     // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [openModalForm])
+
+  useEffect(() => {
+    if (!openModalForm) methods.reset({} as any);
   }, [openModalForm])
   
   const handleSubmit = methods.handleSubmit((value) => {
@@ -94,9 +98,9 @@ const MultiFieldInput = <TValues extends FieldValues>(props: MultiFieldInputProp
     <div>
       <header className="flex justify-between items-center mb-4">
         <h4 className="text-[#5b5b5b] text-xl">{title}</h4>
-        <Button onClick={() => setOpenModalForm(true)} variant="default">{buttonText}</Button>
+        <Button onClick={() => setOpenModalForm(true)} variant="secondary"><PlusCircle size={16} /> {buttonText}</Button>
       </header>
-      <div>
+      <div className="border border-gray-100/50 rounded-lg">
         <Table>
           <TableHeader>
             <TableRow>
@@ -106,7 +110,7 @@ const MultiFieldInput = <TValues extends FieldValues>(props: MultiFieldInputProp
               ))}
             </TableRow>
           </TableHeader>
-          <TableBody>
+          <TableBody className="bg-white">
             {((typeof values === 'object' && values.length === 0) || !values) ? (
               <TableRow>
                 <TableCell colSpan={headerTable.length+1} className="h-24 text-center">No results.</TableCell>
@@ -124,7 +128,7 @@ const MultiFieldInput = <TValues extends FieldValues>(props: MultiFieldInputProp
                       </div>
                     </TableCell>
                     {indexBody?.map((body, index) => (
-                      <TableCell key={index}>{data[body]}</TableCell>
+                      <TableCell key={index} className="max-w-[200px] truncate overflow-hidden">{data[body]}</TableCell>
                     ))}
                   </TableRow>
                 ))}

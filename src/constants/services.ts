@@ -8,4 +8,8 @@ const AUTH_SERVICE = {
   LOGOUT: '/auth/logout',
 };
 
-export { USER_SERVICE, AUTH_SERVICE };
+const RESERVATION = {
+  BASE: '/reservations',
+}
+
+export { USER_SERVICE, AUTH_SERVICE, RESERVATION };

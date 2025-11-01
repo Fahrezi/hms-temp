@@ -4,7 +4,7 @@ export type User = {
   email: string;
   id: string;
   name: string;
-  roles: string[];
+  role: string;
 };
 
 export type Topic = {

@@ -7,10 +7,39 @@ import { Table, TableBody, TableCaption, TableCell, TableFooter, TableHead, Tabl
 import { Popover, PopoverTrigger, PopoverContent } from '@/components/ui/Popover';
 import { Button } from '@/components/ui/Button';
 import { COLORS, COMP_FOC, EST_OCC_PERCENT, flowData, FOC_OCHU, HU_PERM, HU_PRMO, HU_TEMP, OC, occupancyBreakdown, OCCUPIED_NOW, OD, OOO_PERM, OOO_TEMP, optionsAvailability, roomAvailability, Rooms, roomsPaxTable, statusOptionList, TOTAL_ROOMS, VC, VCI, VD } from './data.contants';
-import { Bar, BarChart, CartesianGrid, Cell, Legend, Pie, PieChart, ResponsiveContainer, XAxis, YAxis } from "recharts"
+import { Bar, BarChart, CartesianGrid, Cell, Legend, Pie, PieChart, ResponsiveContainer, XAxis, YAxis, Tooltip as RechartsTooltip } from "recharts"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/Select';
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useOverlay } from '@/hooks/useOverlay';
+import toast from 'react-hot-toast';
+
+
+const LIST_RESERVATION = [
+  {
+    text: 'Individual',
+    subtitle: 'Single guest booking',
+    icon: <User className="mt-1" size={24} />,
+    type: 'individual',
+  },
+  {
+    text: 'Group',
+    subtitle: 'Multiple guests under one booking',
+    icon: <Users className="mt-1" size={24} />,
+    type: 'group',
+  },
+  {
+    text: 'Series',
+    subtitle: 'Repeated group bookings over time',
+    icon: <Repeat className="mt-1" size={24} />,
+    type: 'series',
+  },
+  {
+    text: 'Block',
+    subtitle: 'Reserved rooms held without names yet',
+    icon: <Blocks className="mt-1" size={24} />,
+    type: 'block',
+  },
+]
 
 const KPI = ({ title, value, subtitle, tone="neutral" }: { title: string; value: number | string; subtitle?: string; tone?: string; }) => {
   const toneMap: Record<string, string> = {
@@ -38,7 +67,7 @@ const KPI = ({ title, value, subtitle, tone="neutral" }: { title: string; value:
 }
 
 const Dashboard = () => {
-  const { activateOverlay, isActive: isActiveOverlay } = useOverlay();
+  const { activateOverlay, isActive: isActiveOverlay, activateNotif } = useOverlay();
   const [statusOpen, setStatusOpen] = useState(false);
   const styleStatusContainer = useMemo(() => `
     ${statusOpen ? 'h-[500px]' : 'h-[80px]'}  
@@ -59,47 +88,26 @@ const Dashboard = () => {
             </PopoverTrigger>
             <PopoverContent className="w-64 bg-white border-gray-100 rounded-xl shadow py-4 px-2" onCloseAutoFocus={() => activateOverlay(false)}>
               <div className="space-y-2 flex flex-col">
-                <Button asChild variant="ghost">
-                  <Link className="p-2 rounded-xl hover:shadow hover:ring hover:ring-green-700 bg-white h-auto justify-start items-start gap-2" to="/reservation/list-reservation/new-reservation?type=individual">
-                    <User className="mt-1" size={24} />
-                    <div className="flex flex-col gap-0 items-start">
-                      <span>Individual</span>
-                      <span className="text-xs text-gray-500 text-wrap">Single guest booking</span>
-                    </div>
-                  </Link>
-                </Button>
-                <Button asChild variant="ghost">
-                  <Link className="p-2 rounded-xl hover:shadow hover:ring hover:ring-green-700 bg-white h-auto justify-start items-start gap-2" to="/reservation/list-reservation/new-reservation?type=individual">
-                    <Users className="mt-1" size={24} />
-                    <div className="flex flex-col gap-0 items-start">
-                      <span>Group</span>
-                      <span className="text-xs text-gray-500 text-wrap">Multiple guests under one booking</span>
-                    </div>
-                  </Link>
-                </Button>
-                <Button asChild variant="ghost">
-                  <Link className="p-2 rounded-xl hover:shadow hover:ring hover:ring-green-700 bg-white h-auto justify-start items-start gap-2" to="/reservation/list-reservation/new-reservation?type=individual">
-                    <Repeat className="mt-1" size={24} />
-                    <div className="flex flex-col gap-0 items-start">
-                      <span>Series</span>
-                      <span className="text-xs text-gray-500 text-wrap">Repeated group bookings over time</span>
-                    </div>
-                  </Link>
-                </Button>
-                <Button asChild variant="ghost">
-                  <Link className="p-2 rounded-xl hover:shadow hover:ring hover:ring-green-700 bg-white h-auto justify-start items-start gap-2" to="/reservation/list-reservation/new-reservation?type=individual">
-                    <Blocks className="mt-1" size={24} />
-                    <div className="flex flex-col gap-0 items-start">
-                      <span>Block</span>
-                      <span className="text-xs text-gray-500 text-wrap">Reserved rooms held without names yet</span>
-                    </div>
-                  </Link>
-                </Button>
+                {
+                  LIST_RESERVATION.map((value, index) => (
+                    <Button asChild variant="ghost" key={index}>
+                      <Link className="p-2 rounded-xl hover:shadow hover:ring hover:ring-hotel-soft-fern bg-white h-auto justify-start items-start gap-4" to={`/reservation/list-reservation/new-reservation?type=${value.type}`}>
+                        {value.icon}
+                        <div className="flex flex-col gap-0 items-start">
+                          <span>{value.text}</span>
+                          <span className="text-xs text-gray-500 text-wrap">{value.subtitle}</span>
+                        </div>
+                      </Link>
+                    </Button>
+                  ))
+                }
               </div>
             </PopoverContent>
           </Popover>
-          <Button variant="ghost" className="font-semibold bg-white rounded-lg py-2 px-12 text-black cursor-pointer shadow hover:scale-[1.009]">
-            Walk In Register
+          <Button variant="ghost" asChild className="font-semibold bg-white rounded-lg py-2 px-12 text-black cursor-pointer shadow hover:scale-[1.009]">
+            <Link to="/reservation/register">
+              Walk In Register
+            </Link>
           </Button>
         </section>
         <section className="grid grid-cols-6 gap-4 mb-4">
@@ -125,7 +133,7 @@ const Dashboard = () => {
                       <Cell key={`cell-${idx}`} fill={COLORS[idx % COLORS.length]} />
                     ))}
                   </Pie>
-                  <Tooltip />
+                  <RechartsTooltip />
                   <Legend />
                 </PieChart>
               </ResponsiveContainer>
@@ -137,14 +145,14 @@ const Dashboard = () => {
               <h2 className="text-lg font-semibold text-slate-800">Room Flow Today</h2>
               <span className="text-xs text-slate-500">Arrivals / Departures / Walk-ins</span>
             </div>
-            <div className="h-72 min-w-0">
+            <div className="h-72 min-w-0">  
               <ResponsiveContainer>
                 <BarChart data={flowData}>
                   <CartesianGrid strokeDasharray="3 3" />
                   <XAxis dataKey="label" />
                   <YAxis allowDecimals={false} />
-                  <Tooltip />
-                  <Bar dataKey="value" fill="#2563eb" radius={[6, 6, 0, 0]} />
+                  <RechartsTooltip />
+                  <Bar dataKey="value" fill="#738e7b" radius={[6, 6, 0, 0]} />
                 </BarChart>
               </ResponsiveContainer>
             </div>
@@ -184,7 +192,7 @@ const Dashboard = () => {
           </div>
         </Card>
         {/* HK Status Grid */}
-        <section className="mt-6 grid grid-cols-1 gap-6 xl:grid-cols-3">
+        <section className="my-6 grid grid-cols-1 gap-6 xl:grid-cols-3">
           <Card>
             <h3 className="text-base font-semibold text-slate-800">Vacant Status</h3>
             <div className="mt-3 space-y-2 text-sm">

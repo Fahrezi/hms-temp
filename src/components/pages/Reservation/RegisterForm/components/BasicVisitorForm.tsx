@@ -6,6 +6,7 @@ import { Control } from "react-hook-form";
 import TableInput from "@/components/ui/TableInput";
 
 type StepProps = RHFBridgeProps<any>;
+
 const HEADER_RATE = [
   { label: 'Type', value: 'typeGuestList' },
   { label: 'Rm#', value: 'roomNumberGuestList' },
@@ -58,8 +59,6 @@ const seedGuestList = [
 export const BasicVisitorForm = ({ form, errors, setValue }: StepProps) => {
   const { register, control, watch } = form;
   const valuesGuestList = watch('guestList');
-
-  console.log(valuesGuestList);
 
   return (
     <CardForm className="mt-6 grid grid-cols-2 gap-4 items-end" title="Basic Visitor Information">

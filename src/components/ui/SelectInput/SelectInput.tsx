@@ -13,10 +13,11 @@ type SelectInputProps = {
   placeholder?: string;
   label?: string;
   options: Option[];
+  onChangeCallback?: (value: string) => void
 }
 
 const SelectInput = (props: SelectInputProps) => {
-  const { name, control, disabled, placeholder, label, options } = props;
+  const { name, control, disabled, placeholder, label, options, onChangeCallback } = props;
   return (
     <div>
       {label && <label className="font-medium mb-2 text-sm inline-block" htmlFor={name}>{label}</label>}
@@ -30,6 +31,7 @@ const SelectInput = (props: SelectInputProps) => {
               value={(field.value as string) ?? ""}
               onValueChange={(v) => {
                 field.onChange(v);
+                onChangeCallback?.(v);
               }}
             >
               <SelectTrigger className="overflow-hidden w-full border border-[#dadada] bg-white" id={name} aria-invalid={!!fieldState.error}>

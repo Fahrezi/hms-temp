@@ -4,11 +4,15 @@ import SelectInput from "@/components/ui/SelectInput";
 import { Control } from "react-hook-form";
 import { RHFBridgeProps } from "../types/index.type";
 import { Textarea } from "@/components/ui/TextArea";
+import { guestIdTypeList, guestTypeList } from "@/constants/data";
+import { useDetail } from "../hooks/detail.hooks";
 
 type StepProps = RHFBridgeProps<any>;
 
 export const DetailForm = ({ form, errors }: StepProps) => {
   const { register, control } = form;
+  const { citiesList, countryList, languageList, nationalityList } = useDetail();
+
   return (
     <CardForm className="mt-6" title="Detail">
       <section className="mb-8">
@@ -43,11 +47,18 @@ export const DetailForm = ({ form, errors }: StepProps) => {
             {...register('homeAddress')}
           />
           <InputLabel
+            label="Mailing Address"
+            type="text"
+            placeholder="Mailing Address"
+            errors={errors}
+            {...register('mailingAddress')}
+          />
+          <InputLabel
             label="Phone"
             type="text"
             placeholder="Phone"
             errors={errors}
-            {...register('phone')}
+            {...register('phoneNumberDetail')}
           />
           <InputLabel
             label="Alternative Phone"
@@ -56,26 +67,56 @@ export const DetailForm = ({ form, errors }: StepProps) => {
             errors={errors}
             {...register('alternativePhone')}
           />
+          <SelectInput
+            name="country"
+            label="Country"
+            control={control as Control<any>}
+            placeholder="Select Country"
+            options={countryList}
+          />
+          <SelectInput
+            name="city"
+            label="City"
+            control={control as Control<any>}
+            placeholder="Select City"
+            options={citiesList}
+          />
+          <div className="grid grid-cols-2 gap-4">
+            <SelectInput
+              name="nationality"
+              label="Nationality"
+              control={control as Control<any>}
+              placeholder="Select Nationality"
+              options={nationalityList}
+            />
+            <SelectInput
+              name="language"
+              label="Language"
+              control={control as Control<any>}
+              placeholder="Select Language"
+              options={languageList}
+            />
+          </div>
           <InputLabel
             label="Mobile"
             type="text"
             placeholder="Mobile"
             errors={errors}
-            {...register('mobile')}
+            {...register('mobileDetail')}
           />
           <InputLabel
             label="Fax"
             type="text"
             placeholder="Fax"
             errors={errors}
-            {...register('fax')}
+            {...register('faxDetail')}
           />
           <InputLabel
             label="E-mail"
             type="text"
             placeholder="E-mail"
             errors={errors}
-            {...register('email')}
+            {...register('emailDetail')}
           />
         </div>
       </section>
@@ -87,11 +128,7 @@ export const DetailForm = ({ form, errors }: StepProps) => {
             label="Guest ID Type"
             control={control as Control<any>}
             placeholder="Select Guest ID Type"
-            options={[
-              { label: 'Chargeable', value: 'Chargeable' },
-              { label: 'Rate Group 2', value: 'Rate Group 2' },
-              { label: 'Rate Group 3', value: 'Rate Group 3' },
-            ]}
+            options={guestIdTypeList}
           />
           <InputLabel
             label="guestId"
@@ -105,11 +142,7 @@ export const DetailForm = ({ form, errors }: StepProps) => {
             label="Guest Type"
             control={control as Control<any>}
             placeholder="Select Guest Type"
-            options={[
-              { label: 'Chargeable', value: 'Chargeable' },
-              { label: 'Rate Group 2', value: 'Rate Group 2' },
-              { label: 'Rate Group 3', value: 'Rate Group 3' },
-            ]}
+            options={guestTypeList}
           />
           <div className="grid grid-cols-2 gap-4 items-end">
             <InputLabel
@@ -119,12 +152,11 @@ export const DetailForm = ({ form, errors }: StepProps) => {
               errors={errors}
               {...register('specialDate')}
             />
-            <InputLabel
+            <Textarea
               label=""
-              type="text"
               placeholder="Notes"
               errors={errors}
-              {...register('notesSpecialDate')}
+              {...register('specialDateNote')}
             /> 
           </div>
         </div>
@@ -137,7 +169,7 @@ export const DetailForm = ({ form, errors }: StepProps) => {
             type="text"
             placeholder="Company"
             errors={errors}
-            {...register('company')}
+            {...register('companyDetail')}
           />
           <InputLabel
             label="Position"
@@ -151,21 +183,28 @@ export const DetailForm = ({ form, errors }: StepProps) => {
             type="text"
             placeholder="Phone"
             errors={errors}
-            {...register('phone')}
+            {...register('companyPhoneDetail')}
+          />
+          <InputLabel
+            label="Mobile"
+            type="text"
+            placeholder="Mobile"
+            errors={errors}
+            {...register('companyMobile')}
           />
           <InputLabel
             label="Fax"
             type="text"
             placeholder="Fax"
             errors={errors}
-            {...register('fax')}
+            {...register('companyFax')}
           />
           <InputLabel
             label="Website"
             type="text"
             placeholder="Website"
             errors={errors}
-            {...register('website')}
+            {...register('companySite')}
           />
           <Textarea
             label="Address"

@@ -5,7 +5,7 @@ import { Control } from "react-hook-form";
 import { RHFBridgeProps } from "../types/index.type";
 import { Textarea } from "@/components/ui/TextArea";
 import MultiFieldInput from "@/components/ui/MultiFieldInput";
-import TableInput from "@/components/ui/TableInput";
+import { roomNumberList, roomTypeList, sellingTypeList } from "@/constants/data";
 
 type StepProps = RHFBridgeProps<any>;
 
@@ -29,80 +29,28 @@ const INDEX_BODY = [
   'typeAccommodation'
 ];
 
-const HEADER_RATE = [
-  { label: 'From', value: 'fromRate' },
-  { label: 'Until', value: 'untilRate' },
-  { label: 'Item', value: 'itemRate' },
-  { label: 'Description', value: 'descriptionRate' },
-  { label: '#Room', value: 'roomIdRate' },
-  { label: 'Qty', value: 'quantityRate' },
-  { label: 'Nights', value: 'nightAmountRate' },
-  { label: 'Rate', value: 'rate' },
-  { label: 'Amount', value: 'amountRate' },
-  { label: 'RPL', value: 'rplRate' },
+const RATE_INDEX_BODY = [
+  'from_date',
+  'until_date',
+  'item',
+  'description',
+  'item',
+  'room_count',
+  'nights',
+  'amount',
+  'rpl'
 ];
 
-const rateSeed = [
-  {
-    fromRate: '2025-10-01',
-    untilRate: '2025-10-05',
-    itemRate: 'Deluxe Room',
-    descriptionRate: 'Sea view deluxe room with breakfast',
-    roomIdRate: 'R-101',
-    quantityRate: 2,
-    nightAmountRate: 4,
-    rate: 750000,
-    amountRate: 6000000,
-    rplRate: 'Yes',
-  },
-  {
-    fromRate: '2025-10-03',
-    untilRate: '2025-10-07',
-    itemRate: 'Suite Room',
-    descriptionRate: 'Spacious suite with balcony and living room',
-    roomIdRate: 'R-203',
-    quantityRate: 1,
-    nightAmountRate: 4,
-    rate: 1250000,
-    amountRate: 5000000,
-    rplRate: 'No',
-  },
-  {
-    fromRate: '2025-10-10',
-    untilRate: '2025-10-12',
-    itemRate: 'Standard Room',
-    descriptionRate: 'Basic room for short stay',
-    roomIdRate: 'R-305',
-    quantityRate: 3,
-    nightAmountRate: 2,
-    rate: 500000,
-    amountRate: 3000000,
-    rplRate: 'Yes',
-  },
-  {
-    fromRate: '2025-11-01',
-    untilRate: '2025-11-05',
-    itemRate: 'Family Room',
-    descriptionRate: 'Large family suite with two queen beds',
-    roomIdRate: 'R-402',
-    quantityRate: 1,
-    nightAmountRate: 4,
-    rate: 950000,
-    amountRate: 3800000,
-    rplRate: 'No',
-  },
-  {
-    fromRate: '2025-12-20',
-    untilRate: '2025-12-25',
-    itemRate: 'Executive Room',
-    descriptionRate: 'Premium executive room with lounge access',
-    roomIdRate: 'R-509',
-    quantityRate: 2,
-    nightAmountRate: 5,
-    rate: 1350000,
-    amountRate: 13500000,
-    rplRate: 'Yes',
-  },
+const HEADER_RATE = [
+  { label: 'From', value: 'from_rate' },
+  { label: 'Until', value: 'until_rate' },
+  { label: 'Item', value: 'item' },
+  { label: 'Description', value: 'description' },
+  { label: '#Room', value: 'item' },
+  { label: 'Qty', value: 'room_count' },
+  { label: 'Nights', value: 'nights' },
+  { label: 'Amount', value: 'amount' },
+  { label: 'RPL', value: 'rpl' },
 ];
 
 export const RoomRateForm = ({ form, errors, setValue }: StepProps) => {
@@ -112,76 +60,78 @@ export const RoomRateForm = ({ form, errors, setValue }: StepProps) => {
 
   return (
     <CardForm className="mt-6" title="Room & Rate">
-      <MultiFieldInput
-        buttonText="Add Accommodation"
-        headerTable={HEADER_ACCOMMODATION}
-        values={valuesAccommodation}
-        onSubmit={(data) => setValue('accommodation', data)}
-        title="Accommodation"
-        indexBody={INDEX_BODY}
-      >
-        {({ register: registerMulti, control: controlMulti }) => (
-          <div className="grid grid-cols-2 gap-4">
-            <SelectInput
-              name="typeAccommodation"
-              label="Type"
-              control={controlMulti as Control<any>}
-              placeholder="Select Type"
-              options={[
-                { label: 'Chargeable', value: 'Chargeable' },
-                { label: 'Rate Group 2', value: 'Rate Group 2' },
-                { label: 'Rate Group 3', value: 'Rate Group 3' },
-              ]}
-            />
-            <SelectInput
-              name="rsvpTypeAccommodation"
-              label="RSVP Type"
-              control={controlMulti as Control<any>}
-              placeholder="Select Type"
-              options={[
-                { label: 'Chargeable', value: 'Chargeable' },
-                { label: 'Rate Group 2', value: 'Rate Group 2' },
-                { label: 'Rate Group 3', value: 'Rate Group 3' },
-              ]}
-            />
-            <InputLabel
-              label="RSC"
-              type="text"
-              placeholder="Enter RSC"
-              errors={errors}
-              {...registerMulti('rscAccommodation')}
-            />
-            <InputLabel
-              label="Room"
-              type="text"
-              placeholder="Enter Room"
-              errors={errors}
-              {...registerMulti('roomAccommodation')}
-            />
-            <InputLabel
-              label="Adult"
-              type="text"
-              placeholder="Enter Adult"
-              errors={errors}
-              {...registerMulti('adultAmountAccommodation')}
-            />
-            <InputLabel
-              label="Child"
-              type="text"
-              placeholder="Enter Child"
-              errors={errors}
-              {...registerMulti('childAmountAccommodation')}
-            />
-            <InputLabel
-              label="Cut Off"
-              type="text"
-              placeholder="Enter Cut Off"
-              errors={errors}
-              {...registerMulti('cutOffAccommodation')}
-            />
-          </div>
-        )}
-      </MultiFieldInput>
+      <section className="mb-6">
+        <MultiFieldInput
+          buttonText="Add Accommodation"
+          headerTable={HEADER_ACCOMMODATION}
+          values={valuesAccommodation}
+          onSubmit={(data) => setValue('accommodation', data)}
+          title="Accommodation"
+          indexBody={INDEX_BODY}
+        >
+          {({ register: registerMulti, control: controlMulti }) => (
+            <div className="grid grid-cols-2 gap-4">
+              <SelectInput
+                name="typeAccommodation"
+                label="Type"
+                control={controlMulti as Control<any>}
+                placeholder="Select Type"
+                options={[
+                  { label: 'Chargeable', value: 'Chargeable' },
+                  { label: 'Rate Group 2', value: 'Rate Group 2' },
+                  { label: 'Rate Group 3', value: 'Rate Group 3' },
+                ]}
+              />
+              <SelectInput
+                name="rsvpTypeAccommodation"
+                label="RSVP Type"
+                control={controlMulti as Control<any>}
+                placeholder="Select Type"
+                options={[
+                  { label: 'Chargeable', value: 'Chargeable' },
+                  { label: 'Rate Group 2', value: 'Rate Group 2' },
+                  { label: 'Rate Group 3', value: 'Rate Group 3' },
+                ]}
+              />
+              <InputLabel
+                label="RSC"
+                type="text"
+                placeholder="Enter RSC"
+                errors={errors}
+                {...registerMulti('rscAccommodation')}
+              />
+              <InputLabel
+                label="Room"
+                type="text"
+                placeholder="Enter Room"
+                errors={errors}
+                {...registerMulti('roomAccommodation')}
+              />
+              <InputLabel
+                label="Adult"
+                type="text"
+                placeholder="Enter Adult"
+                errors={errors}
+                {...registerMulti('adultAmountAccommodation')}
+              />
+              <InputLabel
+                label="Child"
+                type="text"
+                placeholder="Enter Child"
+                errors={errors}
+                {...registerMulti('childAmountAccommodation')}
+              />
+              <InputLabel
+                label="Cut Off"
+                type="text"
+                placeholder="Enter Cut Off"
+                errors={errors}
+                {...registerMulti('cutOffAccommodation')}
+              />
+            </div>
+          )}
+        </MultiFieldInput>
+      </section>
       <section className="mb-6">
         <h4 className="mb-6 text-[#5b5b5b] text-xl">Booking Info</h4>
         <div className="grid grid-cols-2 gap-4">
@@ -223,11 +173,7 @@ export const RoomRateForm = ({ form, errors, setValue }: StepProps) => {
             label="Selling Type"
             control={control as Control<any>}
             placeholder="Select Type"
-            options={[
-              { label: 'Chargeable', value: 'Chargeable' },
-              { label: 'Rate Group 2', value: 'Rate Group 2' },
-              { label: 'Rate Group 3', value: 'Rate Group 3' },
-            ]}
+            options={sellingTypeList}
           />
           <Textarea
             label="Notes Detail"
@@ -237,14 +183,91 @@ export const RoomRateForm = ({ form, errors, setValue }: StepProps) => {
           /> 
         </div>
       </section>
-      <section>
-        <TableInput
+      <section className="mb-6">
+        <MultiFieldInput
+          buttonText="Add Rate List"
           headerTable={HEADER_RATE}
-          data={rateSeed}
-          onCheck={(data) => setValue("rate", data)}
-          title="Rate"
           values={valuesRate}
-        />
+          onSubmit={(data) => setValue('rate', data)}
+          title="Rate"
+          indexBody={RATE_INDEX_BODY}
+        >
+          {({ register: registerMulti, control: controlMulti, watch: watchMulti, setValue: setValueMulti }) => (
+            <div className="grid grid-cols-2 gap-4">
+              <InputLabel
+                label="From"
+                type="date"
+                defaultValue={new Date().toISOString().split('T')[0]}
+                errors={errors}
+                {...registerMulti('from_date')}
+              />
+              <InputLabel
+                label="Until"
+                type="date"
+                defaultValue={new Date().toISOString().split('T')[0]}
+                errors={errors}
+                {...registerMulti('until_date')}
+              />
+              <SelectInput 
+                name="item"
+                label="Type Room"
+                control={controlMulti as Control<any>}
+                placeholder="Select Type Room"
+                options={roomTypeList.map((item) => ({ label: item.label, value: item.id }))}
+                onChangeCallback={(v) => setValueMulti('description', roomTypeList.find((item) => item.id === v)?.description)}
+              />
+              <InputLabel
+                label="description"
+                type="text"
+                disabled
+                readOnly
+                errors={errors}
+                {...registerMulti('description')}
+              />
+              <SelectInput
+                name="room_number"
+                label="Room Number"
+                control={controlMulti as Control<any>}
+                placeholder="Select Room Number"
+                options={roomNumberList}
+              />
+              <InputLabel
+                label="Qty"
+                type="number"
+                errors={errors}
+                {...registerMulti('room_count')}
+                onChange={(e) => {
+                  setValueMulti('room_count', Number(e.target.value));
+                  setValueMulti('amount', Number(e.target.value) * Number(watchMulti('nights') ?? 0) * Number(roomTypeList.find((item) => item.id === watchMulti('item'))?.rate));
+                }}
+              />
+              <InputLabel
+                label="Nights"
+                type="number"
+                errors={errors}
+                {...registerMulti('nights')}
+                onChange={(e) => {
+                  setValueMulti('nights', Number(e.target.value));
+                  setValueMulti('amount', Number(e.target.value) * Number(watchMulti('nights') ?? 0) * Number(roomTypeList.find((item) => item.id === watchMulti('item'))?.rate));
+                }}
+              />
+              <InputLabel
+                label="Amount"
+                type="number"
+                disabled
+                errors={errors}
+                readOnly
+                {...registerMulti('amount')}
+              />
+              <InputLabel
+                label="RPL"
+                type="text"
+                errors={errors}
+                {...registerMulti('rpl')}
+              />
+            </div>
+          )}
+        </MultiFieldInput>
       </section>
     </CardForm>
   );

@@ -1,0 +1,22 @@
+export const RESERVATION_LABEL_KEY = [
+  { "label": "RSVP No", "value": "rsvp_no" },
+  { "label": "Room Type", "value": "room_type" },
+  { "label": "Room No", "value": "room_no" },
+  { "label": "Room Count", "value": "room_count" },
+  { "label": "Last Name", "value": "last_name" },
+  { "label": "First Name", "value": "first_name" },
+  { "label": "Adult Pax", "value": "pax_adult" },
+  { "label": "Child Pax", "value": "pax_child" },
+  { "label": "Arrival Date", "value": "arrival_date" },
+  { "label": "Departure Date", "value": "departure_date" },
+  { "label": "ETA By", "value": "eta_by" },
+  { "label": "Voucher No", "value": "voucher_no" },
+  { "label": "Group Name", "value": "group_name" },
+  { "label": "Rate Source", "value": "rate_source" },
+  { "label": "Deposit Amount", "value": "deposit_amount" },
+  { "label": "Status", "value": "sts" },
+  { "label": "User", "value": "us" },
+  { "label": "RSVP Type", "value": "rsvp_type" },
+  { "label": "Non Refundable", "value": "non_refundable" },
+  { "label": "RNW", "value": "rnw" }
+];

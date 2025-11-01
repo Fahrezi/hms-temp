@@ -4,6 +4,8 @@ import SelectInput from "@/components/ui/SelectInput";
 import { Control } from "react-hook-form";
 import { RHFBridgeProps } from "../types/index.type";
 import TableInput from "@/components/ui/TableInput";
+import { cardTypeList, paidMethodList } from "@/constants/data";
+import { useMemo } from "react";
 
 type StepProps = RHFBridgeProps<any>;
 
@@ -25,7 +27,14 @@ const HEADER_MEMBERSHIP = [
 ]
 
 export const AccountForm = ({ form, errors }: StepProps) => {
-  const { register, control } = form;
+  const { register, control, watch } = form;
+  const paidMethodValue = watch('paidMethod');
+
+  const isCard = useMemo(() => {
+    if (!paidMethodValue) return false;
+    return ['credit_card', 'debit_card'].includes(paidMethodValue);
+  }, [paidMethodValue])
+
   return (
     <CardForm className="mt-6" title="Account">
       <section className="mb-8">
@@ -36,26 +45,20 @@ export const AccountForm = ({ form, errors }: StepProps) => {
             label="Paid By"
             control={control as Control<any>}
             placeholder="Select Paid Method"
-            options={[
-              { label: 'Chargeable', value: 'Chargeable' },
-              { label: 'Rate Group 2', value: 'Rate Group 2' },
-              { label: 'Rate Group 3', value: 'Rate Group 3' },
-            ]}
+            options={paidMethodList}
           />
           <SelectInput
             name="cardType"
             label="Card Type"
             control={control as Control<any>}
+            disabled={!isCard}
             placeholder="Select Card Type"
-            options={[
-              { label: 'Chargeable', value: 'Chargeable' },
-              { label: 'Rate Group 2', value: 'Rate Group 2' },
-              { label: 'Rate Group 3', value: 'Rate Group 3' },
-            ]}
+            options={cardTypeList}
           />
           <InputLabel
             label="Card"
             type="text"
+            disabled={!isCard}
             placeholder="000xxx"
             errors={errors}
             {...register('cardId')}
@@ -64,6 +67,7 @@ export const AccountForm = ({ form, errors }: StepProps) => {
             <InputLabel
               label="Valid Until"
               type="text"
+              disabled={!isCard}
               placeholder="Month"
               errors={errors}
               {...register('validMonth')}
@@ -71,6 +75,7 @@ export const AccountForm = ({ form, errors }: StepProps) => {
             <InputLabel
               label=""
               type="text"
+              disabled={!isCard}
               placeholder="Year"
               errors={errors}
               {...register('validYear')}
@@ -81,8 +86,24 @@ export const AccountForm = ({ form, errors }: StepProps) => {
             type="text"
             placeholder="999999"
             errors={errors}
-            {...register('perAmount')}
-          /> 
+            {...register('preAmount')}
+          />
+          <div className="grid grid-cols-2 gap-4 items-end">
+            <InputLabel
+              label="Approval Code"
+              type="text"
+              placeholder="Approval Code"
+              errors={errors}
+              {...register('approvalCode')}
+            />
+            <InputLabel
+              label="Valid"
+              type="text"
+              placeholder="Valid"
+              errors={errors}
+              {...register('arAccountInformation')}
+            /> 
+          </div>
         </div>
       </section>
       <section>

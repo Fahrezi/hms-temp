@@ -6,8 +6,13 @@ import { useMemo } from "react";
 import { ReservationFormValues, ReservationSchema } from "@/libs/validation/reservation.schema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import TabsGroup, { TabsListType } from "@/components/ui/TabsGroup/TabsGroup";
+import { GroupForm } from "./components/GroupInformation";
+import { Navigate, useNavigate } from "react-router-dom";
+import { rateGroup } from "@/constants/data";
+import { useOverlay } from "@/hooks/useOverlay";
 
 const baseDate = new Date();
+type TypeReservation = 'individual' | 'series' | 'group' | 'block';
 
 const RegistrationForm = () => {
   const methods = useForm<ReservationFormValues>({
@@ -18,7 +23,7 @@ const RegistrationForm = () => {
       arrival: format(baseDate, 'yyyy-MM-dd'),
       departure: format(addDays(baseDate, 1), 'yyyy-MM-dd'),
       nights: 1,
-      rateSource: 0,
+      rateSource: '',
       rateGroup: '',
       reservationMode: '',
       type: '',
@@ -28,11 +33,11 @@ const RegistrationForm = () => {
       accommodation: [],
       inventorySource: '',
       reservationType: '',
-      confirmationDate: '',
-      confirmationByName: '',
+      confirmation: '',
+      confirmationBy: '',
       sellingType: '',
       noteDetail: '',
-      rate: null,
+      rate: [],
       // rsvp info
       purposeOfVisit: '',
       sourceOfBusiness: '',
@@ -40,7 +45,6 @@ const RegistrationForm = () => {
       reservedBy: '',
       booker: '',
       bookingSource: '',
-      company: '',
       phoneNumberRsvp: '',
       promo: '',
       email: '',
@@ -48,17 +52,19 @@ const RegistrationForm = () => {
       ETD: set(addDays(baseDate, 1), { hours: 17, minutes: 0, seconds: 0, milliseconds: 0 }),
       ETDby: '',
       ETAby: '',
-      courtesyOrderArr: '',
-      courtesyOrderDep: '',
-      billInstruction: '',
+      courtesyArrival: '',
+      courtesyDeparture: '',
+      billingInstruction: '',
       paymentInstruction: '',
       guestNote: '',
       //detail 
       titleName: '',
       salutation: '',
-      addressSource: '',
+      homeAddress: '',
       country: '',
+      city: '',
       nationality: '',
+      language: '',
       phoneNumberDetail: '',
       altPhoneNumberDetail: '',
       emailDetail: '',
@@ -67,20 +73,20 @@ const RegistrationForm = () => {
       guestType: '',
       specialDate: format(baseDate, 'yyyy-MM-dd'),
       specialDateNote: '',
-      companyProfile: '',
+      companyDetail: '',
       position: '',
+      companyFax: '',
       companyAddress: '',
-      companyPhone: '',
       companySite: '',
       //account
-      paymentPaidBy: '',
-      paymentCardType: '',
-      paymentCardNumber: '',
-      paymentCardValidMonth: '',
-      paymentCardValidYear: '',
-      paymentPreAuthAmount: '',
-      paymentApprovalCode: '',
-      paymentApprovalCodeValid: '',
+      paidMethod: '',
+      cardType: '',
+      cardId: '',
+      validMonth: '',
+      validYear: '',
+      preAmount: '',
+      approvalCode: '',
+      arAccountInformation: '',
       deposit: {
         id: '',
         date: '',
@@ -139,15 +145,222 @@ const RegistrationForm = () => {
           followUpId: '',
           followUpNotes: '',
         }
-      ],  
+      ],
+      idLeaderGroup: '',
+      leaderNameGroup: '',
+      groupNotes: '',
+      roomNotesGroup: '',
+      fnbNotesGroup: '',
+      roomingListGroup: null
     },
     shouldUnregister: false
   });
-
+  const navigate = useNavigate();
+  const { activateNotif } = useOverlay();
+  const searchParams = new URLSearchParams(window.location.search);
+  const type: TypeReservation = searchParams.get('type') as TypeReservation;
   const { handleSubmit, setValue, formState } = methods;
 
-  const onSubmit = (data: any) => {
-    console.log(data);
+  if (!['individual', 'series', 'group', 'block'].includes(type)) {
+    return (<Navigate to="/not-found" />)
+  }
+
+  const onSubmit = async (data: ReservationFormValues) => {
+    const {
+      rsvpDate,
+      rsvpNo,
+      arrival,
+      departure,
+      nights,
+      rateSource,
+      firstName,
+      lastName,
+      type,
+      reservationMode,
+      accommodation,
+      rate,
+      inventorySource,
+      reservationType,
+      sellingType,
+      confirmationBy,
+      notesDetail,
+      booker,
+      bookingSource,
+      companyRsvp,
+      phoneNumberRsvp,
+      promo,
+      email,
+      ETD,
+      ETDby,
+      ETA,
+      ETAby,
+      purposeOfVisit,
+      sourceOfBusiness,
+      segmentMarket,
+      courtesyArrival,
+      courtesyDeparture,
+      billingInstruction,
+      paymentInstruction,
+      guestNote,
+      salutation,
+      homeAddress,
+      phoneNumberDetail,
+      country,
+      city,
+      nationality,
+      language,
+      guestId,
+      guestIdType,
+      guestType,
+      specialDate,
+      specialDateNote,
+      mobileDetail,
+      faxDetail,
+      emailDetail,
+      companyDetail,
+      position,
+      companyPhoneDetail,
+      companyFax,
+      companySite,
+      companyAddress,
+      paidMethod,
+      cardType,
+      cardId,
+      validMonth,
+      validYear,
+      preAmount,
+      approvalCode,
+      arAccountInformation
+    } = data;
+    
+    const payload = {
+      reservation: {
+        rsvp_date: rsvpDate,
+        rsvp_no: rsvpNo,
+        arrival_date: arrival,
+        departure_date: departure,
+        night_count: nights,
+        rate_source: rateSource,
+        guest_name: `${firstName} ${lastName}`,
+        rate_group: {
+          type: reservationMode,
+          agent_company: rateGroup,
+          is_regular: type === 'regular',
+          is_non_refundable: type === 'non_refundable'
+        },
+        reservation_mode: reservationMode,
+        routing: "",
+        room_and_rate: {
+          accommodation,
+          rate_details: rate
+        },
+        booking_info: {
+          inventory_source: inventorySource,
+          reservation_type: reservationType,
+          selling_type: sellingType,
+          confirmation_by: confirmationBy,
+          room_request_notes: notesDetail
+        }
+      },
+      rsvp_info: {
+        booker,
+        booking_source_voucher_no: "",
+        company: companyRsvp,
+        phone: phoneNumberRsvp,
+        promo,
+        email,
+        eta: ETA,
+        etd: ETD,
+        purpose_of_visit: purposeOfVisit,
+        source_of_business: sourceOfBusiness,
+        segment_market: segmentMarket,
+        notes: {
+          courtesy_arrival: courtesyArrival,
+          courtesy_departure: courtesyDeparture,
+          billing_instruction: billingInstruction,
+          payment_instruction: paymentInstruction,
+          guest_note: guestNote
+        }
+      },
+      guest_detail: {
+        last_name: lastName,
+        first_name: firstName,
+        title: salutation,
+        home_address: homeAddress,
+        mailing_address: "address",
+        country,
+        city,
+        nationality_language: language,
+        phone: phoneNumberDetail,
+        mobile: mobileDetail,
+        fax: faxDetail,
+        email: emailDetail,
+        guest_id_type: guestIdType,
+        guest_id_number: guestId,
+        special_date: specialDate,
+        guest_type: guestType,
+        company_profile: {
+          company: companyDetail,
+          position: position,
+          address: companyAddress,
+          phone: companyPhoneDetail,
+          fax: companyFax,
+          website: companySite
+        }
+      },
+      account: {
+        paid_by: paidMethod,
+        card_type: cardType,
+        card_number: cardId,
+        card_valid_until: `${validMonth}/${validYear}`,
+        pre_auth_amount: preAmount,
+        approval_code: approvalCode,
+        ar_account_information: arAccountInformation,
+        membership: {
+          id: "",
+          mbr_no: "",
+          name: "",
+          valid_until: "",
+          status: ""
+        },
+        deposit: {
+          total: 0,
+          list: []
+        }
+      },
+      traces: {
+        reminders: [],
+        inventory_requests: [],
+        leisure_bookings: [],
+        follow_up_status: {
+          date: null,
+          time: null,
+          by: "",
+          notes: ""
+        }
+      }
+    }
+
+    try {
+      const response = await fetch('http://localhost:5174/reservations', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(payload),
+      }).then(response => response.json());
+
+      if (response) {
+        activateNotif({
+          notifText: 'Reservasi berhasil ditambahkan !',
+          notifType: 'success'
+        });
+        void navigate('/reservation/list-reservation')
+      }
+
+    } catch (error) {
+      console.error('Add reservation error:', error);
+    }
   }
 
   const tabsList: TabsListType<ReservationFormValues>[] = useMemo(() => [
@@ -156,18 +369,40 @@ const RegistrationForm = () => {
     { label: 'Detail', value: 'detail', Comp: DetailForm, errorGroup: ['rate'] },
     { label: 'Account', value: 'account', Comp: AccountForm, errorGroup: ['rate'] },
     { label: 'Traces', value: 'traces', Comp: TracesForm, errorGroup: ['rate']},
-    { label: 'Other & Statistics', value: 'other_statistics', Comp: OtherForm, errorGroup: ['rate'] },
+    // { label: 'Other & Statistics', value: 'other_statistics', Comp: OtherForm, errorGroup: ['rate'] },
   ], []);
+
+  const tabsListSeries: TabsListType<ReservationFormValues>[] = useMemo(() => [
+    { label: 'Room Rate', value: 'room_rate', Comp: RoomRateForm, errorGroup: ['rate'] },
+    { label: 'RSVP Info', value: 'rsvp_info', Comp: RsvpForm, errorGroup: ['rate'] },
+    { label: 'Account', value: 'account', Comp: AccountForm, errorGroup: ['rate'] },
+  ], []);
+
+    const tabsListGroup: TabsListType<ReservationFormValues>[] = useMemo(() => [
+    { label: 'Room Rate', value: 'room_rate', Comp: RoomRateForm, errorGroup: ['rate'] },
+    { label: 'RSVP Info', value: 'rsvp_info', Comp: RsvpForm, errorGroup: ['rate'] },
+    { label: 'Account', value: 'account', Comp: AccountForm, errorGroup: ['rate'] },
+    { label: 'Group Information', value: 'detail', Comp: GroupForm, errorGroup: ['rate'] },
+    { label: 'Traces', value: 'traces', Comp: TracesForm, errorGroup: ['rate']},
+    // { label: 'Other & Statistics', value: 'other_statistics', Comp: OtherForm, errorGroup: ['rate'] },
+  ], []);
+
+  const tabs = {
+    individual: tabsList,
+    series: tabsListSeries,
+    group: tabsListGroup,
+    block: tabsListSeries
+  }
 
   return (
     <FormProvider {...methods}>
       <form onSubmit={handleSubmit(onSubmit)}>
         <div>
           <BasicVisitorForm form={methods} errors={formState.errors} setValue={setValue} />
-          <TabsGroup tabsList={tabsList} methods={methods} errors={formState.errors} setValue={setValue} />
+          <TabsGroup tabsList={tabs[type]} methods={methods} errors={formState.errors} setValue={setValue} />
         </div>
         <div className="flex justify-end mt-6">
-          <Button type="submit" className="py-6 rounded-lg !font-bold bg-hotel-green text-white cursor-pointer hover:scale-98 disabled:bg-black/50 w-[150px] text-center">
+          <Button type="submit" className="py-6 rounded-lg !font-bold bg-hotel-green text-white cursor-pointer active:scale-98 hover:scale-[1.005] disabled:bg-black/50 w-[150px] text-center">
             Submit
           </Button>
         </div>

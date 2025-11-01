@@ -7,8 +7,7 @@ import { useAuth } from '@/hooks/useAuth';
 import { RouteGuardProps } from '@/types/routes';
 
 const RouteGuard = ({ children, protectedRoute = false, requiredRoles }: RouteGuardProps) => {
-  const { user, isLoading } = useAuth();
-  const isAuthenticated = true;
+  const { user, isLoading, isAuthenticated } = useAuth();
   const location = useLocation();
 
   if (isLoading) {
@@ -19,9 +18,9 @@ const RouteGuard = ({ children, protectedRoute = false, requiredRoles }: RouteGu
     return <Navigate to='/login' state={{ from: location }} replace />;
   }
 
-  // if (!protectedRoute && isAuthenticated) {
-  //   return <Navigate to='/dashboard' replace />;
-  // }
+  if (!protectedRoute && isAuthenticated) {
+    return <Navigate to='/dashboard' replace />;
+  }
 
   // if (protectedRoute && requiredRoles && user) {
   //   const hasRequiredRole = requiredRoles.some((role) => user.roles.includes(role));

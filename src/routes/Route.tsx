@@ -48,7 +48,7 @@ const routes: RouteObject[] = [
       {
         path: 'reservation/list-reservation',
         element: (
-          <RouteGuard>
+          <RouteGuard protectedRoute>
             <Pages.ListReservation />
           </RouteGuard>
         ),
@@ -56,7 +56,7 @@ const routes: RouteObject[] = [
       {
         path: 'reservation/register',
         element: (
-          <RouteGuard>
+          <RouteGuard protectedRoute>
             <Pages.RegisterReservationForm />
           </RouteGuard>
         ),
@@ -64,7 +64,7 @@ const routes: RouteObject[] = [
       {
         path: 'reservation/list-reservation/new-reservation',
         element: (
-          <RouteGuard>
+          <RouteGuard protectedRoute>
             <Pages.NewReservationForm />
           </RouteGuard>
         ),
@@ -72,7 +72,7 @@ const routes: RouteObject[] = [
       {
         path: 'cashier/deposit',
         element: (
-          <RouteGuard>
+          <RouteGuard protectedRoute>
             <Pages.Deposit />
           </RouteGuard>
         ),
@@ -80,7 +80,7 @@ const routes: RouteObject[] = [
       {
         path: 'report/invoice-report',
         element: (
-          <RouteGuard>
+          <RouteGuard protectedRoute>
             <Pages.ReportInvoice />
           </RouteGuard>
         ),

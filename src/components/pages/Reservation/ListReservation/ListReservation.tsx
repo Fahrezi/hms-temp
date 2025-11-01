@@ -11,6 +11,8 @@ import { useHeaderNav } from '@/hooks/useHeaderNav';
 import { useOverlay } from '@/hooks/useOverlay';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/Select';
 import { optionsAvailability } from '../../Dashboard/data.contants';
+import { RESERVATION_LABEL_KEY } from './constants';
+import { useListReservation } from './useListReservation.hooks';
 
 type FilterTab = 'current-reservation' | 'no-show-reservation' | 'no-show-room';
 const FILTER_TABS: { label: FilterTab; body: string }[] = [
@@ -85,12 +87,40 @@ const ACTION_TABLE = [
     name: 'Print Confirmation',
     action: () => {},
   },
-]
+];
+
+const LIST_RESERVATION = [
+  {
+    text: 'Individual',
+    subtitle: 'Single guest booking',
+    icon: <User className="mt-1" size={24} />,
+    type: 'individual',
+  },
+  {
+    text: 'Group',
+    subtitle: 'Multiple guests under one booking',
+    icon: <Users className="mt-1" size={24} />,
+    type: 'group',
+  },
+  {
+    text: 'Series',
+    subtitle: 'Repeated group bookings over time',
+    icon: <Repeat className="mt-1" size={24} />,
+    type: 'series',
+  },
+  {
+    text: 'Block',
+    subtitle: 'Reserved rooms held without names yet',
+    icon: <Blocks className="mt-1" size={24} />,
+    type: 'block',
+  },
+];
 
 const ListReservation = () => {
   const [filterTab, setFilterTab] = useState<FilterTab>('current-reservation');
   const { changeTitle } = useHeaderNav();
-  const { activateOverlay, isActive: isActiveOverlay } = useOverlay()
+  const { activateOverlay, isActive: isActiveOverlay } = useOverlay();
+  const { listReservation } = useListReservation();
 
   useEffect(() => {
     changeTitle('List Reservation');
@@ -128,42 +158,19 @@ const ListReservation = () => {
             </PopoverTrigger>
             <PopoverContent className="w-64 bg-white border-gray-100 rounded-xl shadow py-4 px-2" onCloseAutoFocus={() => activateOverlay(false)}>
               <div className="space-y-2 flex flex-col">
-                <Button asChild variant="ghost">
-                  <Link className="p-2 rounded-xl hover:shadow hover:ring hover:ring-hotel-soft-fern bg-white h-auto justify-start items-start gap-4" to="/reservation/list-reservation/new-reservation?type=individual">
-                    <User className="mt-1" size={24} />
-                    <div className="flex flex-col gap-0 items-start">
-                      <span>Individual</span>
-                      <span className="text-xs text-gray-500 text-wrap">Single guest booking</span>
-                    </div>
-                  </Link>
-                </Button>
-                <Button asChild variant="ghost">
-                  <Link className="p-2 rounded-xl hover:shadow hover:ring hover:ring-hotel-soft-fern bg-white h-auto justify-start items-start gap-4" to="/reservation/list-reservation/new-reservation?type=individual">
-                    <Users className="mt-1" size={24} />
-                    <div className="flex flex-col gap-0 items-start">
-                      <span>Group</span>
-                      <span className="text-xs text-gray-500 text-wrap">Multiple guests under one booking</span>
-                    </div>
-                  </Link>
-                </Button>
-                <Button asChild variant="ghost">
-                  <Link className="p-2 rounded-xl hover:shadow hover:ring hover:ring-hotel-soft-fern bg-white h-auto justify-start items-start gap-4" to="/reservation/list-reservation/new-reservation?type=individual">
-                    <Repeat className="mt-1" size={24} />
-                    <div className="flex flex-col gap-0 items-start">
-                      <span>Series</span>
-                      <span className="text-xs text-gray-500 text-wrap">Repeated group bookings over time</span>
-                    </div>
-                  </Link>
-                </Button>
-                <Button asChild variant="ghost">
-                  <Link className="p-2 rounded-xl hover:shadow hover:ring hover:ring-hotel-soft-fern bg-white h-auto justify-start items-start gap-4" to="/reservation/list-reservation/new-reservation?type=individual">
-                    <Blocks className="mt-1" size={24} />
-                    <div className="flex flex-col gap-0 items-start">
-                      <span>Block</span>
-                      <span className="text-xs text-gray-500 text-wrap">Reserved rooms held without names yet</span>
-                    </div>
-                  </Link>
-                </Button>
+                {
+                  LIST_RESERVATION.map((value, index) => (
+                    <Button asChild variant="ghost" key={index}>
+                      <Link className="p-2 rounded-xl hover:shadow hover:ring hover:ring-hotel-soft-fern bg-white h-auto justify-start items-start gap-4" to={`/reservation/list-reservation/new-reservation?type=${value.type}`}>
+                        {value.icon}
+                        <div className="flex flex-col gap-0 items-start">
+                          <span>{value.text}</span>
+                          <span className="text-xs text-gray-500 text-wrap">{value.subtitle}</span>
+                        </div>
+                      </Link>
+                    </Button>
+                  ))
+                }
               </div>
             </PopoverContent>
           </Popover>
@@ -226,7 +233,7 @@ const ListReservation = () => {
         <Card>
           <header className="flex items-center justify-between mb-4">
             <h2 className="font-semibold text-2xl capitalize">{filterTab.split('-').join(' ')}</h2>
-            <Select>
+            {/* <Select>
               <SelectTrigger className="overflow-hidden w-full border border-[#dadada] bg-white max-w-max">
                 <SelectValue placeholder="Select a room type" />
               </SelectTrigger>
@@ -237,50 +244,50 @@ const ListReservation = () => {
                   </SelectItem>
                 ))}
               </SelectContent>
-            </Select>
+            </Select> */}
           </header>
-          <Table>
-            <TableCaption>A list of your recent invoices.</TableCaption>
-            <TableHeader>
-              <TableRow>
-                <TableHead className="w-[100px]">Invoice</TableHead>
-                <TableHead>Method</TableHead>
-                <TableHead className="text-right">Amount</TableHead>
-                <TableHead>Status</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {INVOICE.map((invoice) => (
-                <TableRow key={invoice.invoice}>
-                  <TableCell className="font-medium">{invoice.invoice}</TableCell>
-                  <TableCell>{invoice.paymentStatus}</TableCell>
-                  <TableCell>{invoice.paymentMethod}</TableCell>
-                  <TableCell className="text-right">
-                    <Popover>
-                      <PopoverTrigger>
-                        <Button className="border border-hotel-green rounded-xl p-4 cursor-pointer">
-                          <Ellipsis size={16} />
-                        </Button>
-                      </PopoverTrigger>
-                      <PopoverContent className="flex flex-col gap-2 p-2 rounded-lg w-[150px] shadow bg-white border-none">
-                        {ACTION_TABLE.map((item, index) => (
-                          <span className="p-2 rounded hover:shadow-xs cursor-pointer text-xs" key={index} onClick={item.action}>
-                            {item.name}
-                          </span>
-                        ))}
-                      </PopoverContent>
-                    </Popover>
-                  </TableCell>
+          <div className="w-full overflow-auto">
+            <Table>
+              <TableCaption>A list of your recent invoices.</TableCaption>
+              <TableHeader>
+                <TableRow>
+                  <TableHead className="min-w-[50px ]">Aksi</TableHead>
+                  {
+                    RESERVATION_LABEL_KEY.map(({ label }) => (
+                      <TableHead className="min-w-[150px]">{label}</TableHead>
+                    ))
+                  }
                 </TableRow>
-              ))}
-            </TableBody>
-            <TableFooter>
-              <TableRow>
-                <TableCell colSpan={3}>Total</TableCell>
-                <TableCell className="text-right">$2,500.00</TableCell>
-              </TableRow>
-            </TableFooter>
-          </Table>
+              </TableHeader>
+              <TableBody>
+                {listReservation?.map((item, index) => (
+                  <TableRow key={index}>
+                    <TableCell className="text-right">
+                      <Popover>
+                        <PopoverTrigger>
+                          <Button className="border border-hotel-green/30 rounded-xl p-4 cursor-pointer shadow-md">
+                            <Ellipsis size={16} />
+                          </Button>
+                        </PopoverTrigger>
+                        <PopoverContent className="flex flex-col gap-2 p-2 rounded-lg w-[150px] shadow bg-white border-none">
+                          {ACTION_TABLE.map((item, index) => (
+                            <span className="p-2 rounded hover:shadow-xs hover:bg-hotel-green-hover/70 cursor-pointer text-xs" key={index} onClick={item.action}>
+                              {item.name}
+                            </span>
+                          ))}
+                        </PopoverContent>
+                      </Popover>
+                    </TableCell>
+                    {
+                      RESERVATION_LABEL_KEY.map(({ value }, indexChild) => (
+                        <TableCell key={indexChild} className="min-w-[100px]">{(item as Record<string, string>)[value]}</TableCell>
+                      ))
+                    }
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </div>
         </Card>
       </section>
     </div>

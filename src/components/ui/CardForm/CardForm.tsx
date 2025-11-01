@@ -9,7 +9,7 @@ type CardFormProps = {
 const CardForm = (props: CardFormProps) => {
   const { children, title, className } = props;
   return (
-    <div className="grid grid-cols-[1fr_120px] bg-white rounded-xl p-6 border border-[#DADADA]">
+    <div className="grid grid-cols-[1fr_120px] bg-gray-100/20 rounded-xl p-6 border border-[#DADADA] shadow-md">
       <div>
         <header className="flex justify-between mb-4">
           <h2 className="font-medium text-xl">{title}</h2>

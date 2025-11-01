@@ -16,32 +16,19 @@ export default defineConfig({
         tsconfigPath: './tsconfig.app.json',
       },
     }),
-    // VitePWA({
-    //   registerType: 'autoUpdate',
-    //   includeAssets: ['favicon.ico', 'apple-touch-icon.png', 'mask-icon.svg'],
-    //   manifest: {
-    //     name: 'Hotel Management System',
-    //     short_name: 'HMS',
-    //     description: 'Hotel Management System - New System',
-    //     theme_color: '#ffffff',
-    //     icons: [
-    //       {
-    //         src: '/images/pwa-192x192.png',
-    //         sizes: '192x192',
-    //         type: 'image/png',
-    //       },
-    //       {
-    //         src: '/images/pwa-512x512.png',
-    //         sizes: '512x512',
-    //         type: 'image/png',
-    //       },
-    //     ],
-    //   },
-    // }),
   ],
   resolve: {
     alias: {
       '@': path.resolve(__dirname, './src'),
     },
   },
+  server: {
+    proxy: {
+      '/api': {
+        target: 'http://localhost:5174',
+        changeOrigin: true,
+        rewrite: (path) => path.replace(/^\/api/, ''),
+      },
+    },
+  }
 });

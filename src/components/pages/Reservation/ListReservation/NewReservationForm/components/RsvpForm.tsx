@@ -4,6 +4,7 @@ import SelectInput from "@/components/ui/SelectInput";
 import { Control } from "react-hook-form";
 import { RHFBridgeProps } from "../types/index.type";
 import { Textarea } from "@/components/ui/TextArea";
+import { hourList, purposeOfVisitList, segmentMarketList, sourceOfBusinessList } from "@/constants/data";
 
 type StepProps = RHFBridgeProps<any>;
 
@@ -18,34 +19,22 @@ export const RsvpForm = ({ form, errors }: StepProps) => {
             name="purposeOfVisit"
             label="Purpose of Visit"
             control={control as Control<any>}
-            placeholder="Select Type"
-            options={[
-              { label: 'Chargeable', value: 'Chargeable' },
-              { label: 'Rate Group 2', value: 'Rate Group 2' },
-              { label: 'Rate Group 3', value: 'Rate Group 3' },
-            ]}
+            placeholder="Select Purpose of Visit"
+            options={purposeOfVisitList}
           />
           <SelectInput
             name="sourceOfBusiness"
             label="Source of Business"
             control={control as Control<any>}
-            placeholder="Select Type"
-            options={[
-              { label: 'Chargeable', value: 'Chargeable' },
-              { label: 'Rate Group 2', value: 'Rate Group 2' },
-              { label: 'Rate Group 3', value: 'Rate Group 3' },
-            ]}
+            placeholder="Select Source of Business"
+            options={sourceOfBusinessList}
           />
           <SelectInput
             name="segmentMarket"
             label="Segment Market"
             control={control as Control<any>}
-            placeholder="Select Type"
-            options={[
-              { label: 'Chargeable', value: 'Chargeable' },
-              { label: 'Rate Group 2', value: 'Rate Group 2' },
-              { label: 'Rate Group 3', value: 'Rate Group 3' },
-            ]}
+            placeholder="Select Segment Market"
+            options={segmentMarketList}
           />
         </div>
       </section>
@@ -99,12 +88,8 @@ export const RsvpForm = ({ form, errors }: StepProps) => {
               name="eta"
               label="E.T.A / By"
               control={control as Control<any>}
-              placeholder="Select Type"
-              options={[
-                { label: 'Chargeable', value: 'Chargeable' },
-                { label: 'Rate Group 2', value: 'Rate Group 2' },
-                { label: 'Rate Group 3', value: 'Rate Group 3' },
-              ]}
+              placeholder="Select E.T.A"
+              options={hourList}
             />
             <InputLabel
               label=""
@@ -116,15 +101,11 @@ export const RsvpForm = ({ form, errors }: StepProps) => {
           </div>
           <div className="grid grid-cols-2 gap-4 items-end">
             <SelectInput
-              name="eta"
+              name="etd"
               label="E.T.D / By"
               control={control as Control<any>}
-              placeholder="Select Type"
-              options={[
-                { label: 'Chargeable', value: 'Chargeable' },
-                { label: 'Rate Group 2', value: 'Rate Group 2' },
-                { label: 'Rate Group 3', value: 'Rate Group 3' },
-              ]}
+              placeholder="Select E.T.D"
+              options={hourList}
             />
             <InputLabel
               label=""
@@ -144,7 +125,7 @@ export const RsvpForm = ({ form, errors }: StepProps) => {
             type="text"
             placeholder="courtesyOrder"
             errors={errors}
-            {...register('courtesyOrder')}
+            {...register('courtesyArrival')}
           />
           <InputLabel
             label="Courtesy Order (Departure)"

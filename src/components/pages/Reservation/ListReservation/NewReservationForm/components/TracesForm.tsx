@@ -66,14 +66,16 @@ const LEISURE_INDEX_BODY = [
 export const TracesForm = ({ form, errors, setValue }: StepProps) => {
   const { watch } = form;
 
-  const values = watch('reminder');
+  const reminderValues = watch('reminder');
+  const inventoryValues = watch('inventoryRequest');
+  const leisureValues = watch('leisureBooking');
 
   return (
     <CardForm className="mt-6" title="Traces">
       <MultiFieldInput
         buttonText="Add Reminder"
         headerTable={HEADER_REMINDER}
-        values={values}
+        values={reminderValues}
         onSubmit={(data) => setValue('reminder', data)}
         title="Reminder"
         indexBody={REMINDER_INDEX_BODY}
@@ -145,7 +147,7 @@ export const TracesForm = ({ form, errors, setValue }: StepProps) => {
       <MultiFieldInput
         buttonText="Add Inventory Request"
         headerTable={HEADER_INVENTORY}
-        values={values}
+        values={inventoryValues}
         onSubmit={(data) => setValue('inventoryRequest', data)}
         title="Inventory Request"
         indexBody={INVENTORY_INDEX_BODY}
@@ -257,7 +259,7 @@ export const TracesForm = ({ form, errors, setValue }: StepProps) => {
        <MultiFieldInput
         buttonText="Add Leisure Booking"
         headerTable={HEADER_LEISURE}
-        values={values}
+        values={leisureValues}
         onSubmit={(data) => setValue('leisureBooking', data)}
         title="Leisure Booking"
         indexBody={LEISURE_INDEX_BODY}
