@@ -26,10 +26,6 @@ const NAVBAR_ITEMS = [
         path: '/reservation/list-reservation',
       },
       {
-        name: 'Walk In Register',
-        path: '/reservation/walk-in-register',
-      },
-      {
         name: 'Guest In House',
         path: '/reservation/guest-in-house',
       },

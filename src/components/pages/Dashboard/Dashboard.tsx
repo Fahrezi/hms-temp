@@ -70,7 +70,7 @@ const Dashboard = () => {
   const { activateOverlay, isActive: isActiveOverlay, activateNotif } = useOverlay();
   const [statusOpen, setStatusOpen] = useState(false);
   const styleStatusContainer = useMemo(() => `
-    ${statusOpen ? 'h-[500px]' : 'h-[80px]'}  
+    ${statusOpen ? 'h-[500px]' : 'h-[75px]'}  
   `, [statusOpen]);
 
   return (
@@ -301,7 +301,7 @@ const Dashboard = () => {
       </div>
       <div className={`fixed bottom-5 right-5 bg-white shadow-sm rounded-xl w-[350px] border border-gray-200 transition-all duration-200 overflow-auto ${styleStatusContainer}`}>
         <div className="relative">
-          <header className="flex justify-between items-center mb-2 sticky top-0 bg-white p-4 shadow-sm">
+          <header className="flex justify-between h-[75px] items-center sticky top-0 bg-white p-4 shadow-sm">
             <h4 className="font-semibold text-2xl">Status</h4>
             <ChevronsUp size={20} className={`cursor-pointer ${statusOpen ? 'rotate-180' : ''}`}  onClick={() => setStatusOpen(!statusOpen)}/>
           </header>
