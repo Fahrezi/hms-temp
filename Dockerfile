@@ -10,8 +10,15 @@ COPY package*.json ./
 # Install dependencies
 RUN npm ci
 
-# Copy .env file first (needed for build)
-COPY .env ./
+# Declare build-time args for every Vite var you need
+ARG VITE_SECRET_KEY
+ARG VITE_ENABLE_SMALL_CONTAINER
+ARG VITE_API_URL
+
+# Make them available to Vite
+ENV VITE_SECRET_KEY=$VITE_SECRET_KEY
+ENV VITE_ENABLE_SMALL_CONTAINER=$VITE_ENABLE_SMALL_CONTAINER
+ENV VITE_API_URL=$VITE_API_URL
 
 # Copy all project files
 COPY . .
