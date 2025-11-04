@@ -38,6 +38,14 @@ const routes: RouteObject[] = [
         ),
       },
       {
+        path: 'guest/guest-list',
+        element: (
+          <RouteGuard protectedRoute>
+            <Pages.GuestList />
+          </RouteGuard>
+        ),
+      },
+      {
         path: 'settings',
         element: (
           <RouteGuard protectedRoute requiredRoles={['superadmin']}>
@@ -46,10 +54,26 @@ const routes: RouteObject[] = [
         ),
       },
       {
+        path: 'reception',
+        element: (
+          <RouteGuard protectedRoute>
+            <Pages.Reception />
+          </RouteGuard>
+        ),
+      },
+      {
         path: 'reservation/list-reservation',
         element: (
           <RouteGuard protectedRoute>
             <Pages.ListReservation />
+          </RouteGuard>
+        ),
+      },
+      {
+        path: 'reservation/guest-in-house',
+        element: (
+          <RouteGuard protectedRoute>
+            <Pages.GuestInHouse />
           </RouteGuard>
         ),
       },
@@ -74,6 +98,22 @@ const routes: RouteObject[] = [
         element: (
           <RouteGuard protectedRoute>
             <Pages.Deposit />
+          </RouteGuard>
+        ),
+      },
+      {
+        path: 'cashier/guest-account',
+        element: (
+          <RouteGuard protectedRoute>
+            <Pages.GuestAccount />
+          </RouteGuard>
+        ),
+      },
+      {
+        path: 'cashier/batch-posting',
+        element: (
+          <RouteGuard protectedRoute>
+            <Pages.BatchPosting />
           </RouteGuard>
         ),
       },

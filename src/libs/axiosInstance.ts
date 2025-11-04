@@ -4,6 +4,7 @@ import getEnvValue from '@/utils/env';
 import { decryptData } from '@/utils/secureAuth';
 import { getLocalStorage, removeLocalStorage } from '@/utils/storage';
 import { ENVIRONMENT } from '@/constants/envs';
+import { AuthState } from '@/types/auth';
 
 const headers = {
   Accept: 'application/json',
@@ -23,7 +24,7 @@ instance.interceptors.request.use(
     const storedData = getLocalStorage<string>('auth');
     if (storedData) {
       try {
-        const parsedData = decryptData(storedData);
+        const parsedData = decryptData(storedData) as AuthState;
         if (parsedData?.token) {
           request.headers.Authorization = `Bearer ${parsedData?.token}`;
         }

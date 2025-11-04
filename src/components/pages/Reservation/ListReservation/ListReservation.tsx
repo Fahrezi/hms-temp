@@ -1,16 +1,14 @@
 import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/Button';
-import { act, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { cn } from '@/libs/utils';
 import Card from '@/components/ui/Card/Card';
-import { Table, TableBody, TableCaption, TableCell, TableFooter, TableHead, TableHeader, TableRow } from '@/components/ui/Table';
+import { Table, TableBody, TableCaption, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/Table';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/Popover';
 import { Blocks, ChevronDown, Ellipsis, Repeat, Search, User, Users } from 'lucide-react';
 import { Input } from '@/components/ui/Input';
 import { useHeaderNav } from '@/hooks/useHeaderNav';
 import { useOverlay } from '@/hooks/useOverlay';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/Select';
-import { optionsAvailability } from '../../Dashboard/data.contants';
 import { RESERVATION_LABEL_KEY } from './constants';
 import { useListReservation } from './useListReservation.hooks';
 
@@ -174,7 +172,11 @@ const ListReservation = () => {
               </div>
             </PopoverContent>
           </Popover>
-          <Button className="font-semibold bg-white rounded-lg py-2 px-12 cursor-pointer shadow hover:scale-[1.009]">Walk In Register</Button>
+          <Button variant="ghost" asChild className="font-semibold bg-white rounded-lg py-2 px-12 text-black cursor-pointer shadow hover:scale-[1.009]">
+            <Link to="/reservation/register">
+              Walk In Register
+            </Link>
+          </Button>
         </div>
       </section>
       <section className="flex justify-between mb-4">
@@ -251,7 +253,7 @@ const ListReservation = () => {
               <TableCaption>A list of your recent invoices.</TableCaption>
               <TableHeader>
                 <TableRow>
-                  <TableHead className="min-w-[50px ]">Aksi</TableHead>
+                  <TableHead className="min-w-[50px ]">Action</TableHead>
                   {
                     RESERVATION_LABEL_KEY.map(({ label }) => (
                       <TableHead className="min-w-[150px]">{label}</TableHead>

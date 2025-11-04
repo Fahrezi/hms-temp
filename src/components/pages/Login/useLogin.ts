@@ -1,15 +1,18 @@
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useCallback } from 'react';
+// import { useCallback } from 'react';
 import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
 import { z } from 'zod';
 
 import { useAuth } from '@/hooks/useAuth';
+// import { useAuth } from '@/hooks/useAuth';
 import { useOverlay } from '@/hooks/useOverlay';
 
 import { loginRequest } from '@/services/auth.service';
 
 import { User } from '@/types/auth';
+
+// import { User } from '@/types/auth';
 
 const loginSchema = z.object({
   email: z.string().email('Invalid email address'),
@@ -33,44 +36,60 @@ export const useLogin = () => {
     mode: 'onBlur',
   });
 
-  const handleLogin = useCallback(async (body: { email: string; password: string }) => {
-    try {
-      return await fetch('http://localhost:5175/api/auth/login', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(body),
-      }).then(response => response.json());
+  // const handleLogin = useCallback(async (body: { email: string; password: string }) => {
+  //   try {
+  //     return await fetch('http://localhost:5175/api/auth/login', {
+  //       method: 'POST',
+  //       headers: {
+  //         'Content-Type': 'application/json',
+  //       },
+  //       body: JSON.stringify(body),
+  //     }).then(response => response.json());
 
-    } catch (error) {
-      console.error('Login error:', error);
-    }
-  }, []);
+  //   } catch (error) {
+  //     console.error('Login error:', error);
+  //   }
+  // }, []);
 
   const onSubmit = async (data: LoginFormInputs) => {
-    try {
-      const response = await handleLogin(data);
+    console.log(data);
 
-      // void navigate('/dashboard');
-      // const response: AxiosResponse<LoginResponse> = await loginMutation.mutateAsync(data);
+    const user: User = {
+      name: 'admin123',
+      email: 'admin123@mail.com',
+      id: '1',
+      role: 'admin'
+    };
 
-      if (response?.access_token) {
-        const user: User = {
-          name: 'admin',
-          ...response.user
-        };
+    login(user, 'token-123');
 
-        login(user, response.access_token);
-        activateNotif({
-          notifText: 'Selamat Datang!',
-          notifType: 'success'
-        });
-        void navigate('/dashboard');
-      }
-    } catch (error) {
-      console.error('Login error:', error);
-    }
+    activateNotif({
+      notifText: 'Selamat Datang!',
+      notifType: 'success'
+    });
+    void navigate('/dashboard');
+    // try {
+    //   const response = await handleLogin(data);
+
+    //   // void navigate('/dashboard');
+    //   // const response: AxiosResponse<LoginResponse> = await loginMutation.mutateAsync(data);
+
+    //   if (response?.access_token) {
+    //     const user: User = {
+    //       name: 'admin',
+    //       ...response.user
+    //     };
+
+    //     login(user, response.access_token);
+    //     activateNotif({
+    //       notifText: 'Selamat Datang!',
+    //       notifType: 'success'
+    //     });
+    //     void navigate('/dashboard');
+    //   }
+    // } catch (error) {
+    //   console.error('Login error:', error);
+    // }
   };
 
   return {

@@ -10,8 +10,6 @@ type ListResponse = {
   id: string
 };
 
-const BASE_URL = "http://localhost:5175";
-
 export const useDetail = () => {
   const [countryList, setCountryList] = useState<List[]>([]);
   const [citiesList, setCitiesList] = useState<List[]>([]);
@@ -19,10 +17,62 @@ export const useDetail = () => {
   const [languageList, setLanguageList] = useState<List[]>([]);
 
   const getData = useCallback(async () => {
-    const countryResult = await fetch(`${BASE_URL}/countries  `).then(res => res.json());
-    const citiesResult = await fetch(`${BASE_URL}/cities`).then(res => res.json());
-    const nationalityResult = await fetch(`${BASE_URL}/nationality`).then(res => res.json());
-    const languageResult = await fetch(`${BASE_URL}/language`).then(res => res.json());
+    const countryResult = [
+      {
+        "id": "1",
+        "name": "Indonesia"
+      },
+      {
+        "id": "2",
+        "name": "USA"
+      },
+      {
+        "id": "3",
+        "name": "Singapore"
+      }
+    ];
+    const citiesResult = [
+      {
+        "id": "1",
+        "name": "Jakarta"
+      },
+      {
+        "id": "2",
+        "name": "Bandung"
+      },
+      {
+        "id": "3",
+        "name": "Yogyakarta"
+      },
+    ];
+    const nationalityResult = [
+      {
+        "id": "1",
+        "name": "Indonesia"
+      },
+      {
+        "id": "2",
+        "name": "USA"
+      },
+      {
+        "id": "3",
+        "name": "Singapore"
+      }
+    ];
+    const languageResult = [
+    {
+      "id": "1",
+      "name": "Indonesian"
+    },
+    {
+      "id": "2",
+      "name": "English"
+    },
+    {
+      "id": "3",
+      "name": "Chinese"
+    }
+  ];
 
     setCountryList(countryResult.map((country: ListResponse) => ({ label: country.name, value: country.id })));
     setCitiesList(citiesResult.map((city: ListResponse) => ({ label: city.name, value: city.id })));

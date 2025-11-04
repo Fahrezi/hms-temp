@@ -1,25 +1,29 @@
-import { useCallback, useEffect, useState } from "react";
+import { useState } from "react";
 
-const BASE_URL = "http://localhost:5175";
+import { useDataDemo } from "@/hooks/useDataDemo";
+
+// const BASE_URL = "http://localhost:5175";
 
 export const useListReservation = () => {
-  const [listReservation, setListReservation] = useState<unknown[]>([]);
+  const { reservations } = useDataDemo();
+  const [listReservation, setListReservation] = useState<unknown[]>(reservations);
 
-  const getListReservation = useCallback(async () => {
-    const resultReservation = await fetch(`${BASE_URL}/reservation-list`).then(res => res.json());
+  // const getListReservation = useCallback(async () => {
+  //   const resultReservation = await fetch(`${BASE_URL}/reservation-list`).then(res => res.json());
 
-    if (Array.isArray(resultReservation) && resultReservation.length > 0) {
-      setListReservation(resultReservation);
-    } else {
-      setListReservation([]);
-    }
-  }, []);
+  //   if (Array.isArray(resultReservation) && resultReservation.length > 0) {
+  //     setListReservation(resultReservation);
+  //   } else {
+  //     setListReservation([]);
+  //   }
+  // }, []);
 
-  useEffect(() => {
-    getListReservation();
-  }, [getListReservation]);
+  // useEffect(() => {
+  //   getListReservation();
+  // }, [getListReservation]);
 
   return {
-    listReservation
+    listReservation,
+    setListReservation
   }
 }

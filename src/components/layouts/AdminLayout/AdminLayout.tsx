@@ -19,6 +19,16 @@ const NAVBAR_ITEMS = [
     submenu: null,    
   },
   {
+    name: 'Guest',
+    path: '',
+    submenu: [
+      {
+        name: 'Guest List',
+        path: '/guest/guest-list',
+      },
+    ],     
+  },
+  {
     name: 'Reservation',
     path: '/reservation',
     submenu: [

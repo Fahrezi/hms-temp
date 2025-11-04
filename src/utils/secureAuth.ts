@@ -1,11 +1,12 @@
 import { ENVIRONMENT } from '@/constants/envs';
 import { AuthState } from '@/types/auth';
+import { DataDemoState } from '@/types/demo';
 
 import getEnvValue from './env';
 
 const SECRET_KEY = getEnvValue(ENVIRONMENT.SECRET_KEY);
 
-const encryptData = (data: AuthState): string => {
+const encryptData = (data: AuthState | DataDemoState): string => {
   const json = JSON.stringify(data);
   return btoa(
     [...json]
@@ -14,12 +15,12 @@ const encryptData = (data: AuthState): string => {
   );
 };
 
-const decryptData = (data: string): AuthState | null => {
+const decryptData = (data: string): AuthState | DataDemoState | null => {
   try {
     const decoded = [...atob(data)]
       .map((char, i) => String.fromCharCode(char.charCodeAt(0) ^ SECRET_KEY.charCodeAt(i % SECRET_KEY.length)))
       .join('');
-    return JSON.parse(decoded) as AuthState;
+    return JSON.parse(decoded) as AuthState | DataDemoState;
   } catch {
     return null;
   }

@@ -7,9 +7,10 @@ import { ReservationFormValues, ReservationSchema } from "@/libs/validation/rese
 import { zodResolver } from "@hookform/resolvers/zod";
 import TabsGroup, { TabsListType } from "@/components/ui/TabsGroup/TabsGroup";
 import { GroupForm } from "./components/GroupInformation";
-import { Navigate, useNavigate } from "react-router-dom";
+import { Navigate, useNavigate, useSearchParams } from "react-router-dom";
 import { rateGroup } from "@/constants/data";
 import { useOverlay } from "@/hooks/useOverlay";
+import { AUTO_RESERVATION } from "../constants";
 
 const baseDate = new Date();
 type TypeReservation = 'individual' | 'series' | 'group' | 'block';
@@ -157,9 +158,9 @@ const RegistrationForm = () => {
   });
   const navigate = useNavigate();
   const { activateNotif } = useOverlay();
-  const searchParams = new URLSearchParams(window.location.search);
-  const type: TypeReservation = searchParams.get('type') as TypeReservation;
-  const { handleSubmit, setValue, formState } = methods;
+  const params = new URLSearchParams(window.location.search);
+  const type: TypeReservation = params.get('type') as TypeReservation;
+  const { handleSubmit, setValue, formState, reset } = methods;
 
   if (!['individual', 'series', 'group', 'block'].includes(type)) {
     return (<Navigate to="/not-found" />)
@@ -339,28 +340,36 @@ const RegistrationForm = () => {
           notes: ""
         }
       }
-    }
+    };
 
-    try {
-      const response = await fetch('http://localhost:5175/reservations', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(payload),
-      }).then(response => response.json());
+    activateNotif({
+      notifText: 'Reservasi berhasil dibuat!',
+      notifType: 'success'
+    });
+    void navigate('/reservation/list-reservation');
 
-      if (response) {
-        activateNotif({
-          notifText: 'Reservasi berhasil ditambahkan !',
-          notifType: 'success'
-        });
-        void navigate('/reservation/list-reservation')
-      }
+    console.log(payload);
 
-    } catch (error) {
-      console.error('Add reservation error:', error);
-    }
+    // try {
+    //   const response = await fetch('http://localhost:5175/reservations', {
+    //     method: 'POST',
+    //     headers: {
+    //       'Content-Type': 'application/json',
+    //     },
+    //     body: JSON.stringify(payload),
+    //   }).then(response => response.json());
+
+    //   if (response) {
+    //     activateNotif({
+    //       notifText: 'Reservasi berhasil ditambahkan !',
+    //       notifType: 'success'
+    //     });
+    //     void navigate('/reservation/list-reservation')
+    //   }
+
+    // } catch (error) {
+    //   console.error('Add reservation error:', error);
+    // }
   }
 
   const tabsList: TabsListType<ReservationFormValues>[] = useMemo(() => [
@@ -370,13 +379,13 @@ const RegistrationForm = () => {
     { label: 'Account', value: 'account', Comp: AccountForm, errorGroup: ['rate'] },
     { label: 'Traces', value: 'traces', Comp: TracesForm, errorGroup: ['rate']},
     // { label: 'Other & Statistics', value: 'other_statistics', Comp: OtherForm, errorGroup: ['rate'] },
-  ], []);
+  ], [type]);
 
   const tabsListSeries: TabsListType<ReservationFormValues>[] = useMemo(() => [
     { label: 'Room Rate', value: 'room_rate', Comp: RoomRateForm, errorGroup: ['rate'] },
     { label: 'RSVP Info', value: 'rsvp_info', Comp: RsvpForm, errorGroup: ['rate'] },
     { label: 'Account', value: 'account', Comp: AccountForm, errorGroup: ['rate'] },
-  ], []);
+  ], [type]);
 
     const tabsListGroup: TabsListType<ReservationFormValues>[] = useMemo(() => [
     { label: 'Room Rate', value: 'room_rate', Comp: RoomRateForm, errorGroup: ['rate'] },
@@ -385,14 +394,14 @@ const RegistrationForm = () => {
     { label: 'Group Information', value: 'detail', Comp: GroupForm, errorGroup: ['rate'] },
     { label: 'Traces', value: 'traces', Comp: TracesForm, errorGroup: ['rate']},
     // { label: 'Other & Statistics', value: 'other_statistics', Comp: OtherForm, errorGroup: ['rate'] },
-  ], []);
+  ], [type]);
 
-  const tabs = {
+  const tabs = useMemo(() => ({
     individual: tabsList,
     series: tabsListSeries,
     group: tabsListGroup,
     block: tabsListSeries
-  }
+  }), [type])
 
   return (
     <FormProvider {...methods}>

@@ -78,8 +78,6 @@ const RegistrationForm = () => {
     { label: 'Guest Info & Contact', value: 'guest_info_and_contact', Comp: GuestInfoForm, errorGroup: ['rsvpDate'] },
     { label: 'Account', value: 'account', Comp: AccountForm, errorGroup: ['rsvpDate'] },
     { label: 'Traces', value: 'traces', Comp: TracesForm, errorGroup: ['rsvpDate'] },
-    { label: 'Other & Statistics', value: 'other_statistics', Comp: OtherForm, errorGroup: ['rsvpDate'] },
-    { label: 'Logs', value: 'logs', Comp: OtherForm, errorGroup: ['rsvpDate'] },
   ], [])
 
   return (
@@ -91,7 +89,7 @@ const RegistrationForm = () => {
           <TabsGroup tabsList={tabsList} methods={methods} errors={formState.errors} setValue={setValue} />
         </div>
         <div className="flex justify-end mt-6">
-          <Button type="submit" className="py-6 rounded-lg font-semibold bg-black text-white cursor-pointer hover:scale-98 disabled:bg-black/50 w-[150px] text-center">
+          <Button type="submit" className="py-6 rounded-lg !font-bold bg-hotel-green text-white cursor-pointer active:scale-98 hover:scale-[1.005] disabled:bg-black/50 w-[150px] text-center">
             Submit
           </Button>
         </div>

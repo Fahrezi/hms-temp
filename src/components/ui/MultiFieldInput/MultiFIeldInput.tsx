@@ -98,7 +98,7 @@ const MultiFieldInput = <TValues extends FieldValues>(props: MultiFieldInputProp
     <div>
       <header className="flex justify-between items-center mb-4">
         <h4 className="text-[#5b5b5b] text-xl">{title}</h4>
-        <Button onClick={() => setOpenModalForm(true)} variant="secondary"><PlusCircle size={16} /> {buttonText}</Button>
+        <Button type="button" onClick={() => setOpenModalForm(true)} variant="secondary"><PlusCircle size={16} /> {buttonText}</Button>
       </header>
       <div className="border border-gray-100/50 rounded-lg">
         <Table>
@@ -143,15 +143,15 @@ const MultiFieldInput = <TValues extends FieldValues>(props: MultiFieldInputProp
             <DialogTitle className="mb-6">{title}</DialogTitle>
             {description && <DialogDescription>{description}</DialogDescription>}
           </DialogHeader>
-            <div className="grid gap-4">
-              {children(methods)}
-              <DialogFooter className="mt-2">
-                <Button type="button" variant="secondary" onClick={() => setOpenModalForm(false)}>
-                  {cancelText ?? 'Cancel'}
-                </Button>
-                <Button type="button" variant="default" onClick={handleSubmit}>{submitText ?? 'Submit'}</Button>
-              </DialogFooter>
-            </div>
+          <div className="grid gap-4">
+            {children(methods)}
+            <DialogFooter className="mt-2">
+              <Button type="button" variant="secondary" onClick={() => setOpenModalForm(false)}>
+                {cancelText ?? 'Cancel'}
+              </Button>
+              <Button type="button" variant="default" onClick={handleSubmit}>{submitText ?? 'Submit'}</Button>
+            </DialogFooter>
+          </div>
         </DialogContent>
       </Dialog>
       <Dialog open={openModalView} onOpenChange={setOpenModalView}>

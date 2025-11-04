@@ -38,8 +38,8 @@ const TabsGroup = <T extends FieldValues>(props: TabsGroupProps<T>) => {
           </TabsTrigger>
         ))}
       </TabsList>
-      {tabsList.map((tab) => (
-        <TabsContent value={tab.value}>
+      {tabsList.map((tab, index) => (
+        <TabsContent value={tab.value} key={index}>
           <tab.Comp form={methods} errors={errors} setValue={setValue} />
         </TabsContent>
       ))}

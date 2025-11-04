@@ -1,6 +1,6 @@
 import OnWorkingPage from "@/components/ui/OnWorkingPage";
 
-const Invoice = () => {
+const Reception = () => {
   return (
     <div>
       <OnWorkingPage />
@@ -8,4 +8,4 @@ const Invoice = () => {
   )
 }
 
-export default Invoice;
+export default Reception;

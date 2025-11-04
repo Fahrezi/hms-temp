@@ -5,13 +5,14 @@ import SelectInput from "@/components/ui/SelectInput";
 import { Control } from "react-hook-form";
 import { rateGroup, rateSourceList, reservationMode, reservationType } from "@/constants/data";
 import { differenceInDays } from "date-fns";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { useEffect } from "react";
 
 type StepProps = RHFBridgeProps<any>;
 
 export const BasicVisitorForm = ({ form, errors }: StepProps) => {
   const { register, control, watch } = form;
+  const navigate = useNavigate();
   const arrivalValue = watch('arrival');
   const departureValue = watch('departure'); 
   const nights = differenceInDays(new Date(departureValue), new Date(arrivalValue));
@@ -30,7 +31,7 @@ export const BasicVisitorForm = ({ form, errors }: StepProps) => {
     
     const params = new URLSearchParams(window.location.search);
     params.set('type', reservationModeValue);
-    window.history.replaceState(null, '', `${window.location.pathname}?${params.toString()}`);
+    navigate({ search: params.toString() });
   }, [reservationModeValue]);
 
   return (

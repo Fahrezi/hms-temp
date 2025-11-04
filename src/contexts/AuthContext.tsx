@@ -36,7 +36,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     if (storedData) {
       const parsedData = decryptData(storedData);
       if (parsedData) {
-        dispatch({ type: 'RESTORE', payload: parsedData });
+        dispatch({ type: 'RESTORE', payload: parsedData as AuthState });
       }
     } else {
       dispatch({ type: 'RESTORE' });
