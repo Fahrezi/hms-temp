@@ -8,8 +8,10 @@ import { Table, TableBody, TableCaption, TableCell, TableHead, TableHeader, Tabl
 import { useHeaderNav } from "@/hooks/useHeaderNav";
 import { Separator } from "@radix-ui/react-select";
 import { set } from "date-fns";
-import { Ellipsis, Eye, Search } from "lucide-react";
+import { Download, Ellipsis, Eye, Search } from "lucide-react";
 import { useCallback, useEffect, useMemo, useState } from "react";
+import { ReportDoc } from "./components/ReportPDF";
+import { pdf } from "@react-pdf/renderer";
 
 const SEED_GUEST = [
   {
@@ -157,20 +159,40 @@ const GuestList = () => {
     }
   }, [search]);
 
+  const handleDownloadPDF = async () => {
+    const blob = await pdf(<ReportDoc hotelName="Hotel Lorin Sentul" data={listGuest} />).toBlob();
+
+    const link = document.createElement('a');
+    const url = URL.createObjectURL(blob);
+    link.href = url;
+    link.download = 'guest-list-report.pdf';
+    link.click();
+
+    setTimeout(() => {
+      link.remove();
+      URL.revokeObjectURL(url);
+    }, 100);
+  }
+
   return (
     <section>
       <Card>
         <header className="flex items-center justify-between mb-4">
           <h2 className="font-semibold text-2xl capitalize">Guest List</h2>
-          <div className="relative">
-            <span className="absolute top-1/2 left-2 transform -translate-y-1/2">
-              <Search size={16} />
-            </span>
-            <Input
-              className="pl-8 min-w-[250px] !text-xs"
-              placeholder="Search RSVP Id"
-              onChange={(e) => setSearch(e.target.value)}
-            />
+          <div className="flex items-center gap-2">
+            <Button className="!py-2 !px-4" variant="default" onClick={() => handleDownloadPDF()}>
+              <Download size={16}/><span>Report Guest List</span>
+            </Button>
+            <div className="relative">
+              <span className="absolute top-1/2 left-2 transform -translate-y-1/2">
+                <Search size={16} />
+              </span>
+              <Input
+                className="pl-8 min-w-[250px] !text-xs"
+                placeholder="Search RSVP Id"
+                onChange={(e) => setSearch(e.target.value)}
+              />
+            </div>
           </div>
         </header>
         <div className="w-full overflow-auto">

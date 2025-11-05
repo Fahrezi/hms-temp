@@ -19,16 +19,6 @@ const NAVBAR_ITEMS = [
     submenu: null,    
   },
   {
-    name: 'Guest',
-    path: '',
-    submenu: [
-      {
-        name: 'Guest List',
-        path: '/guest/guest-list',
-      },
-    ],     
-  },
-  {
     name: 'Reservation',
     path: '/reservation',
     submenu: [
@@ -41,6 +31,16 @@ const NAVBAR_ITEMS = [
         path: '/reservation/guest-in-house',
       },
     ],    
+  },
+  {
+    name: 'Guest',
+    path: '',
+    submenu: [
+      {
+        name: 'Guest List',
+        path: '/guest/guest-list',
+      },
+    ],     
   },
   {
     name: 'Reception',
