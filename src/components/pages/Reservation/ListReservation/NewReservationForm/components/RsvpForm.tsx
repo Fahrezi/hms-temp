@@ -1,10 +1,13 @@
+import { Control } from "react-hook-form";
+
 import CardForm from "@/components/ui/CardForm/CardForm";
 import { InputLabel } from "@/components/ui/InputLabel";
 import SelectInput from "@/components/ui/SelectInput";
-import { Control } from "react-hook-form";
-import { RHFBridgeProps } from "../types/index.type";
 import { Textarea } from "@/components/ui/TextArea";
+
 import { hourList, purposeOfVisitList, segmentMarketList, sourceOfBusinessList } from "@/constants/data";
+
+import { RHFBridgeProps } from "../types/index.type";
 
 type StepProps = RHFBridgeProps<any>;
 
@@ -14,7 +17,7 @@ export const RsvpForm = ({ form, errors }: StepProps) => {
     <CardForm className="mt-6" title="RSVP Info">
       <section className="mb-8">
         <h4 className="mb-4 text-[#5b5b5b] text-lg">RSVP Info</h4>
-        <div className="grid grid-cols-2 gap-4">
+        <div className="grid grid-cols-2 gap-6">
           <SelectInput
             name="purposeOfVisit"
             label="Purpose of Visit"

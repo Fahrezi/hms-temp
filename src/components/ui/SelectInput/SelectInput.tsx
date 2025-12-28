@@ -1,4 +1,5 @@
 import { Control, Controller } from "react-hook-form";
+
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../Select/Select";
 
 type Option = {
@@ -46,7 +47,7 @@ const SelectInput = (props: SelectInputProps) => {
               </SelectContent>
             </Select>
             {fieldState.error && (
-              <p className="text-sm text-red-500">{fieldState.error.message}</p>
+              <p className="text-xs text-destructive">{fieldState.error.message}</p>
             )}
           </>
         )}

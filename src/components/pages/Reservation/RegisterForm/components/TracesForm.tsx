@@ -1,12 +1,14 @@
-import CardForm from "@/components/ui/CardForm/CardForm";
-import { InputLabel } from "@/components/ui/InputLabel";
-import SelectInput from "@/components/ui/SelectInput";
 import { Control, Controller } from "react-hook-form";
-import { RHFBridgeProps } from "../types/index.type";
-import { Textarea } from "@/components/ui/TextArea";
-import MultiFieldInput from "@/components/ui/MultiFieldInput";
-import DynamicSelectInput from "@/components/ui/DynamicSelectInput";
+
+import CardForm from "@/components/ui/CardForm/CardForm";
 import { Checkbox } from "@/components/ui/Checkbox";
+import DynamicSelectInput from "@/components/ui/DynamicSelectInput";
+import { InputLabel } from "@/components/ui/InputLabel";
+import MultiFieldInput from "@/components/ui/MultiFieldInput";
+import SelectInput from "@/components/ui/SelectInput";
+import { Textarea } from "@/components/ui/TextArea";
+
+import { RHFBridgeProps } from "../types/index.type";
 
 type StepProps = RHFBridgeProps<any>;
 const HEADER_REMINDER: { label: string; value: string }[] = [

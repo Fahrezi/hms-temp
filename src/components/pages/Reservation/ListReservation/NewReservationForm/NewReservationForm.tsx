@@ -1,21 +1,35 @@
-import { Button } from "@/components/ui/Button";
-import { addDays, format, set } from "date-fns";
-import { FormProvider, useForm } from "react-hook-form";
-import { AccountForm, BasicVisitorForm, DetailForm, OtherForm, RoomRateForm, RsvpForm, TracesForm } from "./components";
-import { useMemo } from "react";
-import { ReservationFormValues, ReservationSchema } from "@/libs/validation/reservation.schema";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { addDays, format, set } from "date-fns";
+import { ArrowLeft, Building, Calendar, DoorOpen, NotebookIcon, Save, User, Users } from "lucide-react";
+import { useMemo, useState } from "react";
+import { FormProvider, useForm } from "react-hook-form";
+import { useNavigate } from "react-router-dom";
+
+import { Badge } from "@/components/ui/Badge";
+import { Button } from "@/components/ui/Button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/Card";
 import TabsGroup, { TabsListType } from "@/components/ui/TabsGroup/TabsGroup";
-import { GroupForm } from "./components/GroupInformation";
-import { Navigate, useNavigate, useSearchParams } from "react-router-dom";
+
+import { useOverlay } from "@/hooks/useOverlay.hooks";
+
 import { rateGroup } from "@/constants/data";
-import { useOverlay } from "@/hooks/useOverlay";
-import { AUTO_RESERVATION } from "../constants";
+import { ReservationMode } from "@/types/hotel";
+
+import { AccountForm, BasicVisitorForm, DetailForm, RoomRateForm, RsvpForm, TracesForm } from "./components";
+import { GroupForm } from "./components/GroupInformation";
+
+import { ReservationFormValues, ReservationSchema } from "@/libs/validation/reservation.schema";
 
 const baseDate = new Date();
 type TypeReservation = 'individual' | 'series' | 'group' | 'block';
 
+const RATE_ROOM_GROUP_ERROR: (keyof ReservationFormValues)[] = [
+  'inventorySource',
+];
+
 const RegistrationForm = () => {
+  const [mode, setMode] = useState<ReservationMode>('individual');
+  const [isWalkIn, setIsWalkIn] = useState(false);
   const methods = useForm<ReservationFormValues>({
     resolver: zodResolver(ReservationSchema),
     defaultValues: {
@@ -161,10 +175,6 @@ const RegistrationForm = () => {
   const params = new URLSearchParams(window.location.search);
   const type: TypeReservation = params.get('type') as TypeReservation;
   const { handleSubmit, setValue, formState, reset } = methods;
-
-  if (!['individual', 'series', 'group', 'block'].includes(type)) {
-    return (<Navigate to="/not-found" />)
-  }
 
   const onSubmit = async (data: ReservationFormValues) => {
     const {
@@ -346,10 +356,8 @@ const RegistrationForm = () => {
       notifText: 'Reservasi berhasil dibuat!',
       notifType: 'success'
     });
-    void navigate('/reservation/list-reservation');
 
-    console.log(payload);
-
+    // void navigate('/reservation/list-reservation');
     // try {
     //   const response = await fetch('http://localhost:5175/reservations', {
     //     method: 'POST',
@@ -373,7 +381,7 @@ const RegistrationForm = () => {
   }
 
   const tabsList: TabsListType<ReservationFormValues>[] = useMemo(() => [
-    { label: 'Room Rate', value: 'room_rate', Comp: RoomRateForm, errorGroup: ['rate'] },
+    { label: 'Room Rate', value: 'room_rate', Comp: RoomRateForm, errorGroup: RATE_ROOM_GROUP_ERROR },
     { label: 'RSVP Info', value: 'rsvp_info', Comp: RsvpForm, errorGroup: ['rate'] },
     { label: 'Detail', value: 'detail', Comp: DetailForm, errorGroup: ['rate'] },
     { label: 'Account', value: 'account', Comp: AccountForm, errorGroup: ['rate'] },
@@ -382,13 +390,13 @@ const RegistrationForm = () => {
   ], [type]);
 
   const tabsListSeries: TabsListType<ReservationFormValues>[] = useMemo(() => [
-    { label: 'Room Rate', value: 'room_rate', Comp: RoomRateForm, errorGroup: ['rate'] },
+    { label: 'Room Rate', value: 'room_rate', Comp: RoomRateForm, errorGroup: RATE_ROOM_GROUP_ERROR },
     { label: 'RSVP Info', value: 'rsvp_info', Comp: RsvpForm, errorGroup: ['rate'] },
     { label: 'Account', value: 'account', Comp: AccountForm, errorGroup: ['rate'] },
   ], [type]);
 
-    const tabsListGroup: TabsListType<ReservationFormValues>[] = useMemo(() => [
-    { label: 'Room Rate', value: 'room_rate', Comp: RoomRateForm, errorGroup: ['rate'] },
+  const tabsListGroup: TabsListType<ReservationFormValues>[] = useMemo(() => [
+    { label: 'Room Rate', value: 'room_rate', Comp: RoomRateForm, errorGroup: RATE_ROOM_GROUP_ERROR },
     { label: 'RSVP Info', value: 'rsvp_info', Comp: RsvpForm, errorGroup: ['rate'] },
     { label: 'Account', value: 'account', Comp: AccountForm, errorGroup: ['rate'] },
     { label: 'Group Information', value: 'detail', Comp: GroupForm, errorGroup: ['rate'] },
@@ -397,22 +405,88 @@ const RegistrationForm = () => {
   ], [type]);
 
   const tabs = useMemo(() => ({
-    individual: tabsList,
-    series: tabsListSeries,
-    group: tabsListGroup,
-    block: tabsListSeries
-  }), [type])
+    'individual': tabsList,
+    'tour-series': tabsListSeries,
+    'group': tabsListGroup,
+    'block': tabsListSeries
+  }), [mode]);
+
+  const modeConfig: Record<ReservationMode, { label: string; icon: React.ReactNode; description: string }> = {
+    'individual': { label: 'Individual', icon: <User className="h-4 w-4" />, description: 'Single guest booking' },
+    'block': { label: 'Block', icon: <Building className="h-4 w-4" />, description: 'Block of rooms' },
+    'tour-series': { label: 'Tour Series', icon: <Calendar className="h-4 w-4" />, description: 'Series of tour bookings' },
+    'group': { label: 'Group', icon: <Users className="h-4 w-4" />, description: 'Group reservation' },
+  };
 
   return (
     <FormProvider {...methods}>
-      <form onSubmit={handleSubmit(onSubmit)}>
+      {/* Header */}
+      <div className="flex items-center justify-between mb-4">
+        <div className="flex items-center gap-4">
+          <Button variant="ghost" size="icon" onClick={() => navigate('/reservation')}>
+            <ArrowLeft className="h-5 w-5" />
+          </Button>
+          <div>
+            <h1 className="text-2xl font-bold">
+              {isWalkIn ? "Walk-in Check-in" : "New Reservation"}
+            </h1>
+            <p className="text-muted-foreground">
+              {isWalkIn ? "Quick check-in for walk-in guests" : "Create a new reservation"}
+            </p>
+          </div>
+          <Badge variant={isWalkIn ? "default" : "secondary"}>
+            {isWalkIn ? "Walk-in" : "Reservation"}
+          </Badge>
+        </div>
+      </div>
+      <section className="flex items-center gap-4 mb-4">
+        <Card className="min-w-[300px]">
+          <header className="flex items-center gap-2 mb-2">
+            <NotebookIcon size={18} />
+            <h2 className="font-semibold">Occupancy Status</h2>
+          </header>
+          <p className="font-bold text-2xl text-orange-400">29.2%</p>
+        </Card>
+        <Card className="min-w-[300px]">
+          <header className="flex items-center gap-2 mb-2">
+            <DoorOpen size={18} />
+            <h2 className="font-semibold">Selling Status</h2>
+          </header>
+          <p className="font-bold text-2xl text-green-500">OPEN</p>
+        </Card>
+      </section>
+      <form className="space-y-4" onSubmit={handleSubmit(onSubmit)}>
+        <div>
+          <Card>
+            <CardHeader className="py-3">
+              <CardTitle className="text-sm font-medium">Reservation Mode</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="grid grid-cols-4 gap-3">
+                {(Object.keys(modeConfig) as ReservationMode[]).map((m) => (
+                  <Button
+                    type="button"
+                    key={m}
+                    variant={mode === m ? "default" : "outline"}
+                    className="flex flex-col h-auto py-4 gap-2"
+                    onClick={() => setMode(m)}
+                  >
+                    {modeConfig[m].icon}
+                    <span className="font-medium">{modeConfig[m].label}</span>
+                    <span className="text-xs opacity-70">{modeConfig[m].description}</span>
+                  </Button>
+                ))}
+              </div>
+            </CardContent>
+          </Card>
+        </div>
         <div>
           <BasicVisitorForm form={methods} errors={formState.errors} setValue={setValue} />
-          <TabsGroup tabsList={tabs[type]} methods={methods} errors={formState.errors} setValue={setValue} />
+          <TabsGroup tabsList={tabs[mode]} methods={methods} errors={formState.errors} setValue={setValue} />
         </div>
         <div className="flex justify-end mt-6">
-          <Button type="submit" className="py-6 rounded-lg !font-bold bg-hotel-green text-white cursor-pointer active:scale-98 hover:scale-[1.005] disabled:bg-black/50 w-[150px] text-center">
-            Submit
+          <Button type="submit" className="inline-flex items-center gap-2 p-6 rounded-lg !font-bold bg-primary text-white cursor-pointer active:scale-98 hover:scale-[1.005] disabled:bg-black/50 min-w-[150px] text-center">
+            <Save  size={18}/> <span>{isWalkIn ? "Check-in" : "Save Reservation"}</span>
           </Button>
         </div>
       </form>

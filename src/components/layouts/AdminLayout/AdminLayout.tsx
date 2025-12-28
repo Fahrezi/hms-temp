@@ -1,16 +1,17 @@
-import { Link, Outlet, useLocation, useNavigate } from 'react-router-dom';
+import { useCallback, useEffect, useMemo, useState } from 'react';
+import { Outlet, useLocation, useNavigate } from 'react-router-dom';
 
-import { useAuth } from '@/hooks/useAuth';
-import { useHeaderNav } from '@/hooks/useHeaderNav';
-
-import { CircleUser } from 'lucide-react';
-import { useCallback, useEffect, useMemo } from 'react';
-import { Breadcrumb, BreadcrumbItem, BreadcrumbLink, BreadcrumbList, BreadcrumbPage, BreadcrumbSeparator } from '@/components/ui/Breadcrumb';
-import { BreadcrumbType } from '@/types/headerNav';
-import { cn } from '@/libs/utils';
-import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/Popover';
-import { Button } from '@/components/ui/Button';
 import Avatar from '@/components/ui/Avatar';
+import { Button } from '@/components/ui/Button';
+import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/Popover';
+import { SIDEBAR_WIDTH, SIDEBAR_WIDTH_ICON, SidebarProvider, SidebarTrigger } from '@/components/ui/Sidebar';
+
+import { useAuth } from '@/hooks/useAuth.hooks';
+import { useHeaderNav } from '@/hooks/useHeaderNav.hooks';
+
+import { BreadcrumbType } from '@/types/headerNav';
+
+import AppSidebar from '../AppSidebar/AppSidebar';
 
 const NAVBAR_ITEMS = [
   {
@@ -24,7 +25,7 @@ const NAVBAR_ITEMS = [
     submenu: [
       {
         name: 'List Reservation',
-        path: '/reservation/list-reservation',
+        path: '/reservation/list',
       },
       {
         name: 'Guest In House',
@@ -75,15 +76,17 @@ const NAVBAR_ITEMS = [
       },
     ],     
   },
-]
+];
 
 const AdminLayout = () => {
-  const { logout } = useAuth();
+  // const { logout } = useAuth();
+
   const { title, breadcrumb, changeTitle, changeBreadcrumb } = useHeaderNav();
   const location = useLocation();
   const navigate = useNavigate();
   const pathname = useMemo(() => location.pathname, [location]);
-  const isActiveMenu = useCallback((path: string) => pathname.includes(path), [pathname]);
+  // const isActiveMenu = useCallback((path: string) => pathname.includes(path), [pathname]);
+  const [open, setOpen] = useState<Record<string, boolean> | null>(null);
 
   useEffect(() => {
     changeTitle('Dashboard');
@@ -109,53 +112,34 @@ const AdminLayout = () => {
     changeBreadcrumb(listBreadcrumb);
   }, [pathname]);
 
+  useEffect(() => {
+    const openInit = NAVBAR_ITEMS.reduce((prev, curr) => ({
+      ...prev,
+      ...( curr.submenu !== null && {[curr.name.toLowerCase()]: true})
+    }), {});
+
+    setOpen(openInit);
+  }, []);
+
   return (
-    <div className="w-full max-w-[100vw] mx-auto">
-      <div className="grid grid-cols-[248px_minmax(0,1fr)] w-screen relative">
-        <nav className="p-4 h-screen bg-[#FCFBFB] w-[248px] fixed z-20">
-          <div aria-label="logo" className="mb-8">
-            <img src="/images/logo.png" alt="logo" className="w-[60%] h-auto" />
-          </div>
-          <ul className="flex flex-col gap-4">
-            {
-              NAVBAR_ITEMS.map((item, index) => (
-                item.submenu === null ? (
-                  <li key={index} className={cn("mb-4 rounded-xl", isActiveMenu(item.path) && 'bg-hotel-sage-whisper py-2 px-4 text-green-900 font-medium')}><Link to={item.path}>{item.name}</Link></li>
-                ) : (
-                  <li key={index}>
-                    <div className="flex items-center justify-between cursor-pointer mb-4">
-                      <span className="text-sm font-semibold">{item.name}</span>
-                    </div>
-                      <ul className="pl-4 flex flex-col gap-4 mb-4">
-                        {
-                          item.submenu.map((subitem, subindex) => (
-                            <li className={cn("rounded-xl", isActiveMenu(subitem.path) && 'bg-hotel-sage-whisper  py-2 px-4 text-green-900 font-medium')} key={subindex}>
-                              <Link to={subitem.path}>{subitem.name}</Link>
-                            </li>
-                          ))
-                        }
-                      </ul>
-                  </li>
-                )
-              ))
-            }
-          </ul>
-        </nav>
-        <div className="opacity-0 w-[248px]">
-          halo
-        </div>
-        <main className="bg-white min-w-0 overflow-auto min-h-screen border border-gray-200 rounded-l-2xl" id="main-content">
-          <header className="flex justify-between items-start p-8 pr-6">
+    <SidebarProvider>
+      <div className="flex min-h-screen w-full">
+        <AppSidebar />
+        <main 
+        style={
+          {
+            "--sidebar-width": SIDEBAR_WIDTH,
+            "--sidebar-width-icon": SIDEBAR_WIDTH_ICON,
+          } as React.CSSProperties
+        }
+        className={`flex-1 flex flex-col bg-white border border-gray-200 rounded-l-2xl max-w-[calc(100vw_-_var(--sidebar-width))]`} id="main-content">
+          <header className="sticky top-0 z-10 flex min-h-14 py-4 items-center gap-4 border-b border-border bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 px-6">
             <div className="space-y-4">
               <div className="flex items-center gap-2">
-                {/* {breadcrumb.length > 1 && (
-                  <button className="cursor-pointer" onClick={() => navigate(breadcrumb[breadcrumb.length - 2].href)}>
-                    <ArrowLeft size={24} />
-                  </button>
-                )} */}
+                <SidebarTrigger />
                 <h1 className="font-semibold text-2xl">{title ?? 'Admin Dashboard'}</h1>
               </div>
-              <Breadcrumb>
+              {/* <Breadcrumb>
                 <BreadcrumbList>
                   {
                     breadcrumb.map((item, index) => (
@@ -174,10 +158,10 @@ const AdminLayout = () => {
                     ))               
                   }
                 </BreadcrumbList>
-              </Breadcrumb>
+              </Breadcrumb> */}
             </div>
             <Popover>
-              <PopoverTrigger>
+              <PopoverTrigger className="ml-auto">
                 <Avatar initial="A" className="cursor-pointer" />
               </PopoverTrigger>
               <PopoverContent className="w-64 rounded-xl shadow bg-white p-4 border-gray-100 left-4" align="end">
@@ -200,7 +184,7 @@ const AdminLayout = () => {
           </section>
         </main>
       </div>
-    </div>
+    </SidebarProvider>
   );
 };
 

@@ -1,6 +1,7 @@
-import { OverlayAction, OverlayContextType, OverlayState } from '@/types/overlay';
 import { createContext, type ReactNode, useCallback, useEffect, useReducer } from 'react';
 import toast, { Toaster } from 'react-hot-toast';
+
+import { OverlayAction, OverlayContextType, OverlayState } from '@/types/overlay';
 
 const initialState: OverlayState = {
   isActive: false,

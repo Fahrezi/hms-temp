@@ -1,12 +1,15 @@
+import { differenceInDays } from "date-fns";
+import { useEffect } from "react";
+import { Control } from "react-hook-form";
+import { useNavigate, useParams } from "react-router-dom";
+
 import CardForm from "@/components/ui/CardForm/CardForm";
-import { RHFBridgeProps } from "../types/index.type";
 import { InputLabel } from "@/components/ui/InputLabel";
 import SelectInput from "@/components/ui/SelectInput";
-import { Control } from "react-hook-form";
+
 import { rateGroup, rateSourceList, reservationMode, reservationType } from "@/constants/data";
-import { differenceInDays } from "date-fns";
-import { useNavigate, useParams } from "react-router-dom";
-import { useEffect } from "react";
+
+import { RHFBridgeProps } from "../types/index.type";
 
 type StepProps = RHFBridgeProps<any>;
 

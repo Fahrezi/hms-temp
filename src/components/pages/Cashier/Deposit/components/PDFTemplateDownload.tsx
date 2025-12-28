@@ -1,4 +1,4 @@
-import { Document, Page, StyleSheet, View, Text } from "@react-pdf/renderer";
+import { Document, Page, StyleSheet, Text,View } from "@react-pdf/renderer";
 
 const PDFTemplateDownload = () => {
   const styles = StyleSheet.create({

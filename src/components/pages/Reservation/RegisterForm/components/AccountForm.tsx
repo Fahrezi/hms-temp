@@ -1,9 +1,11 @@
+import { Control } from "react-hook-form";
+
 import CardForm from "@/components/ui/CardForm/CardForm";
 import { InputLabel } from "@/components/ui/InputLabel";
 import SelectInput from "@/components/ui/SelectInput";
-import { Control } from "react-hook-form";
-import { RHFBridgeProps } from "../types/index.type";
 import TableInput from "@/components/ui/TableInput";
+
+import { RHFBridgeProps } from "../types/index.type";
 
 type StepProps = RHFBridgeProps<any>;
 

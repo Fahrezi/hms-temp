@@ -4,7 +4,7 @@ import { vi } from 'vitest';
 
 import AdminLayout from '@/components/layouts/AdminLayout';
 
-import { useAuth } from '@/hooks/useAuth';
+import { useAuth } from '@/hooks/useAuth.hooks';
 
 vi.mock('@/hooks/useAuth', () => ({
   useAuth: vi.fn(),

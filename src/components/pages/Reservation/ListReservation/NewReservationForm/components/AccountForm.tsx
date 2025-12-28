@@ -1,11 +1,14 @@
+import { useMemo } from "react";
+import { Control } from "react-hook-form";
+
 import CardForm from "@/components/ui/CardForm/CardForm";
 import { InputLabel } from "@/components/ui/InputLabel";
 import SelectInput from "@/components/ui/SelectInput";
-import { Control } from "react-hook-form";
-import { RHFBridgeProps } from "../types/index.type";
 import TableInput from "@/components/ui/TableInput";
+
 import { cardTypeList, paidMethodList } from "@/constants/data";
-import { useMemo } from "react";
+
+import { RHFBridgeProps } from "../types/index.type";
 
 type StepProps = RHFBridgeProps<any>;
 
@@ -39,7 +42,7 @@ export const AccountForm = ({ form, errors }: StepProps) => {
     <CardForm className="mt-6" title="Account">
       <section className="mb-8">
         <h4 className="mb-4 text-[#5b5b5b] text-lg">Payment</h4>
-        <div className="grid grid-cols-2 gap-4">
+        <div className="grid grid-cols-2 gap-6">
           <SelectInput
             name="paidMethod"
             label="Paid By"

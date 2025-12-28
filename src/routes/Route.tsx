@@ -38,10 +38,26 @@ const routes: RouteObject[] = [
         ),
       },
       {
-        path: 'guest/guest-list',
+        path: 'guests',
         element: (
           <RouteGuard protectedRoute>
             <Pages.GuestList />
+          </RouteGuard>
+        ),
+      },
+      {
+        path: 'lost-and-found',
+        element: (
+          <RouteGuard protectedRoute>
+            <Pages.LostFound />
+          </RouteGuard>
+        ),
+      },
+      {
+        path: 'night-audit',
+        element: (
+          <RouteGuard protectedRoute>
+            <Pages.NightAudit />
           </RouteGuard>
         ),
       },
@@ -62,7 +78,7 @@ const routes: RouteObject[] = [
         ),
       },
       {
-        path: 'reservation/list-reservation',
+        path: 'reservation',
         element: (
           <RouteGuard protectedRoute>
             <Pages.ListReservation />
@@ -70,13 +86,29 @@ const routes: RouteObject[] = [
         ),
       },
       {
-        path: 'reservation/guest-in-house',
+        path: 'registration',
         element: (
           <RouteGuard protectedRoute>
-            <Pages.GuestInHouse />
+            <Pages.Registration />
           </RouteGuard>
         ),
       },
+      {
+        path: 'rooms',
+        element: (
+          <RouteGuard protectedRoute>
+            <Pages.Room />
+          </RouteGuard>
+        ),
+      },
+      // {
+      //   path: 'guests',
+      //   element: (
+      //     <RouteGuard protectedRoute>
+      //       <Pages.GuestInHouse />
+      //     </RouteGuard>
+      //   ),
+      // },
       {
         path: 'reservation/register',
         element: (
@@ -86,7 +118,7 @@ const routes: RouteObject[] = [
         ),
       },
       {
-        path: 'reservation/list-reservation/new-reservation',
+        path: 'reservation/new',
         element: (
           <RouteGuard protectedRoute>
             <Pages.NewReservationForm />
@@ -94,7 +126,7 @@ const routes: RouteObject[] = [
         ),
       },
       {
-        path: 'cashier/deposit',
+        path: 'deposit',
         element: (
           <RouteGuard protectedRoute>
             <Pages.Deposit />
@@ -118,10 +150,10 @@ const routes: RouteObject[] = [
         ),
       },
       {
-        path: 'report/invoice-report',
+        path: 'report',
         element: (
           <RouteGuard protectedRoute>
-            <Pages.ReportInvoice />
+            <Pages.Report />
           </RouteGuard>
         ),
       }

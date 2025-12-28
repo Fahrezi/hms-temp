@@ -1,7 +1,8 @@
-import { Button } from "@/components/ui/Button";
-import { Dialog, DialogContent, DialogFooter, DialogTrigger } from "@/components/ui/Dialog/Dialog";
 import { Eye } from "lucide-react";
 import { useState } from "react";
+
+import { Button } from "@/components/ui/Button";
+import { Dialog, DialogContent, DialogFooter, DialogTrigger } from "@/components/ui/Dialog/Dialog";
 
 const DetailModal = () => {
   const [openModal, setOpenModal] = useState(false);

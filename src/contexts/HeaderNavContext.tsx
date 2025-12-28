@@ -1,5 +1,6 @@
-import { BreadcrumbType, HeaderNavAction, HeaderNavContextType, HeaderNavState } from '@/types/headerNav';
 import { createContext, type ReactNode, useCallback, useReducer } from 'react';
+
+import { BreadcrumbType, HeaderNavAction, HeaderNavContextType, HeaderNavState } from '@/types/headerNav';
 
 const initialState: HeaderNavState = {
   breadcrumb: [],

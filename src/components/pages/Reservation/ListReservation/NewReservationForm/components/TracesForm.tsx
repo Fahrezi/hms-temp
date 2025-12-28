@@ -1,12 +1,18 @@
+import { DropdownMenuPortal } from "@radix-ui/react-dropdown-menu";
+import { Bell, ChevronDown, Package, Palmtree, Plus } from "lucide-react";
+import { useState } from "react";
+import toast from "react-hot-toast";
+
+import { TraceCard } from "@/components/fragments/reservations/TraceCard";
+import { TraceDialog } from "@/components/fragments/reservations/TraceDialog";
+import { Badge } from "@/components/ui/Badge";
+import { Button } from "@/components/ui/Button";
 import CardForm from "@/components/ui/CardForm/CardForm";
-import { InputLabel } from "@/components/ui/InputLabel";
-import SelectInput from "@/components/ui/SelectInput";
-import { Control, Controller } from "react-hook-form";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/DropdownMenu";
+
+import { Trace, TraceType } from "@/types/hotel";
+
 import { RHFBridgeProps } from "../types/index.type";
-import { Textarea } from "@/components/ui/TextArea";
-import MultiFieldInput from "@/components/ui/MultiFieldInput";
-import DynamicSelectInput from "@/components/ui/DynamicSelectInput";
-import { Checkbox } from "@/components/ui/Checkbox";
 
 type StepProps = RHFBridgeProps<any>;
 const HEADER_REMINDER: { label: string; value: string }[] = [
@@ -66,13 +72,147 @@ const LEISURE_INDEX_BODY = [
 export const TracesForm = ({ form, errors, setValue }: StepProps) => {
   const { watch } = form;
 
+  const [traces, setTraces] = useState<Trace[]>([]);
+  const [traceDialogOpen, setTraceDialogOpen] = useState(false);
+  const [defaultTraceType, setDefaultTraceType] = useState<TraceType>('reminder');
+
   const reminderValues = watch('reminder');
   const inventoryValues = watch('inventoryRequest');
   const leisureValues = watch('leisureBooking');
 
+
+  const handleAddTrace = (traceData: Omit<Trace, 'id' | 'createdAt' | 'status'>) => {
+    const newTrace: Trace = {
+      ...traceData,
+      id: Date.now().toString(),
+      status: 'pending',
+      createdAt: new Date().toISOString(),
+    };
+    setTraces([...traces, newTrace]);
+    toast.success('Trace added');
+  };
+
+  const handleTraceComplete = (id: string) => {
+    setTraces(traces.map(t => t.id === id ? { ...t, status: 'completed' } : t));
+    toast.success('Trace marked as completed');
+  };
+
+  const handleTraceCancel = (id: string) => {
+    setTraces(traces.map(t => t.id === id ? { ...t, status: 'cancelled' } : t));
+    toast.success('Trace cancelled');
+  };
+
   return (
     <CardForm className="mt-6" title="Traces">
-      <MultiFieldInput
+      <div className="flex items-center justify-between">
+        <div>
+          <h3 className="font-semibold">Traces & Follow-ups</h3>
+          <p className="text-sm text-muted-foreground">Track reminders, inventory requests, and leisure bookings</p>
+        </div>
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button>
+              <Plus className="h-4 w-4 mr-2" />
+              Add Trace
+              <ChevronDown className="h-4 w-4 ml-2" />
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align="start" sideOffset={4}>
+            <DropdownMenuItem onClick={() => { setDefaultTraceType('reminder'); setTraceDialogOpen(true); }}>
+              <Bell className="h-4 w-4 mr-2 text-amber-500" />
+              Reminder
+            </DropdownMenuItem>
+            <DropdownMenuItem onClick={() => { setDefaultTraceType('inventory-request'); setTraceDialogOpen(true); }}>
+              <Package className="h-4 w-4 mr-2 text-blue-500" />
+              Inventory Request
+            </DropdownMenuItem>
+            <DropdownMenuItem onClick={() => { setDefaultTraceType('leisure-booking'); setTraceDialogOpen(true); }}>
+              <Palmtree className="h-4 w-4 mr-2 text-green-500" />
+              Leisure Booking
+            </DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
+      </div>
+
+      {traces.length === 0 ? (
+        <div className="text-center py-12 text-muted-foreground">
+          <p>No traces added yet.</p>
+          <p className="text-sm">Click "Add Trace" to create reminders, inventory requests, or leisure bookings.</p>
+        </div>
+      ) : (
+        <div className="space-y-6">
+          {/* Reminders */}
+          {traces.filter(t => t.type === 'reminder').length > 0 && (
+            <div className="space-y-3">
+              <div className="flex items-center gap-2">
+                <Bell className="h-4 w-4 text-amber-500" />
+                <h4 className="font-medium text-sm">Reminders</h4>
+                <Badge variant="secondary" className="text-xs">{traces.filter(t => t.type === 'reminder').length}</Badge>
+              </div>
+              <div className="space-y-2">
+                {traces.filter(t => t.type === 'reminder').map((trace) => (
+                  <TraceCard
+                    key={trace.id}
+                    trace={trace}
+                    onComplete={handleTraceComplete}
+                    onCancel={handleTraceCancel}
+                  />
+                ))}
+              </div>
+            </div>
+          )}
+
+          {/* Inventory Requests */}
+          {traces.filter(t => t.type === 'inventory-request').length > 0 && (
+            <div className="space-y-3">
+              <div className="flex items-center gap-2">
+                <Package className="h-4 w-4 text-blue-500" />
+                <h4 className="font-medium text-sm">Inventory Requests</h4>
+                <Badge variant="secondary" className="text-xs">{traces.filter(t => t.type === 'inventory-request').length}</Badge>
+              </div>
+              <div className="space-y-2">
+                {traces.filter(t => t.type === 'inventory-request').map((trace) => (
+                  <TraceCard
+                    key={trace.id}
+                    trace={trace}
+                    onComplete={handleTraceComplete}
+                    onCancel={handleTraceCancel}
+                  />
+                ))}
+              </div>
+            </div>
+          )}
+
+          {/* Leisure Bookings */}
+          {traces.filter(t => t.type === 'leisure-booking').length > 0 && (
+            <div className="space-y-3">
+              <div className="flex items-center gap-2">
+                <Palmtree className="h-4 w-4 text-green-500" />
+                <h4 className="font-medium text-sm">Leisure Bookings</h4>
+                <Badge variant="secondary" className="text-xs">{traces.filter(t => t.type === 'leisure-booking').length}</Badge>
+              </div>
+              <div className="space-y-2">
+                {traces.filter(t => t.type === 'leisure-booking').map((trace) => (
+                  <TraceCard
+                    key={trace.id}
+                    trace={trace}
+                    onComplete={handleTraceComplete}
+                    onCancel={handleTraceCancel}
+                  />
+                ))}
+              </div>
+            </div>
+          )}
+        </div>
+      )}
+
+      <TraceDialog
+        open={traceDialogOpen}
+        onOpenChange={setTraceDialogOpen}
+        onSave={handleAddTrace}
+        defaultType={defaultTraceType}
+      />
+      {/* <MultiFieldInput
         buttonText="Add Reminder"
         headerTable={HEADER_REMINDER}
         values={reminderValues}
@@ -408,7 +548,7 @@ export const TracesForm = ({ form, errors, setValue }: StepProps) => {
             />
           </div>
         )}
-      </MultiFieldInput>
+      </MultiFieldInput> */}
     </CardForm>
   );
 };

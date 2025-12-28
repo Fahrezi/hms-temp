@@ -21,6 +21,12 @@ export const RESERVATION_LABEL_KEY = [
   { "label": "RNW", "value": "rnw" }
 ];
 
+export const WALK_IN_RESERVATION_ROOM_LIST_KEY = [
+  { "label": "Room Number", "value": "roomId" },
+  { "label": "First Name", "value": "firstName" },
+  { "label": "Last Name", "value": "lastName" },
+];
+
 const FIRST_NAME = "AFIQ FAISAL";
 
 export const AUTO_RESERVATION = {

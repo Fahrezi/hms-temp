@@ -1,10 +1,11 @@
-import { ENVIRONMENT } from '@/constants/envs';
+// import { ENVIRONMENT } from '@/constants/envs';
 import { AuthState } from '@/types/auth';
 import { DataDemoState } from '@/types/demo';
 
-import getEnvValue from './env';
+// import getEnvValue from './env';
 
-const SECRET_KEY = getEnvValue(ENVIRONMENT.SECRET_KEY);
+// const SECRET_KEY = getEnvValue(ENVIRONMENT.SECRET_KEY);
+const SECRET_KEY = 'CyhNv3XqwfOyp/8qcyhdly96gndLoytDUg6aXdo6+pE=';
 
 const encryptData = (data: AuthState | DataDemoState): string => {
   const json = JSON.stringify(data);

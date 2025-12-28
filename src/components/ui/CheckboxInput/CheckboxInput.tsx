@@ -1,4 +1,5 @@
 import { Control, Controller } from "react-hook-form";
+
 import { Checkbox } from "../Checkbox/Checkbox";
 
 type CheckboxInputProps = {

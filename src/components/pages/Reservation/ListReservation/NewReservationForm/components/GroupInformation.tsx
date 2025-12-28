@@ -1,8 +1,9 @@
 import CardForm from "@/components/ui/CardForm/CardForm";
 import { InputLabel } from "@/components/ui/InputLabel";
-import { RHFBridgeProps } from "../types/index.type";
-import { Textarea } from "@/components/ui/TextArea";
 import TableInput from "@/components/ui/TableInput";
+import { Textarea } from "@/components/ui/TextArea";
+
+import { RHFBridgeProps } from "../types/index.type";
 
 type StepProps = RHFBridgeProps<any>;
 const HEADER_RATE = [
@@ -61,7 +62,7 @@ export const GroupForm = ({ form, errors, setValue }: StepProps) => {
     <CardForm className="mt-6" title="Traces">
       <section className="mb-6">
         <h4 className="mb-6 text-[#5b5b5b] text-xl">Tour / Group Information</h4>
-        <div className="grid grid-cols-2 gap-4">
+        <div className="grid grid-cols-2 gap-6">
           <InputLabel
             label="ID Leader"
             type="text"

@@ -12,7 +12,7 @@ const ymdhm = z
 const dateOrIso = z.union([z.date(), z.string().datetime()]);
 
 export const ReservationSchema = z.object({
-  rsvpDate: z.string().optional().or(z.literal("")),
+  rsvpDate: z.string().or(z.literal("")),
   rsvpNo: z.string().optional().or(z.literal("")),
   arrival: ymd,
   departure: ymd,
@@ -25,12 +25,12 @@ export const ReservationSchema = z.object({
   lastName: z.string().optional().or(z.literal("")),
   // room rate default values
   accommodation: z.array(z.unknown()),
-  inventorySource: z.string().optional().or(z.literal("")),
-  reservationType: z.string().optional().or(z.literal("")),
-  confirmation: z.string().optional().or(z.literal("")),
-  confirmationBy: z.string().optional().or(z.literal("")),
-  sellingType: z.string().optional().or(z.literal("")),
-  noteDetail: z.string().optional().or(z.literal("")),
+  inventorySource: z.string().min(1),
+  reservationType: z.string().min(1),
+  confirmation: z.string().min(1),
+  confirmationBy: z.string().min(1),
+  sellingType: z.string().min(1),
+  noteDetail: z.string().optional(),
   rate: z.array(z.unknown()),
   // rsvp info
   purposeOfVisit: z.string().optional().or(z.literal("")),

@@ -4,9 +4,9 @@ import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
 import { z } from 'zod';
 
-import { useAuth } from '@/hooks/useAuth';
+import { useAuth } from '@/hooks/useAuth.hooks';
 // import { useAuth } from '@/hooks/useAuth';
-import { useOverlay } from '@/hooks/useOverlay';
+import { useOverlay } from '@/hooks/useOverlay.hooks';
 
 import { loginRequest } from '@/services/auth.service';
 
@@ -51,8 +51,8 @@ export const useLogin = () => {
   //   }
   // }, []);
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const onSubmit = async (data: LoginFormInputs) => {
-    console.log(data);
 
     const user: User = {
       name: 'admin123',

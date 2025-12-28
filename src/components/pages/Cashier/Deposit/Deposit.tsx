@@ -1,15 +1,18 @@
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/Table";
-import { useHeaderNav } from "@/hooks/useHeaderNav";
-import { useEffect } from "react";
-import { useDeposit } from "./useDeposit";
-import { Button } from "@/components/ui/Button";
-import { Download, Pencil } from "lucide-react";
-import FormModal from "./components/FormModal";
-import DetailModal from "./components/DetailModal";
-import Card from "@/components/ui/Card/Card";
-import { format } from "date-fns";
 import { pdf } from "@react-pdf/renderer";
+import { format } from "date-fns";
+import { Download, Pencil } from "lucide-react";
+import { useEffect } from "react";
+
+import { Button } from "@/components/ui/Button";
+import { Card } from "@/components/ui/Card";
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/Table";
+
+import { useHeaderNav } from "@/hooks/useHeaderNav.hooks";
+
+import DetailModal from "./components/DetailModal";
+import FormModal from "./components/FormModal";
 import PDFTemplateDownload from "./components/PDFTemplateDownload";
+import { useDeposit } from "./useDeposit";
 
 const Deposit = () => {
   const { changeTitle } = useHeaderNav();

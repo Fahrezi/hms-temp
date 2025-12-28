@@ -1,11 +1,14 @@
+import { Control } from "react-hook-form";
+
 import CardForm from "@/components/ui/CardForm/CardForm";
 import { InputLabel } from "@/components/ui/InputLabel";
 import SelectInput from "@/components/ui/SelectInput";
-import { Control } from "react-hook-form";
-import { RHFBridgeProps } from "../types/index.type";
 import { Textarea } from "@/components/ui/TextArea";
+
 import { guestIdTypeList, guestTypeList } from "@/constants/data";
+
 import { useDetail } from "../hooks/detail.hooks";
+import { RHFBridgeProps } from "../types/index.type";
 
 type StepProps = RHFBridgeProps<any>;
 
@@ -17,7 +20,7 @@ export const DetailForm = ({ form, errors }: StepProps) => {
     <CardForm className="mt-6" title="Detail">
       <section className="mb-8">
         <h4 className="mb-4 text-[#5b5b5b] text-lg">Guest Profile</h4>
-        <div className="grid grid-cols-2 gap-4">
+        <div className="grid grid-cols-2 gap-6">
           <InputLabel
             label="First Name"
             type="text"
@@ -122,7 +125,7 @@ export const DetailForm = ({ form, errors }: StepProps) => {
       </section>
       <section className="mb-8">
         <h4 className="mb-4 text-[#5b5b5b] text-lg">Guest Profile Continued</h4>
-        <div className="grid grid-cols-2 gap-4">
+        <div className="grid grid-cols-2 gap-6">
           <SelectInput
             name="guestIdType"
             label="Guest ID Type"
@@ -144,7 +147,7 @@ export const DetailForm = ({ form, errors }: StepProps) => {
             placeholder="Select Guest Type"
             options={guestTypeList}
           />
-          <div className="grid grid-cols-2 gap-4 items-end">
+          <div className="grid grid-cols-2 gap-4 items-start">
             <InputLabel
               label="Special Date"
               type="date"
@@ -153,7 +156,7 @@ export const DetailForm = ({ form, errors }: StepProps) => {
               {...register('specialDate')}
             />
             <Textarea
-              label=""
+              label="Notes"
               placeholder="Notes"
               errors={errors}
               {...register('specialDateNote')}
@@ -163,7 +166,7 @@ export const DetailForm = ({ form, errors }: StepProps) => {
       </section>
       <section>
         <h4 className="mb-4 text-[#5b5b5b] text-lg">Company Profile</h4>
-        <div className="grid grid-cols-2 gap-4">
+        <div className="grid grid-cols-2 gap-6">
           <InputLabel
             label="Company"
             type="text"

@@ -2,7 +2,7 @@ import { Navigate, useLocation } from 'react-router-dom';
 
 import Loading from '@/components/ui/Loading';
 
-import { useAuth } from '@/hooks/useAuth';
+import { useAuth } from '@/hooks/useAuth.hooks';
 
 import { RouteGuardProps } from '@/types/routes';
 

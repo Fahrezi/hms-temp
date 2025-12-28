@@ -4,12 +4,12 @@ import { RouterProvider } from 'react-router-dom';
 
 import Loading from './components/ui/Loading';
 import { AuthProvider } from './contexts/AuthContext';
-import useSmallContainer from './hooks/useSmallContainer';
-import { queryClient } from './libs/queryClients';
-import { router } from './libs/router';
+import { DataDemoProvider } from './contexts/DataDemoContext';
 import { HeaderNavProvider } from './contexts/HeaderNavContext';
 import { OverlayProvider } from './contexts/OverlayContext';
-import { DataDemoProvider } from './contexts/DataDemoContext';
+import useSmallContainer from './hooks/useSmallContainer.hooks';
+import { queryClient } from './libs/queryClients';
+import { router } from './libs/router';
 
 const App = () => {
   useSmallContainer();

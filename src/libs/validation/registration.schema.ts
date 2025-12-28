@@ -12,7 +12,7 @@ export const GuestRegistrationSchema = z.object({
   arrival: ymd,
   departure: ymd,
   nights: z.number().int().min(0),
-  rateSource: z.number().int(),
+  rateSource: emptyable,
   rateGroup: emptyable,
 
   guestList: z.array(z.unknown()),

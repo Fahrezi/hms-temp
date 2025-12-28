@@ -1,11 +1,14 @@
-import { Button } from "@/components/ui/Button";
-import { addDays, format } from "date-fns";
-import { FormProvider, useForm } from "react-hook-form";
-import { AccountForm, BasicVisitorForm, OtherForm, GuestInfoForm, TracesForm } from "./components";
-import { useMemo } from "react";
-import TabsGroup, { TabsListType } from "@/components/ui/TabsGroup/TabsGroup";
-import { GuestRegistrationFormValues, GuestRegistrationSchema } from "@/libs/validation/registration.schema";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { addDays, format } from "date-fns";
+import { useMemo } from "react";
+import { FormProvider, useForm } from "react-hook-form";
+
+import { Button } from "@/components/ui/Button";
+import TabsGroup, { TabsListType } from "@/components/ui/TabsGroup/TabsGroup";
+
+import { AccountForm, BasicVisitorForm, GuestInfoForm, OtherForm, TracesForm } from "./components";
+
+import { GuestRegistrationFormValues, GuestRegistrationSchema } from "@/libs/validation/registration.schema";
 
 const baseDate = new Date();
 
@@ -18,7 +21,7 @@ const RegistrationForm = () => {
       arrival: format(baseDate, 'yyyy-MM-dd'),
       departure: format(addDays(baseDate, 1), 'yyyy-MM-dd'),
       nights: 1,
-      rateSource: 0,
+      rateSource: '',
       rateGroup: '',
       guestList: [],
       // Guest Info & Contact
@@ -82,7 +85,7 @@ const RegistrationForm = () => {
 
   return (
     <FormProvider {...methods}>
-      <h1 className="text-2xl font-semibold mb-4">Registration</h1>
+      <h1 className="text-3xl font-semibold mb-8">Registration</h1>
       <form onSubmit={handleSubmit(onSubmit)}>
         <div>
           <BasicVisitorForm form={methods} errors={formState.errors} setValue={setValue} />

@@ -1,6 +1,7 @@
-import { useState } from 'react';
-import { useLogin } from './useLogin';
 import { Eye, EyeClosed } from 'lucide-react';
+import { useState } from 'react';
+
+import { useLogin } from './useLogin';
 
 const Login = () => {
   const { register, handleSubmit, onSubmit, errors, isSubmitting } = useLogin();

@@ -1,18 +1,19 @@
 
-import { useMemo, useRef, useEffect } from "react";
 import {
-  Chart as ChartJS,
   CategoryScale,
+  Chart as ChartJS,
+  Filler,
+  Legend,
   LinearScale,
-  PointElement,
   LineElement,
+  PointElement,
+  TimeSeriesScale,
   Title as ChartTitle,
   Tooltip,
-  Legend,
-  Filler,
-  TimeSeriesScale,
 } from "chart.js";
+import { useEffect,useMemo, useRef } from "react";
 import { Line } from "react-chartjs-2";
+
 import { withAlpha } from "@/utils/chart";
 
 ChartJS.register(

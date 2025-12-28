@@ -3,8 +3,6 @@ import { useLocation } from 'react-router-dom';
 import { getUsers } from '@/services/user.service';
 
 import { User, UsersResponse } from '@/types/user';
-import { useEffect } from 'react';
-import toast from 'react-hot-toast';
 
 const useDashboard = () => {
   const location = useLocation();

@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-import { useDataDemo } from "@/hooks/useDataDemo";
+import { useDataDemo } from "@/hooks/useDataDemo.hooks";
 
 // const BASE_URL = "http://localhost:5175";
 
