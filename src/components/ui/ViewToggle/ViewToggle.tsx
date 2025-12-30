@@ -14,7 +14,7 @@ interface ViewToggleProps {
 
 export function ViewToggle({ view, onViewChange, className }: ViewToggleProps) {
   return (
-    <div className={cn("flex items-center border border-gray-200 py-0 rounded-md", className)}>
+    <div className={cn("flex items-center py-0 rounded-md", className)}>
       <Button
         variant="ghost"
         size="sm"

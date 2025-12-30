@@ -11,24 +11,35 @@ import {
   Receipt,
   Search,
   ShoppingCart,
-  Users} from 'lucide-react';
+  Users,
+  Wallet} from 'lucide-react';
 import { useMemo } from "react";
 
 import { NavLink } from "@/components/ui/NavLink";
-import { Sidebar, SidebarContent, SidebarGroup, SidebarGroupContent, SidebarHeader, SidebarMenu, SidebarMenuButton, SidebarMenuItem, useSidebar } from "@/components/ui/Sidebar"
+import { Sidebar, SidebarContent, SidebarGroup, SidebarGroupContent, SidebarGroupLabel, SidebarHeader, SidebarMenu, SidebarMenuButton, SidebarMenuItem, useSidebar } from "@/components/ui/Sidebar"
+import { Separator } from '@/components/ui/Separator';
 
-const menuItems = [
+// Front Desk Operations - most used
+const frontDeskItems = [
   { title: "Dashboard", url: "/dashboard", icon: LayoutDashboard },
-  { title: "Rooms", url: "/rooms", icon: BedDouble },
   { title: "Reservations", url: "/reservation", icon: CalendarDays },
+  { title: "Cashier", url: "/cashier", icon: Wallet },
+  { title: "Rooms", url: "/rooms", icon: BedDouble },
+];
+
+// Guest Management
+const guestItems = [
   { title: "Guests", url: "/guests", icon: Users },
   { title: "Guest Requests", url: "/guest-requests", icon: Bell },
-  { title: "Lost & Found", url: "/lost-and-found", icon: Search },
-  { title: "Deposits", url: "/deposit", icon: DollarSign },
-  { title: "Cashier", url: "/cashier", icon: Receipt },
+  { title: "Lost & Found", url: "/lost-found", icon: Search },
+];
+
+// Finance & Operations
+const operationsItems = [
+  { title: "Deposits", url: "/deposits", icon: DollarSign },
   { title: "Night Audit", url: "/night-audit", icon: Moon },
   { title: "Services", url: "/services", icon: ShoppingCart },
-  { title: "Reports", url: "/report", icon: FileText },
+  { title: "Reports", url: "/reports", icon: FileText },
   { title: "Analytics", url: "/analytics", icon: BarChart3 },
 ];
 
@@ -55,10 +66,56 @@ const AppSidebar = () => {
         </div>
       </SidebarHeader>
       <SidebarContent className="px-2">
+        {/* Front Desk Menu */}
         <SidebarGroup>
+          <SidebarGroupLabel>Front Desk</SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>
-              {menuItems.map((item) => (
+              {frontDeskItems.map((item) => (
+                <SidebarMenuItem key={item.title}>
+                  <SidebarMenuButton asChild tooltip={item.title}>
+                    <NavLink 
+                      to={item.url} 
+                      className="flex items-center gap-3 rounded-lg px-3 py-2 text-sidebar-foreground transition-colors hover:bg-sidebar-accent hover:text-sidebar-accent-foreground"
+                      activeClassName="bg-sidebar-accent text-sidebar-primary font-medium"
+                    >
+                      <item.icon className="h-5 w-5 shrink-0" />
+                      {!isCollapsed && <span>{item.title}</span>}
+                    </NavLink>
+                  </SidebarMenuButton>
+                </SidebarMenuItem>
+              ))}
+            </SidebarMenu>
+          </SidebarGroupContent>
+        </SidebarGroup>
+        {/* Guest Menu */}
+        <SidebarGroup>
+          <SidebarGroupLabel>Guest</SidebarGroupLabel>
+          <SidebarGroupContent>
+            <SidebarMenu>
+              {guestItems.map((item) => (
+                <SidebarMenuItem key={item.title}>
+                  <SidebarMenuButton asChild tooltip={item.title}>
+                    <NavLink 
+                      to={item.url} 
+                      className="flex items-center gap-3 rounded-lg px-3 py-2 text-sidebar-foreground transition-colors hover:bg-sidebar-accent hover:text-sidebar-accent-foreground"
+                      activeClassName="bg-sidebar-accent text-sidebar-primary font-medium"
+                    >
+                      <item.icon className="h-5 w-5 shrink-0" />
+                      {!isCollapsed && <span>{item.title}</span>}
+                    </NavLink>
+                  </SidebarMenuButton>
+                </SidebarMenuItem>
+              ))}
+            </SidebarMenu>
+          </SidebarGroupContent>
+        </SidebarGroup>
+        {/* Operation & Finance Menu */}
+        <SidebarGroup>
+          <SidebarGroupLabel>Operation & Finance</SidebarGroupLabel>
+          <SidebarGroupContent>
+            <SidebarMenu>
+              {operationsItems.map((item) => (
                 <SidebarMenuItem key={item.title}>
                   <SidebarMenuButton asChild tooltip={item.title}>
                     <NavLink 

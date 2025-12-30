@@ -46,7 +46,7 @@ const routes: RouteObject[] = [
         ),
       },
       {
-        path: 'lost-and-found',
+        path: 'lost-found',
         element: (
           <RouteGuard protectedRoute>
             <Pages.LostFound />
@@ -134,18 +134,10 @@ const routes: RouteObject[] = [
         ),
       },
       {
-        path: 'cashier/guest-account',
+        path: 'cashier',
         element: (
           <RouteGuard protectedRoute>
-            <Pages.GuestAccount />
-          </RouteGuard>
-        ),
-      },
-      {
-        path: 'cashier/batch-posting',
-        element: (
-          <RouteGuard protectedRoute>
-            <Pages.BatchPosting />
+            <Pages.Cashier />
           </RouteGuard>
         ),
       },

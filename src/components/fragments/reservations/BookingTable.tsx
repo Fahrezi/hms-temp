@@ -149,7 +149,7 @@ export function BookingTable({ bookings, guests, rooms, onCheckOut, onCancel, on
                           <MoreHorizontal className="h-4 w-4" />
                         </Button>
                       </DropdownMenuTrigger>
-                      <DropdownMenuContent align="end">
+                      <DropdownMenuContent className="w-56" align="end">
                         <DropdownMenuItem onClick={() => onViewDetails(booking)}>
                           <Eye className="h-4 w-4 mr-2" />
                           View Details

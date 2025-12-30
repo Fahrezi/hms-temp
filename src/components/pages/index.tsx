@@ -2,8 +2,7 @@ import { lazy } from 'react';
 export default {
   Login: lazy(() => import('./Login')),
   Register: lazy(() => import('./Register')),
-  GuestAccount: lazy(() => import('./Cashier/GuestAccount')),
-  BatchPosting: lazy(() => import('./Cashier/BatchPosting')),
+  Cashier: lazy(() => import('./Cashier')),
   Detail: lazy(() => import('./Detail')),
   Dashboard: lazy(() => import('./Dashboard')),
   Deposit: lazy(() => import('./Deposit')),
