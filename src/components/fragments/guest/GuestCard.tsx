@@ -7,7 +7,7 @@ import { Card, CardContent } from "@/components/ui/Card";
 
 import { Booking, Guest, GuestHotelStatus,Room } from "@/types/hotel";
 
-import { cn } from "@/libs/utils";
+import { cn } from "@/lib/utils";
 
 interface GuestCardProps {
   guest: Guest;
@@ -26,6 +26,8 @@ const hotelStatusStyles: Record<GuestHotelStatus, string> = {
   'departing-today': 'bg-orange-500/10 text-orange-600 border-orange-500/20',
   'departed': 'bg-muted text-muted-foreground border-muted-foreground/20',
   'no-reservation': 'bg-muted text-muted-foreground border-muted-foreground/20',
+  'profile-only': 'bg-muted text-muted-foreground border-muted-foreground/20',
+
 };
 
 const hotelStatusLabels: Record<GuestHotelStatus, string> = {
@@ -36,6 +38,7 @@ const hotelStatusLabels: Record<GuestHotelStatus, string> = {
   'departing-today': 'Departing Today',
   'departed': 'Departed',
   'no-reservation': 'No Reservation',
+  'profile-only': 'Profile Only',
 };
 
 export function GuestCard({ guest, booking, room, hotelStatus, onEdit, onView }: GuestCardProps) {

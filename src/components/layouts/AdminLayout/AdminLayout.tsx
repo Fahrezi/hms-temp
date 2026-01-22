@@ -17,7 +17,7 @@ const NAVBAR_ITEMS = [
   {
     name: 'Dashboard',
     path: '/dashboard',
-    submenu: null,    
+    submenu: null,
   },
   {
     name: 'Reservation',
@@ -31,7 +31,7 @@ const NAVBAR_ITEMS = [
         name: 'Guest In House',
         path: '/reservation/guest-in-house',
       },
-    ],    
+    ],
   },
   {
     name: 'Guest',
@@ -41,12 +41,12 @@ const NAVBAR_ITEMS = [
         name: 'Guest List',
         path: '/guest/guest-list',
       },
-    ],     
+    ],
   },
   {
     name: 'Reception',
     path: '/reception',
-    submenu: null,    
+    submenu: null,
   },
   {
     name: 'Report',
@@ -56,7 +56,7 @@ const NAVBAR_ITEMS = [
         name: 'Invoice Report',
         path: '/report/invoice-report',
       },
-    ],     
+    ],
   },
   {
     name: 'Cashier',
@@ -74,7 +74,7 @@ const NAVBAR_ITEMS = [
         name: 'Deposit',
         path: '/cashier/deposit',
       },
-    ],     
+    ],
   },
 ];
 
@@ -115,7 +115,7 @@ const AdminLayout = () => {
   useEffect(() => {
     const openInit = NAVBAR_ITEMS.reduce((prev, curr) => ({
       ...prev,
-      ...( curr.submenu !== null && {[curr.name.toLowerCase()]: true})
+      ...(curr.submenu !== null && { [curr.name.toLowerCase()]: true })
     }), {});
 
     setOpen(openInit);
@@ -125,14 +125,14 @@ const AdminLayout = () => {
     <SidebarProvider>
       <div className="flex min-h-screen w-full">
         <AppSidebar />
-        <main 
-        style={
-          {
-            "--sidebar-width": SIDEBAR_WIDTH,
-            "--sidebar-width-icon": SIDEBAR_WIDTH_ICON,
-          } as React.CSSProperties
-        }
-        className={`flex-1 flex flex-col bg-white border border-gray-200 rounded-l-2xl max-w-[calc(100vw_-_var(--sidebar-width))]`} id="main-content">
+        <main
+          style={
+            {
+              "--sidebar-width": SIDEBAR_WIDTH,
+              "--sidebar-width-icon": SIDEBAR_WIDTH_ICON,
+            } as React.CSSProperties
+          }
+          className={`flex-1 flex flex-col bg-white border border-gray-200 rounded-l-2xl max-w-[calc(100vw_-_var(--sidebar-width))]`} id="main-content">
           <header className="sticky top-0 z-10 flex min-h-14 py-4 items-center gap-4 border-b border-border bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 px-6">
             <div className="space-y-4">
               <div className="flex items-center gap-2">
@@ -179,7 +179,7 @@ const AdminLayout = () => {
               </PopoverContent>
             </Popover>
           </header>
-          <section className='p-8 pr-12'>
+          <section className='p-8 pr-12 bg-gray-50'>
             <Outlet />
           </section>
         </main>

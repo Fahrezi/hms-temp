@@ -7,7 +7,7 @@ import { ZodTypeAny } from "zod";
 import { Button } from "../Button";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../Select";
 
-import { cn } from "@/libs/utils";
+import { cn } from "@/lib/utils";
 
 type Option = {
   label: string;

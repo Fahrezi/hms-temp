@@ -20,7 +20,7 @@ import {
 
 import { Booking, Guest, GuestHotelStatus,Room } from "@/types/hotel";
 
-import { cn } from "@/libs/utils";
+import { cn } from "@/lib/utils";
 
 interface GuestTableProps {
   guests: Guest[];

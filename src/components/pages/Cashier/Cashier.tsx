@@ -33,7 +33,7 @@ import { folios, guests, rooms, bookings, serviceItems, folioTransactions } from
 import { ServiceCategory, PaymentMethod, FolioTransaction } from '@/types/hotel';
 import { format } from 'date-fns';
 import { toast } from 'sonner';
-import { generateReceiptPDF, downloadPDF } from '@/libs/pdfGenerator';
+import { generateReceiptPDF, downloadPDF } from '@/lib/pdfGenerator';
 
 const categoryIcons: Record<ServiceCategory, React.ElementType> = {
   room: BedDouble,

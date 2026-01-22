@@ -8,7 +8,7 @@ import TabsGroup, { TabsListType } from "@/components/ui/TabsGroup/TabsGroup";
 
 import { AccountForm, BasicVisitorForm, GuestInfoForm, OtherForm, TracesForm } from "./components";
 
-import { GuestRegistrationFormValues, GuestRegistrationSchema } from "@/libs/validation/registration.schema";
+import { GuestRegistrationFormValues, GuestRegistrationSchema } from "@/lib/validation/registration.schema";
 
 const baseDate = new Date();
 

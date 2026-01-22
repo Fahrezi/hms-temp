@@ -3,7 +3,7 @@ import { useCallback } from "react";
 import { Checkbox } from "../Checkbox";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "../Table/Table"
 
-import { cn } from "@/libs/utils";
+import { cn } from "@/lib/utils";
 
 type TableInputProps = {
   headerTable: { label: string; value: string }[],

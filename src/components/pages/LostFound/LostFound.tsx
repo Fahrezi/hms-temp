@@ -1,4 +1,4 @@
-import { AlertTriangle, CheckCircle, Link, Package, Plus,Search } from "lucide-react";
+import { AlertTriangle, CheckCircle, Link, Package, Plus, Search } from "lucide-react";
 import { useState } from "react";
 import { toast } from "sonner";
 
@@ -9,20 +9,20 @@ import { LostFoundTable } from "@/components/fragments/lostfound/LostFoundTable"
 import { Button } from "@/components/ui/Button";
 import { Input } from "@/components/ui/Input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/Select";
-import { ViewToggle } from "@/components/ui/ViewToggle";
+import { ViewMode, ViewToggle } from "@/components/ui/ViewToggle";
 
-import { LostFoundCategory,LostFoundItem, LostFoundStatus, LostFoundType } from "@/types/hotel";
+import { LostFoundCategory, LostFoundItem, LostFoundStatus, LostFoundType } from "@/types/hotel";
 
 import { lostFoundItems as initialItems } from "@/data/mock";
 
 export default function LostFound() {
   const [items, setItems] = useState<LostFoundItem[]>(initialItems);
-  const [view, setView] = useState<"list" | "grid">("list");
+  const [view, setView] = useState<ViewMode>("list");
   const [searchQuery, setSearchQuery] = useState("");
   const [typeFilter, setTypeFilter] = useState<"all" | LostFoundType>("all");
   const [statusFilter, setStatusFilter] = useState<"all" | LostFoundStatus>("all");
   const [categoryFilter, setCategoryFilter] = useState<"all" | LostFoundCategory>("all");
-  
+
   const [dialogOpen, setDialogOpen] = useState(false);
   const [dialogMode, setDialogMode] = useState<'add' | 'edit' | 'view'>('add');
   const [selectedItem, setSelectedItem] = useState<LostFoundItem | null>(null);
@@ -38,12 +38,12 @@ export default function LostFound() {
   // Filter items
   const filteredItems = items.filter(item => {
     const matchesSearch = item.itemName.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                         item.description.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                         item.location.toLowerCase().includes(searchQuery.toLowerCase());
+      item.description.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      item.location.toLowerCase().includes(searchQuery.toLowerCase());
     const matchesType = typeFilter === "all" || item.type === typeFilter;
     const matchesStatus = statusFilter === "all" || item.status === statusFilter;
     const matchesCategory = categoryFilter === "all" || item.category === categoryFilter;
-    
+
     return matchesSearch && matchesType && matchesStatus && matchesCategory;
   });
 
@@ -70,8 +70,8 @@ export default function LostFound() {
   };
 
   const handleReturn = (item: LostFoundItem) => {
-    setItems(items.map(i => 
-      i.id === item.id 
+    setItems(items.map(i =>
+      i.id === item.id
         ? { ...i, status: 'returned' as LostFoundStatus, returnedDate: new Date().toISOString() }
         : i
     ));
@@ -98,7 +98,7 @@ export default function LostFound() {
       setItems([newItem, ...items]);
       toast.success(`Item "${newItem.itemName}" added successfully!`);
     } else if (dialogMode === 'edit' && selectedItem) {
-      setItems(items.map(i => 
+      setItems(items.map(i =>
         i.id === selectedItem.id ? { ...i, ...formData } : i
       ));
       toast.success(`Item "${formData.itemName}" updated!`);
@@ -124,7 +124,7 @@ export default function LostFound() {
               Report Item
             </Button>
           </div>
-          
+
           <div className="flex flex-wrap gap-2 items-center">
             <div className="relative">
               <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
@@ -135,7 +135,7 @@ export default function LostFound() {
                 className="pl-9 w-[200px]"
               />
             </div>
-            
+
             <Select value={typeFilter} onValueChange={(v) => setTypeFilter(v as "all" | LostFoundType)}>
               <SelectTrigger className="w-[120px]">
                 <SelectValue placeholder="Type" />
@@ -146,7 +146,7 @@ export default function LostFound() {
                 <SelectItem value="found">Found</SelectItem>
               </SelectContent>
             </Select>
-            
+
             <Select value={statusFilter} onValueChange={(v) => setStatusFilter(v as "all" | LostFoundStatus)}>
               <SelectTrigger className="w-[130px]">
                 <SelectValue placeholder="Status" />
@@ -160,7 +160,7 @@ export default function LostFound() {
                 <SelectItem value="disposed">Disposed</SelectItem>
               </SelectContent>
             </Select>
-            
+
             <Select value={categoryFilter} onValueChange={(v) => setCategoryFilter(v as "all" | LostFoundCategory)}>
               <SelectTrigger className="w-[140px]">
                 <SelectValue placeholder="Category" />
@@ -176,7 +176,7 @@ export default function LostFound() {
                 <SelectItem value="other">Other</SelectItem>
               </SelectContent>
             </Select>
-            
+
             <ViewToggle view={view} onViewChange={setView} />
           </div>
         </div>

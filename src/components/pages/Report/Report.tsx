@@ -11,8 +11,8 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/Tabs';
 
 import { bookings, deposits, folios, guests, rooms, serviceItems } from '@/data/mock';
-import { downloadPDF,generateReportPDF } from '@/libs/pdfGenerator';
-import { cn } from '@/libs/utils';
+import { downloadPDF,generateReportPDF } from '@/lib/pdfGenerator';
+import { cn } from '@/lib/utils';
 
 export default function Reports() {
   const [dateRange, setDateRange] = useState<{ from: Date; to: Date }>({

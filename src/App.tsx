@@ -8,8 +8,8 @@ import { DataDemoProvider } from './contexts/DataDemoContext';
 import { HeaderNavProvider } from './contexts/HeaderNavContext';
 import { OverlayProvider } from './contexts/OverlayContext';
 import useSmallContainer from './hooks/useSmallContainer.hooks';
-import { queryClient } from './libs/queryClients';
-import { router } from './libs/router';
+import { queryClient } from './lib/queryClients';
+import { router } from './lib/router';
 
 const App = () => {
   useSmallContainer();

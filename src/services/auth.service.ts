@@ -3,7 +3,7 @@ import type { AxiosError, AxiosResponse } from 'axios';
 import { AUTH_SERVICE } from '@/constants/services';
 import { AuthRequest, LoginRequest, LoginResponse } from '@/types/auth';
 
-import { Mutation } from '@/libs/query';
+import { Mutation } from '@/lib/query';
 
 const loginRequest = () => {
   const loginMutation = Mutation<LoginResponse, LoginRequest>({
@@ -34,4 +34,23 @@ const registerRequest = () => {
   return registerMutation;
 };
 
-export { loginRequest, registerRequest };
+const logoutRequest = () => {
+  const logoutMutation = Mutation<AxiosResponse, void>(
+    {
+      url: AUTH_SERVICE.LOGOUT,
+      key: 'logout',
+      method: 'post',
+    },
+    (response: AxiosResponse) => {
+      return response.data as AxiosResponse;
+    },
+    (error: unknown) => {
+      const axiosError = error as AxiosError<{ message?: string }>;
+      if (axiosError) throw axiosError;
+    },
+  );
+
+  return logoutMutation;
+};
+
+export { loginRequest, registerRequest, logoutRequest };

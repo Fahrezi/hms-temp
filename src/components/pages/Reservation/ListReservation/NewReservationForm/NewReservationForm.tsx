@@ -13,12 +13,13 @@ import TabsGroup, { TabsListType } from "@/components/ui/TabsGroup/TabsGroup";
 import { useOverlay } from "@/hooks/useOverlay.hooks";
 
 import { rateGroup } from "@/constants/data";
-import { ReservationMode } from "@/types/hotel";
+import { ReservationMode, RoomReservation } from "@/types/hotel";
 
 import { AccountForm, BasicVisitorForm, DetailForm, RoomRateForm, RsvpForm, TracesForm } from "./components";
 import { GroupForm } from "./components/GroupInformation";
 
-import { ReservationFormValues, ReservationSchema } from "@/libs/validation/reservation.schema";
+import { ReservationFormValues, ReservationSchema } from "@/lib/validation/reservation.schema";
+import { rooms } from "@/data/mock";
 
 const baseDate = new Date();
 type TypeReservation = 'individual' | 'series' | 'group' | 'block';
@@ -44,6 +45,9 @@ const RegistrationForm = () => {
       type: '',
       firstName: '',
       lastName: '',
+      // guest selection
+      selectedGuestId: '',
+      isNewGuest: false,
       // room rate default values
       accommodation: [],
       inventorySource: '',
@@ -102,6 +106,33 @@ const RegistrationForm = () => {
       preAmount: '',
       approvalCode: '',
       arAccountInformation: '',
+      // deposit fields
+      selectedDepositId: '',
+      depositAmount: 0,
+      depositPaymentMethod: '',
+      depositReceiptNumber: '',
+      depositIsNonRefundable: false,
+      // card details
+      cardholderName: '',
+      cardNumber: '',
+      expiryMonth: '',
+      expiryYear: '',
+      cvv: '',
+      // company information
+      selectedCompanyId: '',
+      companyName: '',
+      corporateAccountId: '',
+      companyEmail: '',
+      companyPhone: '',
+      taxId: '',
+      billingContact: '',
+      // membership
+      membershipProgramName: '',
+      membershipNumber: '',
+      membershipTier: '',
+      membershipPointsBalance: 0,
+      // account notes
+      accountNotes: '',
       deposit: {
         id: '',
         date: '',
@@ -122,7 +153,7 @@ const RegistrationForm = () => {
           leisureGroup: '',
           lastName: '',
           firstName: '',
-          bookingForDatetime: '',          
+          bookingForDatetime: '',
           time: format(baseDate, 'yyyy-MM-dd'),
           qty: 0,
           ref: '',
@@ -243,7 +274,7 @@ const RegistrationForm = () => {
       approvalCode,
       arAccountInformation
     } = data;
-    
+
     const payload = {
       reservation: {
         rsvp_date: rsvpDate,
@@ -356,36 +387,14 @@ const RegistrationForm = () => {
       notifText: 'Reservasi berhasil dibuat!',
       notifType: 'success'
     });
-
-    // void navigate('/reservation/list-reservation');
-    // try {
-    //   const response = await fetch('http://localhost:5175/reservations', {
-    //     method: 'POST',
-    //     headers: {
-    //       'Content-Type': 'application/json',
-    //     },
-    //     body: JSON.stringify(payload),
-    //   }).then(response => response.json());
-
-    //   if (response) {
-    //     activateNotif({
-    //       notifText: 'Reservasi berhasil ditambahkan !',
-    //       notifType: 'success'
-    //     });
-    //     void navigate('/reservation/list-reservation')
-    //   }
-
-    // } catch (error) {
-    //   console.error('Add reservation error:', error);
-    // }
   }
 
   const tabsList: TabsListType<ReservationFormValues>[] = useMemo(() => [
     { label: 'Room Rate', value: 'room_rate', Comp: RoomRateForm, errorGroup: RATE_ROOM_GROUP_ERROR },
-    { label: 'RSVP Info', value: 'rsvp_info', Comp: RsvpForm, errorGroup: ['rate'] },
+    { label: 'RSVP Info', value: 'rsvp_info', Comp: RsvpForm, errorGroup: ['rate'], customProps: { guests: [] } },
     { label: 'Detail', value: 'detail', Comp: DetailForm, errorGroup: ['rate'] },
     { label: 'Account', value: 'account', Comp: AccountForm, errorGroup: ['rate'] },
-    { label: 'Traces', value: 'traces', Comp: TracesForm, errorGroup: ['rate']},
+    { label: 'Traces', value: 'traces', Comp: TracesForm, errorGroup: ['rate'] },
     // { label: 'Other & Statistics', value: 'other_statistics', Comp: OtherForm, errorGroup: ['rate'] },
   ], [type]);
 
@@ -400,7 +409,7 @@ const RegistrationForm = () => {
     { label: 'RSVP Info', value: 'rsvp_info', Comp: RsvpForm, errorGroup: ['rate'] },
     { label: 'Account', value: 'account', Comp: AccountForm, errorGroup: ['rate'] },
     { label: 'Group Information', value: 'detail', Comp: GroupForm, errorGroup: ['rate'] },
-    { label: 'Traces', value: 'traces', Comp: TracesForm, errorGroup: ['rate']},
+    { label: 'Traces', value: 'traces', Comp: TracesForm, errorGroup: ['rate'] },
     // { label: 'Other & Statistics', value: 'other_statistics', Comp: OtherForm, errorGroup: ['rate'] },
   ], [type]);
 
@@ -418,10 +427,15 @@ const RegistrationForm = () => {
     'group': { label: 'Group', icon: <Users className="h-4 w-4" />, description: 'Group reservation' },
   };
 
+  const availableRooms = rooms.filter(r => r.status === 'available');
+  const occupiedRooms = rooms.filter(r => r.status === 'occupied');
+  const maintenanceRooms = rooms.filter(r => r.status === 'maintenance');
+  const cleaningRooms = rooms.filter(r => r.status === 'cleaning');
+
   return (
     <FormProvider {...methods}>
       {/* Header */}
-      <div className="flex items-center justify-between mb-4">
+      <header className="flex items-center justify-between mb-4">
         <div className="flex items-center gap-4">
           <Button variant="ghost" size="icon" onClick={() => navigate('/reservation')}>
             <ArrowLeft className="h-5 w-5" />
@@ -438,7 +452,38 @@ const RegistrationForm = () => {
             {isWalkIn ? "Walk-in" : "Reservation"}
           </Badge>
         </div>
-      </div>
+        <div className="flex justify-end mt-6">
+          <Button type="submit" className="inline-flex items-center gap-2 p-6 rounded-lg !font-bold bg-primary text-white cursor-pointer active:scale-98 hover:scale-[1.005] disabled:bg-black/50 min-w-[150px] text-center">
+            <Save size={18} /> <span>{isWalkIn ? "Check-in" : "Save Reservation"}</span>
+          </Button>
+        </div>
+      </header>
+      {/* Occupation Status Panel */}
+        <Card className="mb-4 p-2">
+          <CardHeader className="py-3">
+            <CardTitle className="text-sm font-medium">Room Occupation Status</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="flex gap-6">
+              <div className="flex items-center gap-2">
+                <div className="w-3 h-3 rounded-full bg-success" />
+                <span className="text-sm">Available: {availableRooms.length}</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <div className="w-3 h-3 rounded-full bg-destructive" />
+                <span className="text-sm">Occupied: {occupiedRooms.length}</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <div className="w-3 h-3 rounded-full bg-warning" />
+                <span className="text-sm">Maintenance: {maintenanceRooms.length}</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <div className="w-3 h-3 rounded-full bg-info" />
+                <span className="text-sm">Cleaning: {cleaningRooms.length}</span>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
       <section className="flex items-center gap-4 mb-4">
         <Card className="min-w-[300px]">
           <header className="flex items-center gap-2 mb-2">
@@ -481,13 +526,8 @@ const RegistrationForm = () => {
           </Card>
         </div>
         <div>
-          <BasicVisitorForm form={methods} errors={formState.errors} setValue={setValue} />
+          {/* <BasicVisitorForm form={methods} errors={formState.errors} setValue={setValue} /> */}
           <TabsGroup tabsList={tabs[mode]} methods={methods} errors={formState.errors} setValue={setValue} />
-        </div>
-        <div className="flex justify-end mt-6">
-          <Button type="submit" className="inline-flex items-center gap-2 p-6 rounded-lg !font-bold bg-primary text-white cursor-pointer active:scale-98 hover:scale-[1.005] disabled:bg-black/50 min-w-[150px] text-center">
-            <Save  size={18}/> <span>{isWalkIn ? "Check-in" : "Save Reservation"}</span>
-          </Button>
         </div>
       </form>
     </FormProvider>

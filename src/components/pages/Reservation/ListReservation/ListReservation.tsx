@@ -1,5 +1,5 @@
-import { Plus, Search,UserPlus } from "lucide-react";
-import { useEffect,useState } from "react";
+import { Plus, Search, UserPlus } from "lucide-react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 
@@ -10,11 +10,12 @@ import { WalkInDialog } from "@/components/fragments/reservations/WalkInDialog";
 import { Button } from "@/components/ui/Button";
 import { Input } from "@/components/ui/Input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/Select";
-import { ViewMode,ViewToggle } from "@/components/ui/ViewToggle";
+import { ViewMode, ViewToggle } from "@/components/ui/ViewToggle";
 
 import { Booking, Guest } from "@/types/hotel";
 
 import { bookings as initialBookings, guests as initialGuests, rooms } from "@/data/mock";
+import { RoomAvailabilityCalendar } from "@/components/ui/ReservationCalendar/RoomAvailability";
 
 const VIEW_STORAGE_KEY = "reservations-view-mode";
 
@@ -39,7 +40,7 @@ export default function Reservations() {
   const filteredBookings = bookings.filter(b => {
     const statusMatch = statusFilter === "all" || b.status === statusFilter;
     const typeMatch = typeFilter === "all" || b.type === typeFilter;
-    const searchMatch = searchQuery === "" || 
+    const searchMatch = searchQuery === "" ||
       b.rsvpNo.toLowerCase().includes(searchQuery.toLowerCase()) ||
       guests.find(g => g.id === b.guestId)?.name.toLowerCase().includes(searchQuery.toLowerCase());
     return statusMatch && typeMatch && searchMatch;
@@ -65,42 +66,51 @@ export default function Reservations() {
     setGuests(prev => [...prev, guest]);
   };
 
+  const handleCalendarBookingClick = (booking: Booking) => {
+    setSelectedBooking(booking);
+    setDetailSheetOpen(true);
+  };
 
   return (
     <div>
       <div className="space-y-6">
         <div className="flex flex-col lg:flex-row gap-4 justify-between">
           <div className="flex flex-col sm:flex-row gap-2">
-            <div className="relative">
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-              <Input 
-                placeholder="Search RSVP# or guest..." 
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                className="pl-9 w-full sm:w-[220px]"
-              />
-            </div>
-            <Select value={statusFilter} onValueChange={setStatusFilter}>
-              <SelectTrigger className="w-full sm:w-[140px]"><SelectValue placeholder="Status" /></SelectTrigger>
-              <SelectContent>
-                <SelectItem value="all">All Status</SelectItem>
-                <SelectItem value="confirmed">Confirmed</SelectItem>
-                <SelectItem value="checked-in">Checked In</SelectItem>
-                <SelectItem value="checked-out">Checked Out</SelectItem>
-                <SelectItem value="cancelled">Cancelled</SelectItem>
-              </SelectContent>
-            </Select>
-            <Select value={typeFilter} onValueChange={setTypeFilter}>
-              <SelectTrigger className="w-full sm:w-[140px]"><SelectValue placeholder="Type" /></SelectTrigger>
-              <SelectContent>
-                <SelectItem value="all">All Types</SelectItem>
-                <SelectItem value="reservation">Reservations</SelectItem>
-                <SelectItem value="walk-in">Walk-ins</SelectItem>
-              </SelectContent>
-            </Select>
+            {viewMode !== "calendar" && (
+              <>
+                <div className="relative">
+                  <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                  <Input
+                    placeholder="Search RSVP# or guest..."
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                    className="pl-9 w-full sm:w-[220px]"
+                  />
+                </div>
+                <Select value={statusFilter} onValueChange={setStatusFilter}>
+                  <SelectTrigger className="w-full sm:w-[140px]"><SelectValue placeholder="Status" /></SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="all">All Status</SelectItem>
+                    <SelectItem value="confirmed">Confirmed</SelectItem>
+                    <SelectItem value="checked-in">Checked In</SelectItem>
+                    <SelectItem value="checked-out">Checked Out</SelectItem>
+                    <SelectItem value="cancelled">Cancelled</SelectItem>
+                    <SelectItem value="no-show">No-show</SelectItem>
+                  </SelectContent>
+                </Select>
+                <Select value={typeFilter} onValueChange={setTypeFilter}>
+                  <SelectTrigger className="w-full sm:w-[140px]"><SelectValue placeholder="Type" /></SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="all">All Types</SelectItem>
+                    <SelectItem value="reservation">Reservations</SelectItem>
+                    <SelectItem value="walk-in">Walk-ins</SelectItem>
+                  </SelectContent>
+                </Select>
+              </>
+            )}
           </div>
           <div className="flex gap-2">
-            <ViewToggle view={viewMode} onViewChange={setViewMode} />
+            <ViewToggle view={viewMode} onViewChange={setViewMode} showCalendar />
             <Button variant="outline" onClick={() => setWalkInDialogOpen(true)}>
               <UserPlus className="h-4 w-4 mr-2" />Walk-in
             </Button>
@@ -110,31 +120,38 @@ export default function Reservations() {
           </div>
         </div>
 
-        {viewMode === "grid" ? (
+        {viewMode === "calendar" ? (
+          <RoomAvailabilityCalendar
+            rooms={rooms}
+            bookings={bookings}
+            guests={guests}
+            onBookingClick={handleCalendarBookingClick}
+          />
+        ) : viewMode === "grid" ? (
           <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
             {filteredBookings.map(booking => (
-              <BookingCard 
-                key={booking.id} 
-                booking={booking} 
-                guest={guests.find(g => g.id === booking.guestId)} 
-                room={rooms.find(r => r.id === booking.roomId)} 
-                onCheckOut={handleCheckOut} 
-                onCancel={handleCancel} 
+              <BookingCard
+                key={booking.id}
+                booking={booking}
+                guest={guests.find(g => g.id === booking.guestId)}
+                room={rooms.find(r => r.id === booking.roomId)}
+                onCheckOut={handleCheckOut}
+                onCancel={handleCancel}
               />
             ))}
           </div>
         ) : (
-          <BookingTable 
-            bookings={filteredBookings} 
-            guests={guests} 
-            rooms={rooms} 
-            onCheckOut={handleCheckOut} 
+          <BookingTable
+            bookings={filteredBookings}
+            guests={guests}
+            rooms={rooms}
+            onCheckOut={handleCheckOut}
             onCancel={handleCancel}
             onViewDetails={handleViewDetails}
           />
         )}
 
-        {filteredBookings.length === 0 && (
+        {viewMode !== "calendar" && filteredBookings.length === 0 && (
           <div className="text-center py-12 text-muted-foreground">
             No reservations found matching your criteria
           </div>

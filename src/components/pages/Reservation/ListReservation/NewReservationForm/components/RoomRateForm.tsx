@@ -1,198 +1,166 @@
-import { Plus, Trash2 } from "lucide-react";
-import { useState } from "react";
-import { Control } from "react-hook-form";
-
-import { Badge } from "@/components/ui/Badge";
+import { Label } from "@/components/ui/Label";
+import { Input } from "@/components/ui/Input";
 import { Button } from "@/components/ui/Button";
 import { Card, CardContent } from "@/components/ui/Card";
-import CardForm from "@/components/ui/CardForm/CardForm";
-import { Input } from "@/components/ui/Input";
-import { InputLabel } from "@/components/ui/InputLabel";
-import { Label } from "@/components/ui/Label";
-import MultiFieldInput from "@/components/ui/MultiFieldInput";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/Select";
-import SelectInput from "@/components/ui/SelectInput";
-import { Textarea } from "@/components/ui/TextArea";
-
-import { roomNumberList, roomTypeList, sellingTypeList } from "@/constants/data";
+import { Badge } from "@/components/ui/Badge";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/Select";
 import { RoomReservation } from "@/types/hotel";
+import { Room } from "@/types/hotel";
+import { Plus, Trash2, Clock } from "lucide-react";
 
 import { RHFBridgeProps } from "../types/index.type";
 
+import { useFieldArray } from "react-hook-form";
+import CardForm from "@/components/ui/CardForm/CardForm";
 import { rooms } from "@/data/mock";
 
-type StepProps = RHFBridgeProps<any>;
+interface RoomRateTabProps {
+  isWalkIn: boolean;
+  today: string;
+}
 
-const HEADER_ACCOMMODATION: { label: string; value: string }[] = [
-  { label: 'Type', value: 'typeAccommodation' },
-  { label: 'RSVP Type', value: 'rsvpTypeAccommodation' },
-  { label: 'RSC', value: 'rscAccommodation' },
-  { label: 'Room', value: 'roomAccommodation' },
-  { label: 'Cut Off', value: 'cutOffAccommodation' },
-  { label: 'Child Amount', value: 'childAmountAccommodation' },
-  { label: 'Adult Amount', value: 'adultAmountAccommodation' },
-];
+type StepProps = RHFBridgeProps<any> & RoomRateTabProps;
 
-const INDEX_BODY = [
-  'adultAmountAccommodation',
-  'childAmountAccommodation',
-  'cutOffAccommodation',
-  'roomAccommodation',
-  'rscAccommodation',
-  'rsvpTypeAccommodation',
-  'typeAccommodation'
-];
-
-const RATE_INDEX_BODY = [
-  'from_date',
-  'until_date',
-  'item',
-  'description',
-  'item',
-  'room_count',
-  'nights',
-  'amount',
-  'rpl'
-];
-
-const HEADER_RATE = [
-  { label: 'From', value: 'from_rate' },
-  { label: 'Until', value: 'until_rate' },
-  { label: 'Item', value: 'item' },
-  { label: 'Description', value: 'description' },
-  { label: '#Room', value: 'item' },
-  { label: 'Qty', value: 'room_count' },
-  { label: 'Nights', value: 'nights' },
-  { label: 'Amount', value: 'amount' },
-  { label: 'RPL', value: 'rpl' },
-];
-
-export const RoomRateForm = ({ form, errors, setValue }: StepProps) => {
+export const RoomRateForm = ({
+  form,
+  setValue,
+  isWalkIn,
+  today,
+}: StepProps) => {
   const { register, control, watch } = form;
-  const valuesAccommodation = watch('accommodation');
-  const valuesRate = watch('rate');
 
-  const [roomReservations, setRoomReservations] = useState<RoomReservation[]>([
-    { id: '1', roomId: '', adults: 1, children: 0, rateCode: 'rack' }
-  ]);
+  const { fields, append, remove, update } = useFieldArray({
+    control,
+    name: "accommodation"
+  });
+
+  // Type cast fields to RoomReservation for proper typing
+  const typedFields = fields as unknown as RoomReservation[];
+
+  const checkIn = watch('arrival');
+  const checkOut = watch('departure');
+  const eta = watch('ETA');
+  const etd = watch('ETD');
 
   const availableRooms = rooms.filter(r => r.status === 'available');
-  const occupiedRooms = rooms.filter(r => r.status === 'occupied');
-  const maintenanceRooms = rooms.filter(r => r.status === 'maintenance');
-  const cleaningRooms = rooms.filter(r => r.status === 'cleaning');
 
-  const getUsedRoomIds = () => roomReservations.map(r => r.roomId).filter(Boolean);
+  const getUsedRoomIds = () => typedFields.map(r => r.roomId).filter(Boolean);
 
-  // const calculateTotal = () => {
-  //   if (!formData.checkIn || !formData.checkOut) return 0;
-  //   const checkIn = new Date(formData.checkIn);
-  //   const checkOut = new Date(formData.checkOut);
-  //   const nights = Math.ceil((checkOut.getTime() - checkIn.getTime()) / (1000 * 60 * 60 * 24));
-  //   if (nights <= 0) return 0;
+  const calculateTotal = () => {
+    if (!checkIn || !checkOut) return 0;
+    const checkInDate = new Date(checkIn);
+    const checkOutDate = new Date(checkOut);
+    const nights = Math.ceil((checkOutDate.getTime() - checkInDate.getTime()) / (1000 * 60 * 60 * 24));
+    if (nights <= 0) return 0;
 
-  //   return roomReservations.reduce((total, reservation) => {
-  //     const room = rooms.find(r => r.id === reservation.roomId);
-  //     return total + (room ? room.price * nights : 0);
-  //   }, 0);
-  // };
+    return typedFields.reduce((total, reservation) => {
+      const room = rooms.find(r => r.id === reservation.roomId);
+      return total + (room ? room.price * nights : 0);
+    }, 0);
+  };
 
   const addRoom = () => {
-    setRoomReservations([
-      ...roomReservations,
-      { id: Date.now().toString(), roomId: '', adults: 1, children: 0, rateCode: 'rack' }
-    ]);
+    append({ id: Date.now().toString(), roomId: '', adults: 1, children: 0, rateCode: 'rack' });
   };
 
-  const removeRoom = (id: string) => {
-    if (roomReservations.length > 1) {
-      setRoomReservations(roomReservations.filter(r => r.id !== id));
-    }
-  };
-
-  const updateRoom = (id: string, field: keyof RoomReservation, value: string | number) => {
-    setRoomReservations(roomReservations.map(r => 
-      r.id === id ? { ...r, [field]: value } : r
-    ));
-  };
 
   return (
-    <CardForm className="mt-6" title="Room & Rate">
-      <section className="mb-6">
-        <h4 className="mb-6 text-[#5b5b5b] text-xl">Booking Info</h4>
-        <div className="grid grid-cols-2 gap-6">
-          <InputLabel
-            label="Inventory Source"
-            type="text"
-            placeholder="Enter RSVP Date"
-            errors={errors}
-            {...register('inventorySource')}
+    <CardForm title="Room & Rate">
+      <div className="grid grid-cols-2 gap-4 mb-4">
+        <div className="space-y-2">
+          <Label>Check-in Date</Label>
+          <Input
+            type="date"
+            value={checkIn}
+            onChange={(e) => setValue('arrival', e.target.value)}
+            min={isWalkIn ? today : undefined}
+            max={isWalkIn ? today : undefined}
+            disabled={isWalkIn}
           />
-          <InputLabel
-            label="Reservation Type"
-            type="text"
-            placeholder="Enter Rate Source"
-            errors={errors}
-            {...register('reservationType')}
-          />
-          <div>
-            <p className="mb-2 font-medium text-sm">Confirmation - By</p>
-            <div className="grid grid-cols-2 gap-4">
-              <InputLabel
-                label=""
-                type="text"
-                placeholder="by"
-                errors={errors}
-                {...register('confirmation')}
-              />
-              <InputLabel
-                label=""
-                type="text"
-                placeholder="confirmation"
-                errors={errors}
-                {...register('confirmationBy')}
-              /> 
-            </div>
-          </div> 
-          <SelectInput
-            name="sellingType"
-            label="Selling Type"
-            control={control as Control<any>}
-            placeholder="Select Type"
-            options={sellingTypeList}
-          />
-          <Textarea
-            label="Notes Detail"
-            placeholder="Notes Detail"
-            errors={errors}
-            {...register('notesDetail')}
-          /> 
+          {isWalkIn && (
+            <p className="text-xs text-muted-foreground">Walk-ins check in today</p>
+          )}
         </div>
-      </section>
+        <div className="space-y-2">
+          <Label>Check-out Date</Label>
+          <Input
+            type="date"
+            value={checkOut}
+            onChange={(e) => setValue('departure', e.target.value)}
+            min={checkIn || today}
+          />
+        </div>
+      </div>
+
+      {/* ETA / ETD Section */}
+      <div className="grid grid-cols-2 gap-4 mb-4">
+        <div className="space-y-2">
+          <Label className="flex items-center gap-2">
+            <Clock className="h-4 w-4" />
+            ETA (Expected Time of Arrival)
+          </Label>
+          <Input
+            type="time"
+            value={eta instanceof Date ? eta.toTimeString().slice(0, 5) : eta}
+            onChange={(e) => {
+              const [hours, minutes] = e.target.value.split(':');
+              const newDate = new Date();
+              newDate.setHours(parseInt(hours), parseInt(minutes), 0, 0);
+              setValue('ETA', newDate);
+            }}
+          />
+          <p className="text-xs text-muted-foreground">Standard check-in: 3:00 PM</p>
+        </div>
+        <div className="space-y-2">
+          <Label className="flex items-center gap-2">
+            <Clock className="h-4 w-4" />
+            ETD (Expected Time of Departure)
+          </Label>
+          <Input
+            type="time"
+            value={etd instanceof Date ? etd.toTimeString().slice(0, 5) : etd}
+            onChange={(e) => {
+              const [hours, minutes] = e.target.value.split(':');
+              const newDate = new Date();
+              newDate.setHours(parseInt(hours), parseInt(minutes), 0, 0);
+              setValue('ETD', newDate);
+            }}
+          />
+          <p className="text-xs text-muted-foreground">Standard check-out: 11:00 AM</p>
+        </div>
+      </div>
+
       <div className="flex items-center justify-between mb-2">
-        <Label className="text-base font-semibold">Rooms ({roomReservations.length})</Label>
+        <Label className="text-base font-semibold">Rooms ({fields.length})</Label>
         <Button type="button" variant="outline" size="sm" onClick={addRoom}>
           <Plus className="h-4 w-4 mr-1" /> Add Room
         </Button>
       </div>
 
-      <div className="space-y-6">
-        {roomReservations.map((reservation, index) => {
-          const usedRoomIds = getUsedRoomIds().filter(id => id !== reservation.roomId);
+      <div className="space-y-4">
+        {typedFields.map((field, index) => {
+          const usedRoomIds = getUsedRoomIds().filter(id => id !== field.roomId);
           const availableForSelect = availableRooms.filter(r => !usedRoomIds.includes(r.id));
-          const selectedRoom = rooms.find(r => r.id === reservation.roomId);
+          const selectedRoom = rooms.find(r => r.id === field.roomId);
 
           return (
-            <Card key={reservation.id} className="bg-muted/50">
+            <Card key={fields[index].id} className="bg-muted/50">
               <CardContent className="pt-4">
                 <div className="flex items-center justify-between mb-3">
                   <span className="font-medium">Room {index + 1}</span>
-                  {roomReservations.length > 1 && (
-                    <Button 
-                      type="button" 
-                      variant="ghost" 
-                      size="icon" 
+                  {fields.length > 1 && (
+                    <Button
+                      type="button"
+                      variant="ghost"
+                      size="icon"
                       className="h-8 w-8 text-destructive"
-                      onClick={() => removeRoom(reservation.id)}
+                      onClick={() => remove(index)}
                     >
                       <Trash2 className="h-4 w-4" />
                     </Button>
@@ -202,15 +170,17 @@ export const RoomRateForm = ({ form, errors, setValue }: StepProps) => {
                   <div className="space-y-2">
                     <Label>Room</Label>
                     <Select
-                      value={reservation.roomId} 
-                      onValueChange={(value) => updateRoom(reservation.id, 'roomId', value)}
+                      value={field.roomId}
+                      onValueChange={(value) => {
+                        update(index, { ...field, roomId: value });
+                      }}
                     >
                       <SelectTrigger>
                         <SelectValue placeholder="Select room" />
                       </SelectTrigger>
                       <SelectContent>
                         {availableForSelect.map((room) => (
-                          <SelectItem key={room.id} value={room.id} className="w-full overflow-hidden truncate">
+                          <SelectItem key={room.id} value={room.id}>
                             Room {room.number} - {room.type} (${room.price}/night)
                           </SelectItem>
                         ))}
@@ -219,9 +189,11 @@ export const RoomRateForm = ({ form, errors, setValue }: StepProps) => {
                   </div>
                   <div className="space-y-2">
                     <Label>Rate Code</Label>
-                    <Select 
-                      value={reservation.rateCode} 
-                      onValueChange={(value) => updateRoom(reservation.id, 'rateCode', value)}
+                    <Select
+                      value={field.rateCode}
+                      onValueChange={(value) => {
+                        update(index, { ...field, rateCode: value });
+                      }}
                     >
                       <SelectTrigger>
                         <SelectValue placeholder="Rate" />
@@ -240,8 +212,10 @@ export const RoomRateForm = ({ form, errors, setValue }: StepProps) => {
                       type="number"
                       min={1}
                       max={selectedRoom?.capacity || 10}
-                      value={reservation.adults}
-                      onChange={(e) => updateRoom(reservation.id, 'adults', parseInt(e.target.value) || 1)}
+                      value={field.adults}
+                      onChange={(e) => {
+                        update(index, { ...field, adults: parseInt(e.target.value) || 1 });
+                      }}
                     />
                   </div>
                   <div className="space-y-2">
@@ -249,8 +223,10 @@ export const RoomRateForm = ({ form, errors, setValue }: StepProps) => {
                     <Input
                       type="number"
                       min={0}
-                      value={reservation.children}
-                      onChange={(e) => updateRoom(reservation.id, 'children', parseInt(e.target.value) || 0)}
+                      value={field.children}
+                      onChange={(e) => {
+                        update(index, { ...field, children: parseInt(e.target.value) || 0 });
+                      }}
                     />
                   </div>
                 </div>
@@ -276,12 +252,12 @@ export const RoomRateForm = ({ form, errors, setValue }: StepProps) => {
         })}
       </div>
 
-      {/* {calculateTotal() > 0 && (
+      {calculateTotal() > 0 && (
         <div className="bg-primary/10 p-4 rounded-lg mt-4">
           <p className="text-sm text-muted-foreground">Estimated Total</p>
           <p className="text-2xl font-bold">${calculateTotal().toLocaleString()}</p>
         </div>
-      )} */}
+      )}
     </CardForm>
   );
 };

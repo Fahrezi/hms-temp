@@ -4,7 +4,7 @@ import type { AxiosResponse } from 'axios';
 import { USER_SERVICE } from '@/constants/services';
 import type { UserResponse, UsersResponse } from '@/types/user';
 
-import { GetData, GetDataById } from '@/libs/query';
+import { GetData, GetDataById } from '@/lib/query';
 
 export const getUsers = (page = 1): UseQueryResult<AxiosResponse<UsersResponse>> => {
   const option = {

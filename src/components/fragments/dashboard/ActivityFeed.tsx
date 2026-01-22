@@ -3,7 +3,7 @@ import { useEffect, useMemo, useState } from "react";
 
 import { Activity } from "@/types/hotel";
 
-import { cn } from "@/libs/utils";
+import { cn } from "@/lib/utils";
 
 type ActivityFeedProps = {
   activities: Activity[];

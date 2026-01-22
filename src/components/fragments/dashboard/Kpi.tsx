@@ -2,7 +2,7 @@ import { LucideIcon } from "lucide-react";
 
 import { Card } from "@/components/ui/Card";
 
-import { cn } from "@/libs/utils";
+import { cn } from "@/lib/utils";
 
 type Props = {
   title: string;

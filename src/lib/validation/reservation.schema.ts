@@ -23,6 +23,9 @@ export const ReservationSchema = z.object({
   type: z.string().optional().or(z.literal("")),
   firstName: z.string().optional().or(z.literal("")),
   lastName: z.string().optional().or(z.literal("")),
+  // guest selection fields
+  selectedGuestId: z.string().optional().or(z.literal("")),
+  isNewGuest: z.boolean().optional().default(false),
   // room rate default values
   accommodation: z.array(z.unknown()),
   inventorySource: z.string().min(1),
@@ -85,6 +88,33 @@ export const ReservationSchema = z.object({
   preAmount: z.string().optional().or(z.literal("")),
   approvalCode: z.string().optional().or(z.literal("")),
   arAccountInformation: z.string().optional().or(z.literal("")),
+  // deposit fields
+  selectedDepositId: z.string().optional().or(z.literal("")),
+  depositAmount: z.number().optional().default(0),
+  depositPaymentMethod: z.string().optional().or(z.literal("")),
+  depositReceiptNumber: z.string().optional().or(z.literal("")),
+  depositIsNonRefundable: z.boolean().optional().default(false),
+  // card details
+  cardholderName: z.string().optional().or(z.literal("")),
+  cardNumber: z.string().optional().or(z.literal("")),
+  expiryMonth: z.string().optional().or(z.literal("")),
+  expiryYear: z.string().optional().or(z.literal("")),
+  cvv: z.string().optional().or(z.literal("")),
+  // company information
+  selectedCompanyId: z.string().optional().or(z.literal("")),
+  companyName: z.string().optional().or(z.literal("")),
+  corporateAccountId: z.string().optional().or(z.literal("")),
+  companyEmail: z.string().optional().or(z.literal("")),
+  companyPhone: z.string().optional().or(z.literal("")),
+  taxId: z.string().optional().or(z.literal("")),
+  billingContact: z.string().optional().or(z.literal("")),
+  // membership
+  membershipProgramName: z.string().optional().or(z.literal("")),
+  membershipNumber: z.string().optional().or(z.literal("")),
+  membershipTier: z.string().optional().or(z.literal("")),
+  membershipPointsBalance: z.number().optional().default(0),
+  // account notes
+  accountNotes: z.string().optional().or(z.literal("")),
   deposit: z.object({
     id: z.string().optional().or(z.literal("")),
     date: z.string().optional().or(z.literal("")),

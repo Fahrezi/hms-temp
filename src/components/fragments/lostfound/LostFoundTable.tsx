@@ -6,7 +6,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 
 import { LostFoundItem } from "@/types/hotel";
 
-import { cn } from "@/libs/utils";
+import { cn } from "@/lib/utils";
 
 interface LostFoundTableProps {
   items: LostFoundItem[];

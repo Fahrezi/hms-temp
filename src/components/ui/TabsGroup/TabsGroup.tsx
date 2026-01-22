@@ -11,6 +11,7 @@ export type TabsListType<T extends FieldValues> = {
   value: string,
   Comp: ({ form, errors, setValue }: RHFBridgeProps<T>) => React.ReactNode;
   errorGroup: Partial<keyof T>[];
+  customProps?: Record<string, any>;
 };
 
 export type TabsGroupProps<T extends FieldValues> = {
@@ -31,7 +32,7 @@ const TabsGroup = <T extends FieldValues>(props: TabsGroupProps<T>) => {
     }
     return false;
   }, [errors]);
-  
+
   return (
     <Card className="mt-8">
       <Tabs defaultValue={tabsList[0].value ?? ''}>
@@ -45,10 +46,10 @@ const TabsGroup = <T extends FieldValues>(props: TabsGroupProps<T>) => {
         </TabsList>
         {tabsList.map((tab, index) => (
           <TabsContent value={tab.value} key={index}>
-            <tab.Comp form={methods} errors={errors} setValue={setValue} />
+            <tab.Comp form={methods} errors={errors} setValue={setValue} {...tab.customProps} />
           </TabsContent>
         ))}
-      </Tabs>   
+      </Tabs>
     </Card>
   )
 }

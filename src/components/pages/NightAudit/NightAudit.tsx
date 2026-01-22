@@ -30,7 +30,7 @@ import { Tabs, TabsList, TabsTrigger } from "@/components/ui/Tabs";
 import { AuditPeriod, NightAuditReport, NightAuditStatus, PeriodBreakdownRow } from "@/types/hotel";
 
 import { bookings, deposits, folios, folioTransactions,guests, rooms } from "@/data/mock";
-import { downloadPDF,generateNightAuditPDF } from "@/libs/pdfGenerator";
+import { downloadPDF,generateNightAuditPDF } from "@/lib/pdfGenerator";
 
 const NightAudit = () => {
   const [businessDate, setBusinessDate] = useState<Date>(new Date());

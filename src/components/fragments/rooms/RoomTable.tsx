@@ -19,7 +19,7 @@ import {
 
 import { Room } from "@/types/hotel";
 
-import { cn } from "@/libs/utils";
+import { cn } from "@/lib/utils";
 
 interface RoomTableProps {
   rooms: Room[];

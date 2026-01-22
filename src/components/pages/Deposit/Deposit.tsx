@@ -24,9 +24,10 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/Table';
 import { Textarea } from '@/components/ui/TextArea';
 
-import { DepositStatus, PaymentMethod } from '@/types/hotel';
+import { Deposit, DepositStatus, PaymentMethod } from '@/types/hotel';
 
-import { bookings, deposits, guests, rooms } from '@/data/mock';
+import { bookings, deposits as initialDeposits, guests, rooms } from '@/data/mock';
+import { DepositDialog } from '@/components/fragments/deposits/DepositDialog';
 
 const statusConfig: Record<DepositStatus, { label: string; variant: 'default' | 'secondary' | 'destructive' | 'outline'; icon: React.ElementType }> = {
   pending: { label: 'Pending', variant: 'outline', icon: Clock },
@@ -45,6 +46,7 @@ const paymentMethodConfig: Record<PaymentMethod, { label: string; icon: React.El
 };
 
 export default function Deposits() {
+  const [deposits, setDeposits] = useState<Deposit[]>(initialDeposits);
   const [searchTerm, setSearchTerm] = useState('');
   const [statusFilter, setStatusFilter] = useState<string>('all');
   const [isDialogOpen, setIsDialogOpen] = useState(false);
@@ -72,9 +74,8 @@ export default function Deposits() {
   const totalPending = deposits.filter(d => d.status === 'pending').reduce((sum, d) => sum + d.amount, 0);
   const totalApplied = deposits.filter(d => d.status === 'applied').reduce((sum, d) => sum + d.amount, 0);
 
-  const handleRecordDeposit = () => {
-    toast.success('Deposit recorded successfully');
-    setIsDialogOpen(false);
+  const handleDepositCreated = (deposit: Deposit) => {
+    setDeposits([...deposits, deposit]);
   };
 
   return (
@@ -86,72 +87,10 @@ export default function Deposits() {
             <h1 className="text-2xl font-bold tracking-tight">Deposits</h1>
             <p className="text-muted-foreground">Manage guest deposits and security payments</p>
           </div>
-          <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
-            <DialogTrigger asChild>
-              <Button>
-                <Plus className="h-4 w-4 mr-2" />
-                Record Deposit
-              </Button>
-            </DialogTrigger>
-            <DialogContent className="sm:max-w-[425px]">
-              <DialogHeader>
-                <DialogTitle>Record New Deposit</DialogTitle>
-              </DialogHeader>
-              <div className="grid gap-4 py-4">
-                <div className="grid gap-2">
-                  <Label htmlFor="booking">Booking</Label>
-                  <Select>
-                    <SelectTrigger>
-                      <SelectValue placeholder="Select booking" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      {bookings.filter(b => b.status === 'confirmed' || b.status === 'checked-in').map(booking => {
-                        const guest = guests.find(g => g.id === booking.guestId);
-                        const room = rooms.find(r => r.id === booking.roomId);
-                        return (
-                          <SelectItem key={booking.id} value={booking.id}>
-                            {guest?.name} - Room {room?.number}
-                          </SelectItem>
-                        );
-                      })}
-                    </SelectContent>
-                  </Select>
-                </div>
-                <div className="grid gap-2">
-                  <Label htmlFor="amount">Amount ($)</Label>
-                  <Input id="amount" type="number" placeholder="0.00" />
-                </div>
-                <div className="grid gap-2">
-                  <Label htmlFor="method">Payment Method</Label>
-                  <Select>
-                    <SelectTrigger>
-                      <SelectValue placeholder="Select method" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      {Object.entries(paymentMethodConfig).map(([key, config]) => (
-                        <SelectItem key={key} value={key}>
-                          <div className="flex items-center gap-2">
-                            <config.icon className="h-4 w-4" />
-                            {config.label}
-                          </div>
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                </div>
-                <div className="grid gap-2">
-                  <Label htmlFor="notes">Notes</Label>
-                  <Textarea name="notes" id="notes" placeholder="Optional notes..." />
-                </div>
-              </div>
-              <DialogFooter>
-                <Button variant="outline" onClick={() => setIsDialogOpen(false)}>
-                  Cancel
-                </Button>
-                <Button onClick={handleRecordDeposit}>Record Deposit</Button>
-              </DialogFooter>
-            </DialogContent>
-          </Dialog>
+          <Button onClick={() => setIsDialogOpen(true)}>
+            <Plus className="h-4 w-4 mr-2" />
+            Record Deposit
+          </Button>
         </div>
 
         {/* Summary Cards */}
@@ -227,79 +166,77 @@ export default function Deposits() {
         {/* Deposits Table */}
         <Card>
           <CardContent className="pt-6">
-            <div className="rounded-xl overflow-hidden">
-              <Table>
-                <TableHeader>
-                  <TableRow>
-                    <TableHead>Guest</TableHead>
-                    <TableHead>Room</TableHead>
-                    <TableHead>Amount</TableHead>
-                    <TableHead>Method</TableHead>
-                    <TableHead>Status</TableHead>
-                    <TableHead>Date</TableHead>
-                    <TableHead className="text-right">Actions</TableHead>
-                  </TableRow>
-                </TableHeader>
-                <TableBody>
-                  {filteredDeposits.map((deposit) => {
-                    const bookingInfo = getBookingInfo(deposit.bookingId);
-                    const StatusIcon = statusConfig[deposit.status].icon;
-                    const PaymentIcon = paymentMethodConfig[deposit.paymentMethod].icon;
-                    
-                    return (
-                      <TableRow key={deposit.id}>
-                        <TableCell className="font-medium">
-                          {getGuestName(deposit.guestId)}
-                        </TableCell>
-                        <TableCell>
-                          {bookingInfo?.room ? `Room ${bookingInfo.room.number}` : '-'}
-                        </TableCell>
-                        <TableCell className="font-semibold">
-                          ${deposit.amount.toLocaleString()}
-                        </TableCell>
-                        <TableCell>
-                          <div className="flex items-center gap-2">
-                            <PaymentIcon className="h-4 w-4 text-muted-foreground" />
-                            <span className="text-sm">{paymentMethodConfig[deposit.paymentMethod].label}</span>
-                          </div>
-                        </TableCell>
-                        <TableCell>
-                          <Badge variant={statusConfig[deposit.status].variant}>
-                            <StatusIcon className="h-3 w-3 mr-1" />
-                            {statusConfig[deposit.status].label}
-                          </Badge>
-                        </TableCell>
-                        <TableCell className="text-muted-foreground">
-                          {deposit.receivedAt 
-                            ? format(new Date(deposit.receivedAt), 'MMM dd, yyyy')
-                            : 'Pending'
-                          }
-                        </TableCell>
-                        <TableCell className="text-right">
-                          <div className="flex justify-end gap-2">
-                            {deposit.status === 'pending' && (
-                              <Button size="sm" variant="outline" onClick={() => toast.success('Deposit marked as received')}>
-                                Receive
+            <Table>
+              <TableHeader>
+                <TableRow>
+                  <TableHead>Guest</TableHead>
+                  <TableHead>Room</TableHead>
+                  <TableHead>Amount</TableHead>
+                  <TableHead>Method</TableHead>
+                  <TableHead>Status</TableHead>
+                  <TableHead>Date</TableHead>
+                  <TableHead className="text-right">Actions</TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                {filteredDeposits.map((deposit) => {
+                  const bookingInfo = getBookingInfo(deposit.bookingId);
+                  const StatusIcon = statusConfig[deposit.status].icon;
+                  const PaymentIcon = paymentMethodConfig[deposit.paymentMethod].icon;
+                  
+                  return (
+                    <TableRow key={deposit.id}>
+                      <TableCell className="font-medium">
+                        {getGuestName(deposit.guestId)}
+                      </TableCell>
+                      <TableCell>
+                        {bookingInfo?.room ? `Room ${bookingInfo.room.number}` : '-'}
+                      </TableCell>
+                      <TableCell className="font-semibold">
+                        ${deposit.amount.toLocaleString()}
+                      </TableCell>
+                      <TableCell>
+                        <div className="flex items-center gap-2">
+                          <PaymentIcon className="h-4 w-4 text-muted-foreground" />
+                          <span className="text-sm">{paymentMethodConfig[deposit.paymentMethod].label}</span>
+                        </div>
+                      </TableCell>
+                      <TableCell>
+                        <Badge variant={statusConfig[deposit.status].variant}>
+                          <StatusIcon className="h-3 w-3 mr-1" />
+                          {statusConfig[deposit.status].label}
+                        </Badge>
+                      </TableCell>
+                      <TableCell className="text-muted-foreground">
+                        {deposit.receivedAt 
+                          ? format(new Date(deposit.receivedAt), 'MMM dd, yyyy')
+                          : 'Pending'
+                        }
+                      </TableCell>
+                      <TableCell className="text-right">
+                        <div className="flex justify-end gap-2">
+                          {deposit.status === 'pending' && (
+                            <Button size="sm" variant="outline" onClick={() => toast.success('Deposit marked as received')}>
+                              Receive
+                            </Button>
+                          )}
+                          {deposit.status === 'received' && (
+                            <>
+                              <Button size="sm" variant="outline" onClick={() => toast.success('Deposit applied to folio')}>
+                                Apply
                               </Button>
-                            )}
-                            {deposit.status === 'received' && (
-                              <>
-                                <Button size="sm" variant="outline" onClick={() => toast.success('Deposit applied to folio')}>
-                                  Apply
-                                </Button>
-                                <Button size="sm" variant="ghost" onClick={() => toast.info('Refund initiated')}>
-                                  Refund
-                                </Button>
-                              </>
-                            )}
-                          </div>
-                        </TableCell>
-                      </TableRow>
-                    );
-                  })}
-                </TableBody>
-              </Table>
-            </div>
+                              <Button size="sm" variant="ghost" onClick={() => toast.info('Refund initiated')}>
+                                Refund
+                              </Button>
+                            </>
+                          )}
+                        </div>
+                      </TableCell>
+                    </TableRow>
+                  );
+                })}
+              </TableBody>
+            </Table>
             {filteredDeposits.length === 0 && (
               <div className="text-center py-10 text-muted-foreground">
                 No deposits found matching your criteria
@@ -308,6 +245,15 @@ export default function Deposits() {
           </CardContent>
         </Card>
       </div>
+
+      {/* Deposit Dialog */}
+      <DepositDialog
+        open={isDialogOpen}
+        onOpenChange={setIsDialogOpen}
+        bookings={bookings}
+        guests={guests}
+        onDepositCreated={handleDepositCreated}
+      />
     </div>
   );
 }

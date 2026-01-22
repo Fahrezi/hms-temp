@@ -1,21 +1,17 @@
-import { addDays,format } from "date-fns";
-import { CalendarIcon, User } from "lucide-react";
-import { useMemo,useState } from "react";
+import { useState, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
-import { toast } from "sonner";
-
-import { Button } from "@/components/ui/Button";
-import { Calendar } from "@/components/ui/Calendar";
+import { format, addDays } from "date-fns";
 import {
   Dialog,
   DialogContent,
-  DialogFooter,
   DialogHeader,
   DialogTitle,
+  DialogFooter,
 } from "@/components/ui/Dialog";
+import { Button } from "@/components/ui/Button";
 import { Input } from "@/components/ui/Input";
 import { Label } from "@/components/ui/Label";
-import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/Popover";
+import { Textarea } from "@/components/ui/TextArea";
 import {
   Select,
   SelectContent,
@@ -23,12 +19,14 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/Select";
-import { Textarea } from "@/components/ui/TextArea";
-
-import { Booking, Guest,Room } from "@/types/hotel";
-
-import { bookings,guests as existingGuests, rooms } from "@/data/mock";
-import { cn } from "@/libs/utils";
+import { Badge } from "@/components/ui/Badge";
+import { Calendar } from "@/components/ui/Calendar";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/Popover";
+import { CalendarIcon, User, Users, Layers, BedDouble, CheckCircle2, Sparkles } from "lucide-react";
+import { cn } from "@/lib/utils";
+import { rooms, bookings } from "@/data/mock";
+import { Booking, Guest } from "@/types/hotel";
+import { toast } from "sonner";
 
 interface WalkInDialogProps {
   open: boolean;
@@ -101,7 +99,7 @@ export function WalkInDialog({ open, onOpenChange, onBookingCreated }: WalkInDia
 
     // Generate new IDs
     const newGuestId = `g-${Date.now()}`;
-    const newBookingId = `1`;
+    const newBookingId = `b-${Date.now()}`;
     const rsvpNumber = `WLK-${format(today, 'yyyy')}-${String(bookings.length + 1).padStart(3, '0')}`;
 
     // Create new guest
@@ -145,13 +143,15 @@ export function WalkInDialog({ open, onOpenChange, onBookingCreated }: WalkInDia
     resetForm();
     onOpenChange(false);
     
-    // Navigate to registration page
-    navigate(`/registration?bookingId=${newBookingId}`);
+    // Navigate to registration page with booking and guest data
+    navigate(`/registration/${newBookingId}`, { 
+      state: { booking: newBooking, guest: newGuest } 
+    });
   };
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="sm:max-w-[600px] max-h-[90vh] flex flex-col">
+      <DialogContent className="sm:max-w-175 max-h-[90vh] flex flex-col">
         <DialogHeader>
           <DialogTitle className="flex items-center gap-2">
             <User className="h-5 w-5" />
@@ -161,7 +161,7 @@ export function WalkInDialog({ open, onOpenChange, onBookingCreated }: WalkInDia
 
         <div className="space-y-6 py-4 overflow-y-auto flex-1 pr-2">
           {/* Guest Information */}
-          <div className="space-y-4 px-1">
+          <div className="space-y-4 px-2">
             <h4 className="text-sm font-medium text-muted-foreground">Guest Information</h4>
             <div className="grid grid-cols-2 gap-4">
               <div className="space-y-2">
@@ -195,40 +195,95 @@ export function WalkInDialog({ open, onOpenChange, onBookingCreated }: WalkInDia
           </div>
 
           {/* Room Selection */}
-          <div className="space-y-4 px-1">
-            <h4 className="text-sm font-medium text-muted-foreground">Room Selection</h4>
-            <div className="space-y-2">
-              <Label>Select Room *</Label>
-              <Select value={selectedRoomId} onValueChange={setSelectedRoomId}>
-                <SelectTrigger>
-                  <SelectValue placeholder="Choose an available room..." />
-                </SelectTrigger>
-                <SelectContent>
-                  {availableRooms.length === 0 ? (
-                    <div className="p-2 text-sm text-muted-foreground">No rooms available</div>
-                  ) : (
-                    availableRooms.map((room) => (
-                      <SelectItem key={room.id} value={room.id}>
-                        Room {room.number} - {room.type.charAt(0).toUpperCase() + room.type.slice(1)} (${room.price}/night)
-                      </SelectItem>
-                    ))
-                  )}
-                </SelectContent>
-              </Select>
+          <div className="space-y-4 px-2">
+            <div className="flex items-center justify-between">
+              <h4 className="text-sm font-medium text-muted-foreground">Room Selection</h4>
+              <Badge variant="secondary" className="text-xs">
+                {availableRooms.length} available
+              </Badge>
             </div>
-            {selectedRoom && (
-              <div className="rounded-lg bg-muted/50 p-3 text-sm">
-                <div className="flex justify-between">
-                  <span>Room {selectedRoom.number}</span>
-                  <span className="font-medium">${selectedRoom.price}/night</span>
-                </div>
-                <div className="text-muted-foreground capitalize">{selectedRoom.type} • Capacity: {selectedRoom.capacity}</div>
+            
+            {availableRooms.length === 0 ? (
+              <div className="flex flex-col items-center justify-center py-8 text-center rounded-lg border border-dashed border-muted-foreground/25">
+                <BedDouble className="h-12 w-12 text-muted-foreground/50 mb-3" />
+                <p className="text-sm font-medium text-muted-foreground">No Rooms Available</p>
+                <p className="text-xs text-muted-foreground/70 mt-1">All rooms are currently occupied</p>
+              </div>
+            ) : (
+              <div className="grid grid-cols-2 gap-3 overflow-y-auto pr-1 p-4">
+                {availableRooms.map((room) => {
+                  const isSelected = selectedRoomId === room.id;
+                  const housekeepingColor = room.housekeepingStatus === 'clean' 
+                    ? 'text-green-600 dark:text-green-400' 
+                    : room.housekeepingStatus === 'inspected' 
+                    ? 'text-blue-600 dark:text-blue-400' 
+                    : 'text-amber-600 dark:text-amber-400';
+                  
+                  return (
+                    <div
+                      key={room.id}
+                      onClick={() => setSelectedRoomId(room.id)}
+                      className={cn(
+                        "relative p-4 rounded-xl border-2 cursor-pointer transition-all duration-200",
+                        "hover:border-primary/50 hover:shadow-md hover:scale-[1.02]",
+                        isSelected 
+                          ? "border-primary bg-primary/5 shadow-lg ring-2 ring-primary/20" 
+                          : "border-border bg-card hover:bg-accent/30"
+                      )}
+                    >
+                      {isSelected && (
+                        <div className="absolute -top-2 -right-2 bg-primary text-primary-foreground rounded-full p-1">
+                          <CheckCircle2 className="h-4 w-4" />
+                        </div>
+                      )}
+                      
+                      <div className="flex justify-between items-start mb-3">
+                        <div className="flex items-center gap-2">
+                          <span className="text-xl font-bold">#{room.number}</span>
+                        </div>
+                        <Badge 
+                          variant="secondary" 
+                          className={cn(
+                            "text-xs capitalize",
+                            room.type === 'suite' && "bg-accent text-accent-foreground",
+                            room.type === 'deluxe' && "bg-primary/20 text-primary",
+                            (room.type === 'single' || room.type === 'double') && "bg-muted text-muted-foreground"
+                          )}
+                        >
+                          {room.type}
+                        </Badge>
+                      </div>
+                      
+                      <div className="space-y-1.5 text-sm text-muted-foreground mb-3">
+                        <div className="flex items-center gap-2">
+                          <Users className="h-3.5 w-3.5" />
+                          <span>{room.capacity} guests</span>
+                        </div>
+                        <div className="flex items-center gap-2">
+                          <Layers className="h-3.5 w-3.5" />
+                          <span>Floor {room.floor}</span>
+                        </div>
+                        <div className="flex items-center gap-2">
+                          <Sparkles className={cn("h-3.5 w-3.5", housekeepingColor)} />
+                          <span className={cn("capitalize", housekeepingColor)}>
+                            {room.housekeepingStatus}
+                          </span>
+                        </div>
+                      </div>
+                      
+                      <div className="pt-2 border-t border-border/50">
+                        <span className="text-lg font-bold text-primary">${room.price}</span>
+                        <span className="text-xs text-muted-foreground">/night</span>
+                      </div>
+                    </div>
+                  );
+                })}
               </div>
             )}
           </div>
 
           {/* Stay Details */}
-          <div className="space-y-4 px-1">
+          <div className="space-y-4 px-2">
             <h4 className="text-sm font-medium text-muted-foreground">Stay Details</h4>
             <div className="grid grid-cols-2 gap-4">
               <div className="space-y-2">
@@ -293,7 +348,7 @@ export function WalkInDialog({ open, onOpenChange, onBookingCreated }: WalkInDia
           </div>
 
           {/* Special Requests */}
-          <div className="space-y-2 px-1">
+          <div className="space-y-2">
             <Label htmlFor="specialRequests">Special Requests</Label>
             <Textarea
               name="specialRequests"

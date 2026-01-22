@@ -1,7 +1,7 @@
 import * as React from "react"
 import { FieldErrors } from "react-hook-form";
 
-import { cn } from "@/libs/utils"
+import { cn } from "@/lib/utils"
 
 type TextAreaLabelProps = React.ComponentPropsWithoutRef<"textarea"> & {
   name: string;

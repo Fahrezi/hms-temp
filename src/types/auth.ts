@@ -3,8 +3,10 @@ export type UserRole = 'admin' | 'superadmin' | 'manager';
 export type User = {
   email: string;
   id: string;
-  name: string;
-  role: string;
+  username: string;
+  first_name: string;
+  last_name: string;
+  // email: string;
 };
 
 export type Topic = {
@@ -38,13 +40,12 @@ export type AuthRequest = {
 };
 
 export type LoginResponse = {
-  email: string;
-  id: string;
-  name: string;
-  roles: string[];
+  access_token: string;
+  refresh_token: string;
+  user: User;
 };
 
 export type LoginRequest = {
-  email: string;
+  username: string;
   password: string;
 };

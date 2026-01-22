@@ -1,63 +1,116 @@
-import { Eye, EyeClosed } from 'lucide-react';
+import { Eye, EyeClosed, Hotel, Loader2 } from 'lucide-react';
 import { useState } from 'react';
 
 import { useLogin } from './useLogin';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/Card';
+import { useNavigate } from 'react-router-dom';
+import { Label } from '@/components/ui/Label';
+import { Input } from '@/components/ui/Input';
+import { Button } from '@/components/ui/Button';
+import { useAuth } from '@/hooks/useAuth.hooks';
+import { Alert, AlertDescription } from '@/components/ui/Alert';
 
 const Login = () => {
-  const { register, handleSubmit, onSubmit, errors, isSubmitting } = useLogin();
-  const [passwordSeen, setPasswordSeen] = useState(false);
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [error, setError] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
+  const { login, isAuthenticated } = useAuth();
+  const navigate = useNavigate();
+
+  // Redirect if already authenticated
+  if (isAuthenticated) {
+    navigate('/', { replace: true });
+    return null;
+  }
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setError('');
+    setIsLoading(true);
+
+    const result = await login(email, password);
+
+    console.log('result', result)
+
+    // if (result.success) {
+    //   navigate('/', { replace: true });
+    // } else {
+    //   setError(result.error || 'Login failed');
+    // }
+
+    setIsLoading(false);
+  };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-white ">
-      <div className="bg-[#FCFBFB] rounded-lg shadow-md w-full max-w-[1080px] min-h-[80vh] grid grid-cols-[60%_40%] border border-gray-100">
-        <section className="relative flex items-center justify-center bg-[url('/images/login_bg.png')] bg-cover p-8 text-white after:content-[''] after:absolute after:inset-0 after:bg-black/30 after:rounded-tl-xl after:rounded-bl-xl">
-          <div className="z-99">
-            <h4 className="font-bold text-[48px] max-w-[500px] mb-12">Welcome to <br />Hotel Management System</h4>
-            <p className="text-2xl max-w-[500px]">Your key to running a stress-free and memorable hotel experience.</p>
-          </div> 
-        </section>
-        <section className="flex flex-col items-stretch justify-center p-6">
-          <h1 className="font-medium text-[32px] mb-8">Login</h1>
-          <form onSubmit={handleSubmit(onSubmit)}>
-            <div className="mb-4 space-y-2">
-              <input
-                id='email'
-                type='email'
-                placeholder="Your Email"
-                {...register('email')}
-                className="rounded-xl border border-gray-300 shadow px-4 py-2 focus:outline-none focus:ring-2 focus:ring-hotel-green focus:border-transparent w-full bg-white"
-                disabled={isSubmitting}
+    <div className="min-h-screen flex items-center justify-center bg-background p-4">
+      <Card className="w-full max-w-md">
+        <CardHeader className="text-center space-y-4">
+          <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-full bg-primary/10">
+            <Hotel className="h-7 w-7 text-primary" />
+          </div>
+          <div>
+            <CardTitle className="text-2xl">Welcome back</CardTitle>
+            <CardDescription>Sign in to your HotelHub account</CardDescription>
+          </div>
+        </CardHeader>
+        <CardContent>
+          <form onSubmit={handleSubmit} className="space-y-4">
+            {error && (
+              <Alert variant="destructive">
+                <AlertDescription>{error}</AlertDescription>
+              </Alert>
+            )}
+
+            <div className="space-y-2">
+              <Label htmlFor="email">Username</Label>
+              <Input
+                id="email"
+                // type="email"
+                placeholder="admin@hotelhub.com"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                required
+                disabled={isLoading}
               />
-              {errors.email && <p className="text-red-600 text-xs">{errors.email.message}</p>}
             </div>
 
-            <div className="mb-4 space-y-2">
-              <div className="relative flex items-center">
-                <input
-                  id='password'
-                  type={passwordSeen ? 'text' : 'password'}
-                  placeholder="Your Password"
-                  {...register('password')}
-                  className="rounded-xl border border-gray-300 shadow px-4 py-2 focus:outline-none focus:ring-2 focus:ring-hotel-green focus:border-transparent w-full bg-white"
-                  disabled={isSubmitting}
-                />
-                {/* <span className="absolute top-1/2 transform -translate-y-1/2 right-2 inline-block"> */}
-                  {
-                    passwordSeen
-                      ? <Eye size={16} className="absolute right-4 top-1/2 transform -translate-y-1/2 cursor-pointer" onClick={() => setPasswordSeen(!passwordSeen)} />
-                      : <EyeClosed size={16} className="absolute right-4 top-1/2 transform -translate-y-1/2 cursor-pointer" onClick={() => setPasswordSeen(!passwordSeen)} />
-                  }
-                {/* </span> */}
-              </div>
-              {errors.password && <p className="text-red-600 text-xs">{errors.password.message}</p>}
+            <div className="space-y-2">
+              <Label htmlFor="password">Password</Label>
+              <Input
+                id="password"
+                type="password"
+                placeholder="••••••••"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                required
+                disabled={isLoading}
+              />
             </div>
 
-            <button type='submit' className="mt-4 rounded-xl bg-hotel-green-hover text-hotel-gold-light py-2 px-4 w-full cursor-pointer active:scale-99" disabled={isSubmitting}>
-              {isSubmitting ? 'Logging in...' : 'Login'}
-            </button>
+            <Button type="submit" className="w-full" disabled={isLoading}>
+              {isLoading ? (
+                <>
+                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                  Signing in...
+                </>
+              ) : (
+                'Sign In'
+              )}
+            </Button>
           </form>
-        </section>
-      </div>
+
+          <div className="mt-6 pt-6 border-t border-border">
+            <p className="text-sm text-muted-foreground text-center mb-3">Demo Accounts</p>
+            <div className="space-y-2 text-xs text-muted-foreground">
+              <div className="flex justify-between px-2 py-1.5 rounded bg-muted/50">
+                <span>john.doe</span>
+                <span>SecurePass123!</span>
+              </div>
+            </div>
+          </div>
+        </CardContent>
+      </Card>
     </div>
   );
 };
