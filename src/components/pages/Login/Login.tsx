@@ -31,13 +31,11 @@ const Login = () => {
 
     const result = await login(email, password);
 
-    console.log('result', result)
-
-    // if (result.success) {
-    //   navigate('/', { replace: true });
-    // } else {
-    //   setError(result.error || 'Login failed');
-    // }
+    if (result.success) {
+      navigate('/', { replace: true });
+    } else {
+      setError(result.error || 'Login failed');
+    }
 
     setIsLoading(false);
   };

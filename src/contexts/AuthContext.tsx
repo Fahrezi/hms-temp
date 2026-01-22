@@ -1,6 +1,8 @@
 import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
 import { loginRequest, logoutRequest } from '@/services/auth.service';
 import { User } from '@/types/auth';
+import { mockUsers, mockTokens, mockAuthState } from '@/data/mockLocalStorage';
+import { encryptData } from '@/utils/secureAuth';
 
 interface AuthContextType {
   user: User | null;
@@ -14,6 +16,9 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 const AUTH_STORAGE_KEY = 'hotelhub_auth';
 const TOKEN_STORAGE_KEY = 'hotelhub_token';
+
+// Enable mock mode for development
+const USE_MOCK_AUTH = true;
 
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
@@ -41,51 +46,99 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }, []);
 
   const login = async (email: string, password: string): Promise<{ success: boolean; error?: string }> => {
-    try {
-      // Use the mutation that was defined at the top level
-      const response = await loginMutation.mutateAsync({ username: email, password });
+    // Mock login for development
+    if (USE_MOCK_AUTH) {
+      try {
+        // Find mock user by email
+        const mockUserEntry = Object.values(mockUsers).find(u => u.email === email);
+        
+        if (!mockUserEntry) {
+          return {
+            success: false,
+            error: 'Invalid email or password'
+          };
+        }
 
-      console.log('response', response);
+        // Simulate API delay
+        await new Promise(resolve => setTimeout(resolve, 500));
 
-      // The response is wrapped in AxiosResponse, so we need to access .data
-      const userData: User = {
-        id: response.data.user.id,
-        email: response.data.user.email,
-        first_name: response.data.user.first_name,
-        last_name: response.data.user.last_name,
-        username: response.data.user.username,
-        // role: response.data.roles[0], // Taking the first role
-      };
+        const userData: User = mockUserEntry;
+        const authState = {
+          user: userData,
+          isAuthenticated: true,
+          isLoading: false,
+          token: mockTokens.access_token,
+          notification: [],
+          messages: [],
+        };
 
-      setUser(userData);
-      localStorage.setItem(AUTH_STORAGE_KEY, JSON.stringify(userData));
-      // Store the access token
-      localStorage.setItem(TOKEN_STORAGE_KEY, response.data.access_token);
-      // Optionally store refresh token if needed
-      localStorage.setItem('hotelhub_refresh_token', response.data.refresh_token);
+        setUser(userData);
+        localStorage.setItem(AUTH_STORAGE_KEY, JSON.stringify(userData));
+        localStorage.setItem(TOKEN_STORAGE_KEY, mockTokens.access_token);
+        localStorage.setItem('hotelhub_refresh_token', mockTokens.refresh_token);
+        localStorage.setItem('auth', encryptData(authState));
 
-      return { success: true };
-    } catch (error: any) {
-      return {
-        success: false,
-        error: error?.response?.data?.message || 'Invalid email or password'
-      };
+        console.log('✅ Mock login successful:', userData.email);
+        return { success: true };
+      } catch (error: any) {
+        return {
+          success: false,
+          error: error?.message || 'Login failed'
+        };
+      }
     }
+
+    // Real API login (commented out for now)
+    // try {
+    //   const response = await loginMutation.mutateAsync({ username: email, password });
+    //   const userData: User = {
+    //     id: response.data.user.id,
+    //     email: response.data.user.email,
+    //     first_name: response.data.user.first_name,
+    //     last_name: response.data.user.last_name,
+    //     username: response.data.user.username,
+    //   };
+    //   setUser(userData);
+    //   localStorage.setItem(AUTH_STORAGE_KEY, JSON.stringify(userData));
+    //   localStorage.setItem(TOKEN_STORAGE_KEY, response.data.access_token);
+    //   localStorage.setItem('hotelhub_refresh_token', response.data.refresh_token);
+    //   return { success: true };
+    // } catch (error: any) {
+    //   return {
+    //     success: false,
+    //     error: error?.response?.data?.message || 'Invalid email or password'
+    //   };
+    // }
   };
 
   const logout = async () => {
-    try {
-      // Use the mutation that was defined at the top level
-      await logoutMutation.mutateAsync();
-    } catch (error) {
-      // Log error but still clear local state
-      console.error('Logout API error:', error);
-    } finally {
-      // Always clear local state and storage
+    // Mock logout for development
+    if (USE_MOCK_AUTH) {
+      // Simulate API delay
+      await new Promise(resolve => setTimeout(resolve, 300));
+      
+      // Clear all auth data
       setUser(null);
       localStorage.removeItem(AUTH_STORAGE_KEY);
       localStorage.removeItem(TOKEN_STORAGE_KEY);
+      localStorage.removeItem('hotelhub_refresh_token');
+      localStorage.removeItem('auth');
+      console.log('✅ Mock logout successful');
+      return;
     }
+
+    // Real API logout (commented out for now)
+    // try {
+    //   await logoutMutation.mutateAsync();
+    // } catch (error) {
+    //   console.error('Logout API error:', error);
+    // } finally {
+    //   setUser(null);
+    //   localStorage.removeItem(AUTH_STORAGE_KEY);
+    //   localStorage.removeItem(TOKEN_STORAGE_KEY);
+    //   localStorage.removeItem('hotelhub_refresh_token');
+    //   localStorage.removeItem('auth');
+    // }
   };
 
   return (

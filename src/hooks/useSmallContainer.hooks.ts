@@ -7,7 +7,7 @@ const SMALL_CONTAINER_CLASS = 'small-container';
 
 const useSmallContainer = () => {
   useEffect(() => {
-    const isSmallContainer = true;
+    const isSmallContainer = false;
 
     if (isSmallContainer) {
       document.body.classList.add(SMALL_CONTAINER_CLASS);
