@@ -40,6 +40,7 @@ const hotelStatusStyles: Record<GuestHotelStatus, string> = {
   'departing-today': 'bg-orange-500/10 text-orange-600 border-orange-500/20',
   'departed': 'bg-muted text-muted-foreground border-muted-foreground/20',
   'no-reservation': 'bg-muted text-muted-foreground border-muted-foreground/20',
+  'profile-only': 'bg-muted text-muted-foreground border-muted-foreground/20',
 };
 
 const hotelStatusLabels: Record<GuestHotelStatus, string> = {
@@ -50,6 +51,7 @@ const hotelStatusLabels: Record<GuestHotelStatus, string> = {
   'departing-today': 'Departing Today',
   'departed': 'Departed',
   'no-reservation': 'No Reservation',
+  'profile-only': 'Profile Only',
 };
 
 export function GuestTable({ 

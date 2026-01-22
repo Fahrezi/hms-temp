@@ -41,8 +41,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }, []);
 
   const login = async (email: string, password: string): Promise<{ success: boolean; error?: string }> => {
-    console.log('login', email, password);
-
     try {
       // Use the mutation that was defined at the top level
       const response = await loginMutation.mutateAsync({ username: email, password });

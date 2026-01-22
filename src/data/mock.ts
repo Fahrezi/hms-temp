@@ -1,3 +1,4 @@
+/* eslint-disable sonarjs/no-duplicate-string */
 /* eslint-disable max-lines */
 import { Activity, Booking, Company,DashboardStats, Deposit, Folio, FolioTransaction, Guest, GuestRequest, LostFoundItem, Room, ServiceItem } from '@/types/hotel';
 export const rooms: Room[] = [

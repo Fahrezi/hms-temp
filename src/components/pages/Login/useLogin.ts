@@ -10,7 +10,7 @@ import { useOverlay } from '@/hooks/useOverlay.hooks';
 
 import { loginRequest } from '@/services/auth.service';
 
-import { User } from '@/types/auth';
+// import { User } from '@/types/auth';
 
 // import { User } from '@/types/auth';
 
@@ -51,17 +51,18 @@ export const useLogin = () => {
   //   }
   // }, []);
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+   
   const onSubmit = async (data: LoginFormInputs) => {
 
-    const user: User = {
-      name: 'admin123',
-      email: 'admin123@mail.com',
-      id: '1',
-      role: 'admin'
-    };
+    // const user: User = {
+    //   email: 'admin123@mail.com',
+    //   id: '1',
+    //   username: 'admin123',
+    //   first_name: 'Admin',
+    //   last_name: 'User',
+    // };
 
-    login(user, 'token-123');
+    login(data.email, data.password);
 
     activateNotif({
       notifText: 'Selamat Datang!',
@@ -76,7 +77,9 @@ export const useLogin = () => {
 
     //   if (response?.access_token) {
     //     const user: User = {
-    //       name: 'admin',
+    //       username: 'admin123',
+    //       first_name: 'Admin',
+    //       last_name: 'User',
     //       ...response.user
     //     };
 
