@@ -36,10 +36,10 @@ const guestItems = [
 
 // Finance & Operations
 const operationsItems = [
-  { title: "Deposits", url: "/deposits", icon: DollarSign },
+  { title: "Deposits", url: "/deposit", icon: DollarSign },
   { title: "Night Audit", url: "/night-audit", icon: Moon },
   { title: "Services", url: "/services", icon: ShoppingCart },
-  { title: "Reports", url: "/reports", icon: FileText },
+  { title: "Reports", url: "/report", icon: FileText },
   { title: "Analytics", url: "/analytics", icon: BarChart3 },
 ];
 
