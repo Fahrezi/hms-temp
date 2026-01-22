@@ -1,9 +1,9 @@
 import axios from 'axios';
 
-import getEnvValue from '@/utils/env';
+// import getEnvValue from '@/utils/env';
 import { decryptData } from '@/utils/secureAuth';
 import { getLocalStorage, removeLocalStorage } from '@/utils/storage';
-import { ENVIRONMENT } from '@/constants/envs';
+// import { ENVIRONMENT } from '@/constants/envs';
 import { AuthState } from '@/types/auth';
 
 const headers = {
@@ -14,7 +14,7 @@ const headers = {
 };
 
 const instance = axios.create({
-  baseURL: getEnvValue(ENVIRONMENT.API_URL),
+  baseURL: 'localhost:8080/api',
   headers,
   timeout: 60000,
 });
